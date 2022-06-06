@@ -20,8 +20,6 @@ class BlogFactory extends Factory
         return [
             'title'=>$this->faker->text(30),
             'description'=>$this->faker->realText(),
-            'likes'=>$this->faker->randomNumber(),
-            'dislikes'=>$this->faker->randomNumber(),
             'status'=>$this->faker->randomElement(['posted', 'drafted']),
         ];
     }

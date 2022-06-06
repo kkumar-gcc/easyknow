@@ -4,10 +4,9 @@
 <div class="container guest-account">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card card-white">
-                <div class="card-header ">{{ __('Register') }}</div>
-
+            <div class="e-card">
                 <div class="card-body">
+                    <div class="e-card-title">{{ __('Register') }}</div>
                     <form method="POST" action="{{ route('register') }}">
                         @csrf
 
@@ -75,7 +74,7 @@
 
                         <div class="row mb-0">
                             <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-secondary">
+                                <button type="submit" class="e-btn e-btn-primary">
                                     {{ __('Register') }}
                                 </button>
                             </div>
@@ -88,7 +87,7 @@
                                 
                             </span>
                             @if (Route::has('login'))
-                                <a class="btn btn-link link" href="{{ route('login') }}">
+                                <a class="e-rbtn" href="{{ route('login') }}">
                                     {{ __('Sign In') }}
                                 </a>
                             @endif

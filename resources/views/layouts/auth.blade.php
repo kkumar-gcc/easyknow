@@ -25,7 +25,7 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.0.0/mdb.min.css" rel="stylesheet" />
     <link href="{{ asset('assets') }}/css/home.css" rel="stylesheet" />
-
+    @stack('styles')
 </head>
 
 <body>
@@ -80,7 +80,7 @@
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.0.0/mdb.min.js"></script>
     
         {{-- <script src="{{ asset('assets') }}/js/theme.js"></script> --}}
-
+        @stack('scripts')
     </body>
 
     </html>

@@ -21,6 +21,7 @@ class PublicProfileController extends Controller
         $user = User::find($id);
         $blogs = Blog::where("user_id", "=", $id)->paginate(5);
         $friendship = NULL;
+        
         if (Auth::check()) {
             $friendship = Friendship::where([
                 ["user_id", "=", $user->id],
@@ -34,7 +35,27 @@ class PublicProfileController extends Controller
             "friendship" => $friendship
         ]);
     }
+    public function detailCard(Request $request)
+    {
+        $userId = $request->get('userId');
 
+        $user = User::query()->where('id', '=', $userId)
+            ->withCount('friendships')->first();
+        $friendship = NULL;
+        if (Auth::check()) {
+            $friendship = Friendship::where([
+                ["user_id", "=", $userId],
+                ["follower_id", "=", auth()->user()->id]
+            ])->count();
+        }
+
+        $html = view("blogs.popover")
+            ->with([
+                "user" => $user,
+                "friendship" => $friendship,
+            ])->render();
+        return response()->json($html);
+    }
     /**
      * Show the form for creating a new resource.
      *

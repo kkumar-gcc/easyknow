@@ -4,10 +4,11 @@
 <div class="container guest-account">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Reset Password') }}</div>
+            <div class="e-card">
+                
 
                 <div class="card-body">
+                    <div class="e-card-title">{{ __('Reset Password') }}</div>
                     <form method="POST" action="{{ route('password.update') }}">
                         @csrf
 
@@ -51,7 +52,7 @@
 
                         <div class="row mb-0">
                             <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="e-btn e-btn-primary">
                                     {{ __('Reset Password') }}
                                 </button>
                             </div>

@@ -22,6 +22,7 @@
     },
     "dependencies": {
         "@jkryszto/mdb-for-laravel": "^1.0.0",
-        "@toast-ui/editor": "^3.1.5"
+        "@toast-ui/editor": "^3.1.5",
+        "webui-popover": "^1.2.18"
     }
 }

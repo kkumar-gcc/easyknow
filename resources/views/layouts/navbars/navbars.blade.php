@@ -1,5 +1,5 @@
 @include("layouts.navbars.sidebar")
-<nav class="navbar navbar-expand-md fixed-top navbar-light bg-white shadow-sm">
+<nav class="navbar navbar-expand-md fixed-top  shadow-sm">
    
     <div class="container-fluid">
         {{-- <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions">Enable both scrolling & backdrop</button> --}}
@@ -32,14 +32,14 @@
                 <!-- Authentication Links -->
                 @guest
                     @if (Route::has('login'))
-                        <li class="nav-item ">
-                            <a class="link link-secondary sbtn " href="{{ route('login') }}">{{ __('Login') }}</a>
+                        <li class="nav-item mr-10">
+                            <a class="e-btn e-btn-primary" href="{{ route('login') }}">{{ __('Login') }}</a>
                         </li>
                     @endif
 
                     @if (Route::has('register'))
                         <li class="nav-item ">
-                            <a class="link link-secondary sbtn ml-3" href="{{ route('register') }}">{{ __('Register') }}</a>
+                            <a class="e-btn " href="{{ route('register') }}">{{ __('Register') }}</a>
                         </li>
                     @endif
                 @else

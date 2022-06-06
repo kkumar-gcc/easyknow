@@ -39,9 +39,9 @@ class FriendshipController extends Controller
      */
     public function store(StoreFriendshipRequest $request)
     {
-        $userId = $request->get('userId');
+        $userId = $request->get('user_id');
         if ($userId != auth()->user()->id) {
-            $followerId = $request->get("followerId");
+            $followerId = $request->get("follower_id");
             $exitFriend = Friendship::where([
                 ["user_id", "=", $userId],
                 ["follower_id", "=", $followerId]
@@ -57,15 +57,18 @@ class FriendshipController extends Controller
                 $numberOfFollower = Friendship::where("user_id", "=", $userId)->count();
                 return response()->json([
                     "success" => 'follower added successfully.',
-                    "followers" => $numberOfFollower
+                    "followers" => $numberOfFollower,
+                    "user_id"=>$userId
+                ]);
+            } else {
+                $numberOfFollower = Friendship::where("user_id", "=", $userId)->count();
+
+                return response()->json([
+                    "error" => 'you are already a follower.',
+                    "followers" => $numberOfFollower,
+                    "user_id"=>$userId
                 ]);
             }
-            $numberOfFollower = Friendship::where("user_id", "=", $userId)->count();
-
-            return response()->json([
-                "error" => 'you are already a follower.',
-                "followers" => $numberOfFollower
-            ]);
         }
     }
 
@@ -111,8 +114,8 @@ class FriendshipController extends Controller
      */
     public function destroy(Request $request)
     {
-        $userId = $request->get('userId');
-        $followerId = $request->get("followerId");
+        $userId = $request->get('user_id');
+        $followerId = $request->get("follower_id");
         $exitFriend =  Friendship::where([
             ["user_id", "=", $userId],
             ["follower_id", "=", $followerId]
@@ -128,14 +131,16 @@ class FriendshipController extends Controller
 
             return response()->json([
                 "success" => 'follower removed successfully.',
-                "followers" => $numberOfFollower
+                "followers" => $numberOfFollower,
+                "user_id"=>$userId,
             ]);
         } else {
             $numberOfFollower = Friendship::where("user_id", "=", $userId)->count();
 
             return response()->json([
                 "error" => 'You haven\'t followed yet.',
-                "followers" => $numberOfFollower
+                "followers" => $numberOfFollower,
+                "user_id"=>$userId,
             ]);
         }
     }

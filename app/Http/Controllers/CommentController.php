@@ -36,7 +36,26 @@ class CommentController extends Controller
      */
     public function store(StoreCommentRequest $request)
     {
-        //
+        $user_id = $request->get('user_id');
+        $blog_id = $request->get('blog_id');
+        $description = $request->get('comment');
+
+
+        $comment = new Comment();
+        $comment->user_id = $user_id;
+        $comment->blog_id = $blog_id;
+        $comment->description = $description;
+        $saved = $comment->save();
+
+        if ($saved) {
+            return response()->json([
+                "success" => "comment created",
+                "created" => true,
+                "comment" => $comment,
+                "user"=>auth()->user()
+            ]);
+        }
+        return view("error");
     }
 
     /**

@@ -13,14 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('likes', function (Blueprint $table) {
+        Schema::create('reply_likes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')
                 ->constrained("users")
                 ->onUpdate('cascade');
-            $table->foreignId('blog_id')
-                ->constrained("blogs")
+            $table->foreignId('reply_id')
+                ->constrained("replies")
                 ->onUpdate('cascade');
+            $table->boolean('status');
             $table->timestamps();
         });
     }
@@ -32,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('likes');
+        Schema::dropIfExists('reply_likes');
     }
 };

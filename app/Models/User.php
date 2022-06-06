@@ -21,17 +21,26 @@ class User extends Authenticatable
     public function bookmarks(){
         return $this->hasMany(Bookmark::class);
     }
-    public function likes(){
-        return $this->hasMany(Like::class);
-    }
+   
     public function comments(){
         return $this->hasMany(Comment::class);
     }
     public function replies(){
         return $this->hasMany(Reply::class);
     }
-
-    
+    public function commentlikes(){
+        return $this->hasMany(BlogLike::class);
+    }
+    public function replylikes(){
+        return $this->hasMany(ReplyLike::class);
+    }
+    public function bloglikes(){
+        return $this->hasMany(BlogLike::class);
+    }
+    public function isFollower()
+    {
+        return $this->friendships()->where('follower_id','=', auth()->user()->id)->exists();
+    }
     /**
      * The attributes that are mass assignable.
      *
@@ -46,8 +55,6 @@ class User extends Authenticatable
         'password',
         'description',
         'image',
-        'following_count',
-        'follower_count',
     ];
     /**
      * The attributes that should be hidden for serialization.

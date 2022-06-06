@@ -4,10 +4,11 @@
 <div class="container guest-account">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Confirm Password') }}</div>
+            <div class="e-card">
+              
 
-                <div class="card-body">
+                <div class="card-body"> 
+                     <div class="e-card-title">{{ __('Confirm Password') }}</div>
                     {{ __('Please confirm your password before continuing.') }}
 
                     <form method="POST" action="{{ route('password.confirm') }}">
@@ -29,12 +30,12 @@
 
                         <div class="row mb-0">
                             <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="e-btn e-btn-primary">
                                     {{ __('Confirm Password') }}
                                 </button>
 
                                 @if (Route::has('password.request'))
-                                    <a class="btn btn-link" href="{{ route('password.request') }}">
+                                    <a class="e-rbtn" href="{{ route('password.request') }}">
                                         {{ __('Forgot Your Password?') }}
                                     </a>
                                 @endif

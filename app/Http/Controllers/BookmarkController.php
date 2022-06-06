@@ -36,7 +36,33 @@ class BookmarkController extends Controller
      */
     public function store(StoreBookmarkRequest $request)
     {
-        //
+        $userId = $request->get('userId');
+        $blogId = $request->get('blogId');
+        $exitBookmark = Bookmark::where([
+            ['user_id', '=', $userId],
+            ['blog_id', '=', $blogId]
+        ])->count();
+        if ($exitBookmark < 1) {
+            $bookmark = new Bookmark();
+            $bookmark->user_id = $userId;
+            $bookmark->blog_id = $blogId;
+            $bookmark->save();
+            return response()->json([
+                "success" => "Successfully Bookmarked",
+                "created" => true,
+            ]);
+        } else {
+            $bookmark = Bookmark::where([
+                ['user_id', '=', $userId],
+                ['blog_id', '=', $blogId]
+            ])->first();
+            $bookmark->delete();
+
+            return response()->json([
+                "success" => "Removed from your Bookmarks",
+                "removed" => true,
+            ]);
+        }
     }
 
     /**

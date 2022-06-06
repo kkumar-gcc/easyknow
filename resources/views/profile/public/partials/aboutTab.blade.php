@@ -1,5 +1,5 @@
 <div class="container-fluid  about">
-    <div class="card">
+    <div class="e-card">
         <div class="card-body">
             <h4 class="title">About</h4>
             <hr>

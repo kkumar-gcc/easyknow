@@ -21,8 +21,6 @@ return new class extends Migration
                 ->onUpdate('cascade');
             $table->string('title');
             $table->text('description');
-            $table->unsignedBigInteger('likes')->default(0);
-            $table->unsignedBigInteger('dislikes')->default(0);
             $table->enum("status", ['posted', 'drafted']);
             $table->timestamps();
         });

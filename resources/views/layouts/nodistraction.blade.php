@@ -26,15 +26,16 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.0.0/mdb.min.css" rel="stylesheet" />
     <link href="{{ asset('assets') }}/css/home.css" rel="stylesheet" />
-
-    @yield('style')
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/jquery.webui-popover/1.2.1/jquery.webui-popover.min.css">
+    
+    @stack('styles')
 </head>
 
 <body>
 
     <div id="app">
         <div class="wrapper">
-            @include('layouts.navbars.navbars')
+            {{-- @include('layouts.navbars.navbars') --}}
             <div class="nd-main-panel ">
                 
                     <div class="content">
@@ -47,7 +48,8 @@
     <script src="{{ asset('assets') }}/js/core/popper.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.0.0/mdb.min.js"></script>
     <script src={{ asset('js/prism.js') }}></script>
-    @yield('script')
+    <script src="https://cdn.jsdelivr.net/npm/webui-popover@1.2.18/dist/jquery.webui-popover.min.js"></script>
+    @stack('scripts')
 </body>
 
 </html>

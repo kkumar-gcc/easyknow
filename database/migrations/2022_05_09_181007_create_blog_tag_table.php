@@ -20,7 +20,8 @@ return new class extends Migration
                 ->onUpdate('cascade');
             $table->foreignId('tag_id')
                 ->constrained("tags")
-                ->onUpdate('cascade');
+                ->onUpdate('cascade')
+                ;
             $table->timestamps();
         });
     }

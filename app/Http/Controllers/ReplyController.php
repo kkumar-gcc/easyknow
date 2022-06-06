@@ -36,7 +36,26 @@ class ReplyController extends Controller
      */
     public function store(StoreReplyRequest $request)
     {
-        //
+        $userId = $request->get('user_id');
+        $commentId = $request->get('comment_id');
+        $description = $request->get('content');
+        $repliedUserId = $request->get('replied_user_id');
+
+        $reply = new Reply();
+        $reply->user_id = $userId;
+        $reply->comment_id = $commentId;
+        $reply->description = $description;
+        $saved = $reply->save();
+
+        if ($saved) {
+            return response()->json([
+                "success" => "comment created",
+                "created" => true,
+                "reply" => $reply,
+                "user"=>auth()->user()
+            ]);
+        }
+        return view("error");
     }
 
     /**

@@ -16,8 +16,6 @@ return new class extends Migration
         Schema::create('replies', function (Blueprint $table) {
             $table->id();
             $table->text('description');
-            $table->unsignedBigInteger('likes')->default(0);
-            $table->unsignedBigInteger('dislikes')->default(0);
             $table->foreignId('comment_id')
                 ->constrained("comments")
                 ->onUpdate('cascade');

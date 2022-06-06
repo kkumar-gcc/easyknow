@@ -18,6 +18,9 @@ return new class extends Migration
             $table->string('title')->unique();
             $table->text('description')->nullable();
             $table->string('color')->nullable();
+            $table->foreignId('user_id')->nullable()
+                ->constrained("users")
+                ->onUpdate('cascade');
             $table->timestamps();
         });
     }

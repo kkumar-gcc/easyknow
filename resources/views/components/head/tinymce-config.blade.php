@@ -3,7 +3,7 @@
     const useDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
     const isSmallScreen = window.matchMedia('(max-width: 1023.5px)').matches;
     tinymce.init({
-        selector: 'textarea#myeditorinstance',
+        selector: "textarea#myeditorinstance",
         plugins: [
             'advlist', 'autolink', 'importcss', 'link', 'image', 'lists', 'charmap', 'preview', 'anchor',
             'pagebreak',
@@ -15,6 +15,11 @@
             'bullist numlist outdent indent | link image media | redo  fullscreen codesample | ' +
             'print forecolor backcolor emoticons | help',
         menubar: 'edit view insert format tools table help ',
+        mobile: {
+            menubar: true,
+            plugins: 'autosave lists autolink',
+            toolbar: 'undo bold italic styles'
+        },
         codesample_global_prismjs: true,
         branding: false,
         autosave_ask_before_unload: true,
@@ -103,6 +108,60 @@
         if (e.target.closest('.tox-tinymce-aux, .moxman-window, .tam-assetmanager-root') !== null) {
             e.stopImmediatePropagation();
         }
+    });
+    tinymce.init({
+        selector: "#editor2",
+        plugins: [
+            'advlist', 'autolink', 'importcss', 'link', 'image', 'lists', 'charmap', 'preview', 'anchor',
+            'pagebreak',
+            'searchreplace', 'wordcount', 'visualblocks', 'visualchars', 'code', 'fullscreen',
+            'insertdatetime', 'codesample',
+            'media', 'table', 'emoticons', 'help'
+        ],
+        // toolbar: '| bold italic | bullist numlist | link image media emoticons | codesample preview |' +
+        //     '| styles     | ' +
+        //     'forecolor | help',
+        toolbar: "formatgroup paragraphgroup insertgroup moregroup",
+        toolbar_groups: {
+            formatgroup: {
+                icon: 'format',
+                tooltip: 'Formatting',
+                items: 'bold italic underline strikethrough | forecolor backcolor | superscript subscript | removeformat'
+            },
+            paragraphgroup: {
+                icon: 'paragraph',
+                tooltip: 'Paragraph format',
+                items: 'h1 h2 h3 | bullist numlist | alignleft aligncenter alignright | indent outdent'
+            },
+            insertgroup: {
+                icon: 'plus',
+                tooltip: 'Insert',
+                items: 'link image emoticons charmap hr'
+            },
+            moregroup: {
+                icon: "more-drawer",
+                tooltip: "more",
+                items: "codesample preview help "
+            }
+        },
+
+        menubar: false,
+        statusbar: false,
+        max_height: 300,
+        codesample_global_prismjs: true,
+        branding: false,
+        image_advtab: true,
+        importcss_append: true,
+        template_cdate_format: '[Date Created (CDATE): %m/%d/%Y : %H:%M:%S]',
+        template_mdate_format: '[Date Modified (MDATE): %m/%d/%Y : %H:%M:%S]',
+        image_caption: true,
+        quickbars_selection_toolbar: 'bold italic | quicklink h2 h3 blockquote quickimage quicktable',
+        noneditable_class: 'mceNonEditable',
+        contextmenu: 'link image table',
+        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }',
+        toolbar_location: 'bottom',
+        // skin: useDarkMode ? 'oxide-dark' : 'oxide',
+        // content_css: useDarkMode ? 'dark' : 'default'
     });
     // tinymce.init({
     //     selector: 'textarea#myeditorinstance',
@@ -193,8 +252,8 @@
     //     noneditable_class: 'mceNonEditable',
     //     toolbar_mode: 'sliding',
     //     contextmenu: 'link image table',
-    //     skin: useDarkMode ? 'oxide-dark' : 'oxide',
-    //     content_css: useDarkMode ? 'dark' : 'default',
+    // skin: useDarkMode ? 'oxide-dark' : 'oxide',
+    // content_css: useDarkMode ? 'dark' : 'default',
     //     content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }'
     // });
 </script>

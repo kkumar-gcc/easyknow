@@ -25,24 +25,11 @@
                 <a href="/blogs" class="sidebar-link link link-secondary">Blogs</a>
             </li>
             <li class="sidebar-item">
-                <a href="#" class="sidebar-link link link-secondary">Home 1</a>
-            </li>
-            <li class="sidebar-item">
-                <a class="sidebar-link dropdown-toggle sidebar-link link link-secondary" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Dropdown
-                  </a>
-                  <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-                    <li><a class="dropdown-item" href="#">Action</a></li>
-                    <li><a class="dropdown-item" href="#">Another action</a></li>
-                    <li><a class="dropdown-item" href="#">Something else here</a></li>
-                  </ul>
+                <a href="/tags" class="sidebar-link link link-secondary">Tags</a>
             </li>
            
+           
         </ul>
-        <div class="btn-group">
-            <a href="#" class="btn btn-primary" aria-current="page">Active link</a>
-            <a href="#" class="btn btn-primary">Link</a>
-            <a href="#" class="btn btn-primary">Link</a>
-          </div>
+       
     </div>
 </div>

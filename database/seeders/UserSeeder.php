@@ -29,7 +29,7 @@ class UserSeeder extends Seeder
                     ->each(function ($blog) {
                         $tag_ids = range(1, 8);
                         shuffle($tag_ids);
-                        $assignments = array_slice($tag_ids, 0, rand(1, 7));
+                        $assignments = array_slice($tag_ids, 0, rand(1, 5));
                         foreach ($assignments as $tag_id) {
                             DB::table('blog_tag')
                                 ->insert([

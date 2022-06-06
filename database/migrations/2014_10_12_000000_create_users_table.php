@@ -22,8 +22,6 @@ return new class extends Migration
             $table->string('username')->unique();
             $table->string('image')->nullable();
             $table->text('description')->nullable();
-            $table->unsignedBigInteger('follower_count')->nullable();
-            $table->unsignedBigInteger('following_count')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();

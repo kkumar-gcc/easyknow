@@ -1,7 +1,7 @@
 @extends('layouts.nodistraction')
-@section('style')
+@push('styles')
     <x-head.tinymce-config />
-@endsection
+@endpush
 @section('content')
     <?php
     function nice_number($n)
@@ -45,17 +45,6 @@
                 </div>
             </section>
         @endif
-        {{-- @isset($success)
-            <section class=" d-flex justify-content-center my-4 w-100">
-                <div class="container">
-                    <div class="alert alert-dismissible fade show alert-success" role="alert" data-mdb-color="warning"
-                        id="customxD">
-                        <strong>Success!</strong> {{ $success }}
-                        <button type="button" class="btn-close" data-mdb-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                </div>
-            </section>
-        @endisset --}}
         <a type="button" href="{{ url()->previous() }}" class="btn btn-outline-dark" data-mdb-ripple-color="dark">back</a>
         <h1 class="title"><a class="link link-secondary" href="/blogs/{{ $blog->id }}">{{ $blog->title }}</a>
         </h1>
@@ -193,7 +182,7 @@
                         <li class="blog-bar-item">
                             <a type="button" data-mdb-toggle="modal" role="button"
                                 class="blog-bar-link sbtn link text-warning border-warning  btn-outline-warning"
-                                href="#blogModal-{{ $blog->id }}">
+                                href="#blogEditModal-{{ $blog->id }}">
                                 <span>{{ svg('feathericon-edit') }}</span> Edit
                             </a>
                         </li>
@@ -223,19 +212,84 @@
             </div>
 
             <div class="blog-bar-right">
-                <ul>
-                    <li class="blog-bar-item"><a class="blog-bar-link sbtn link link-secondary"
-                            href="#"><span>{{ svg('grommet-like') }}</span> {{ nice_number($blog->likes) }}</a></li>
-                    <li class="blog-bar-item"><a class="blog-bar-link sbtn link link-secondary"
-                            href="#"><span>{{ svg('grommet-dislike') }}</span> {{ nice_number($blog->dislikes) }}</a>
-                    </li>
-                    <li class="blog-bar-item"><a class="blog-bar-link sbtn link link-secondary" href="#comments"><span><i
-                                    class="tim-icons icon-chat-33"></i></span>
-                            {{ nice_number($blog->comments->count()) }}</a></li>
-                    <li class="blog-bar-item"><a class="blog-bar-link sbtn link link-secondary"
-                            href="#"><span>{{ svg('bx-share') }}</span> 1</a></li>
 
-                </ul>
+                @guest
+                    <ul>
+                        <li class="blog-bar-item">
+                            <button class="blog-bar-link bg-white sbtn link link-secondary" data-mdb-toggle="tooltip"
+                                title="likes">
+                                <span>{{ svg('grommet-like') }}</span>
+                                {{ nice_number($blog->bloglikes->where('status', 1)->count()) }}
+                            </button>
+                        </li>
+                        <li class="blog-bar-item">
+                            <button class="blog-bar-link sbtn bg-white link link-secondary" data-mdb-toggle="tooltip"
+                                title="dislikes">
+                                <span>{{ svg('grommet-dislike') }}</span>
+                                {{ nice_number($blog->bloglikes->where('status', 0)->count()) }}
+                            </button>
+                        </li>
+                        <li class="blog-bar-item">
+                            <a class="blog-bar-link sbtn bg-white link link-secondary" href="#comments"
+                                data-mdb-toggle="tooltip" title="comments">
+                                <span><i class="tim-icons icon-chat-33"></i></span>
+                                {{ nice_number($blog->comments->count()) }}
+                            </a>
+                        </li>
+                        <li class="blog-bar-item">
+                            <button class="blog-bar-link bg-white sbtn link link-secondary" data-mdb-toggle="tooltip"
+                                title="share">
+                                <span>{{ svg('bx-share') }}</span> 1
+                            </button>
+                        </li>
+
+                    </ul>
+                @else
+                    <ul>
+                        <li class="blog-bar-item">
+                            <form method="post" id="blog_like_form" class="d-inline">
+                                @csrf
+                                @method('PUT')
+                                <input type="hidden" name="blog_id" id="blog_like_id" value="{{ $blog->id }}">
+                                <input type="hidden" name="user_id" id="user_like_id" value="{{ auth()->user()->id }}">
+                                <button type="submit" id="blog-like-{{ $blog->id }}"
+                                    class="blog-bar-link bg-white sbtn @isset($like) {{ $like->status == 1 ? 'text-danger border-danger' : '' }} @endisset  link link-secondary"
+                                    data-mdb-toggle="tooltip" title="likes">
+                                    <span>{{ svg('grommet-like') }}</span>
+                                    {{ nice_number($blog->bloglikes->where('status', 1)->count()) }}
+                                </button>
+                            </form>
+                        </li>
+                        <li class="blog-bar-item">
+                            <form method="post" id="blog_dislike_form" class="d-inline">
+                                @csrf
+                                @method('PUT')
+                                <input type="hidden" name="blog_id" id="blog_dislike_id" value="{{ $blog->id }}">
+                                <input type="hidden" name="user_id" id="user_dislike_id" value="{{ auth()->user()->id }}">
+                                <button type="submit" id="blog-dislike-{{ $blog->id }}"
+                                    class="blog-bar-link sbtn bg-white @isset($like) {{ $like->status == 0 ? 'text-secondary border-secondary' : '' }} @endisset  link link-secondary"
+                                    data-mdb-toggle="tooltip" title="dislikes">
+                                    <span>{{ svg('grommet-dislike') }}</span>
+                                    {{ nice_number($blog->bloglikes->where('status', 0)->count()) }}
+                                </button>
+                            </form>
+                        </li>
+                        <li class="blog-bar-item">
+                            <a class="blog-bar-link sbtn bg-white link link-secondary" href="#comments"
+                                data-mdb-toggle="tooltip" title="comments">
+                                <span><i class="tim-icons icon-chat-33"></i></span>
+                                {{ nice_number($blog->comments->count()) }}
+                            </a>
+                        </li>
+                        <li class="blog-bar-item">
+                            <button class="blog-bar-link bg-white sbtn link link-secondary" data-mdb-toggle="tooltip"
+                                title="share">
+                                <span>{{ svg('bx-share') }}</span> 1
+                            </button>
+                        </li>
+
+                    </ul>
+                @endguest
             </div>
 
         </div>
@@ -264,7 +318,7 @@
     </div>
 @endsection
 
-@section('script')
+@push('script')
     <script>
         $(document).ready(function() {
             $('.showElement').click(function() {
@@ -365,6 +419,329 @@
 
                 })
             })
+
+
+            //like blog using ajax 
+
+            $('#blog_like_form').on('submit', function(e) {
+                $.ajaxSetup({
+                    header: $('meta[name="_token"]').attr('content')
+                })
+                e.preventDefault(e);
+                var blog_like_id = $("#blog_like_id").val();
+                var user_like_id = $("#user_like_id").val();
+                $.ajax({
+                    url: '{{ Route('bloglike.create') }}',
+                    type: "PUT",
+                    data: {
+                        blogId: blog_like_id,
+                        userId: user_like_id,
+                    },
+                    dataType: 'json',
+                    success: function(data) {
+                        if (data.created) {
+                            $("#blog-like-" + blog_like_id).html(
+                                `<span>{{ svg('grommet-like') }}</span> ` + data.likes);
+                            $("#blog-dislike-" + blog_like_id).html(
+                                `<span>{{ svg('grommet-dislike') }}</span> ` + data
+                                .dislikes);
+                            $("#blog-like-" + blog_like_id).addClass(
+                                "text-danger border-danger");
+                        }
+                        if (data.removed) {
+                            $("#blog-like-" + blog_like_id).html(
+                                `<span>{{ svg('grommet-like') }}</span> ` + data.likes);
+                            $("#blog-dislike-" + blog_like_id).html(
+                                `<span>{{ svg('grommet-dislike') }}</span> ` + data
+                                .dislikes);
+                            $("#blog-like-" + blog_like_id).removeClass(
+                                "text-danger border-danger");
+                        }
+                        if (data.updated) {
+                            $("#blog-like-" + blog_like_id).html(
+                                `<span>{{ svg('grommet-like') }}</span> ` + data.likes);
+                            $("#blog-dislike-" + blog_like_id).html(
+                                `<span>{{ svg('grommet-dislike') }}</span> ` + data
+                                .dislikes);
+                            $("#blog-like-" + blog_like_id).addClass(
+                                "text-danger border-danger");
+                            $("#blog-dislike-" + blog_like_id).removeClass(
+                                "text-secondary border-secondary")
+                        }
+
+                    }
+                })
+            });
+            //dislike ajax
+            $('#blog_dislike_form').on('submit', function(e) {
+                $.ajaxSetup({
+                    header: $('meta[name="_token"]').attr('content')
+                })
+                e.preventDefault(e);
+                var blog_dislike_id = $("#blog_dislike_id").val();
+                var user_dislike_id = $("#user_dislike_id").val();
+                $.ajax({
+                    type: "PUT",
+                    url: '{{ Route('blogdislike.create') }}',
+                    data: {
+                        blogId: blog_dislike_id,
+                        userId: user_dislike_id,
+                    },
+                    dataType: 'json',
+                    success: function(data) {
+                        if (data.created) {
+                            $("#blog-like-" + blog_dislike_id).html(
+                                `<span>{{ svg('grommet-like') }}</span> ` + data.likes);
+                            $("#blog-dislike-" + blog_dislike_id).html(
+                                `<span>{{ svg('grommet-dislike') }}</span> ` + data
+                                .dislikes);
+                            $("#blog-dislike-" + blog_dislike_id).addClass(
+                                "text-secondary border-secondary");
+                        }
+                        if (data.removed) {
+                            $("#blog-like-" + blog_dislike_id).html(
+                                `<span>{{ svg('grommet-like') }}</span> ` + data.likes);
+                            $("#blog-dislike-" + blog_dislike_id).html(
+                                `<span>{{ svg('grommet-dislike') }}</span> ` + data
+                                .dislikes);
+                            $("#blog-dislike-" + blog_dislike_id).removeClass(
+                                "text-secondary border-secondary");
+                        }
+                        if (data.updated) {
+                            $("#blog-like-" + blog_dislike_id).html(
+                                `<span>{{ svg('grommet-like') }}</span> ` + data.likes);
+                            $("#blog-dislike-" + blog_dislike_id).html(
+                                `<span>{{ svg('grommet-dislike') }}</span> ` + data
+                                .dislikes);
+                            $("#blog-like-" + blog_dislike_id).removeClass(
+                                "text-danger border-danger");
+                            $("#blog-dislike-" + blog_dislike_id).addClass(
+                                "text-secondary border-secondary");
+                        }
+
+                    }
+                })
+            });
+
+
+            //comment like
+            $("form.comment-like").on('submit', function(e) {
+
+                $.ajaxSetup({
+                    header: $('meta[name="_token"]').attr('content')
+                })
+                e.preventDefault(e);
+                var id = $(this).attr('id');
+                var comment_id = id.substr(18, id.length - 1)
+
+                var comment_like_id = $("#comment_like_id_" + comment_id).val();
+                var user_like_id = $("#user_like_id_" + comment_id).val();
+                $.ajax({
+                    url: '/commentlike/create',
+                    type: "PUT",
+                    data: {
+                        commentId: comment_like_id,
+                        userId: user_like_id
+                    },
+                    dataType: 'json',
+                    success: function(data) {
+                        if (data.created) {
+                            $("#comment-like-" + comment_like_id).html(
+                                `<span>{{ svg('grommet-like') }}</span> ` + data.likes);
+                            $("#comment-dislike-" + comment_like_id).html(
+                                `<span>{{ svg('grommet-dislike') }}</span> ` + data
+                                .dislikes);
+                            $("#comment-like-" + comment_like_id).addClass(
+                                "text-danger border-danger");
+                        }
+                        if (data.removed) {
+                            $("#comment-like-" + comment_like_id).html(
+                                `<span>{{ svg('grommet-like') }}</span> ` + data.likes);
+                            $("#comment-dislike-" + comment_like_id).html(
+                                `<span>{{ svg('grommet-dislike') }}</span> ` + data
+                                .dislikes);
+                            $("#comment-like-" + comment_like_id).removeClass(
+                                "text-danger border-danger");
+                        }
+                        if (data.updated) {
+                            $("#comment-like-" + comment_like_id).html(
+                                `<span>{{ svg('grommet-like') }}</span> ` + data.likes);
+                            $("#comment-dislike-" + comment_like_id).html(
+                                `<span>{{ svg('grommet-dislike') }}</span> ` + data
+                                .dislikes);
+                            $("#comment-like-" + comment_like_id).addClass(
+                                "text-danger border-danger");
+                            $("#comment-dislike-" + comment_like_id).removeClass(
+                                "text-secondary border-secondary")
+                        }
+
+                    }
+                });
+            })
+
+            //dislike ajax
+            $('form.comment-dislike').on('submit', function(e) {
+                $.ajaxSetup({
+                    header: $('meta[name="_token"]').attr('content')
+                })
+                e.preventDefault(e);
+                var id = $(this).attr('id');
+                var comment_id = id.substr(21, id.length - 1)
+                console.log(id, comment_id);
+                var comment_dislike_id = $("#comment_dislike_id_" + comment_id).val();
+                var user_dislike_id = $("#user_dislike_id_" + comment_id).val();
+                $.ajax({
+                    type: "PUT",
+                    url: '{{ Route('commentdislike.create') }}',
+                    data: {
+                        commentId: comment_dislike_id,
+                        userId: user_dislike_id,
+                    },
+                    dataType: 'json',
+                    success: function(data) {
+                        if (data.created) {
+                            $("#comment-like-" + comment_dislike_id).html(
+                                `<span>{{ svg('grommet-like') }}</span> ` + data.likes);
+                            $("#comment-dislike-" + comment_dislike_id).html(
+                                `<span>{{ svg('grommet-dislike') }}</span> ` + data
+                                .dislikes);
+                            $("#comment-dislike-" + comment_dislike_id).addClass(
+                                "text-secondary border-secondary");
+                        }
+                        if (data.removed) {
+                            $("#comment-like-" + comment_dislike_id).html(
+                                `<span>{{ svg('grommet-like') }}</span> ` + data.likes);
+                            $("#comment-dislike-" + comment_dislike_id).html(
+                                `<span>{{ svg('grommet-dislike') }}</span> ` + data
+                                .dislikes);
+                            $("#comment-dislike-" + comment_dislike_id).removeClass(
+                                "text-secondary border-secondary");
+                        }
+                        if (data.updated) {
+                            $("#comment-like-" + comment_dislike_id).html(
+                                `<span>{{ svg('grommet-like') }}</span> ` + data.likes);
+                            $("#comment-dislike-" + comment_dislike_id).html(
+                                `<span>{{ svg('grommet-dislike') }}</span> ` + data
+                                .dislikes);
+                            $("#comment-like-" + comment_dislike_id).removeClass(
+                                "text-danger border-danger");
+                            $("#comment-dislike-" + comment_dislike_id).addClass(
+                                "text-secondary border-secondary");
+                        }
+
+                    }
+                })
+            });
+
+            //comment like
+            $("form.reply-like").on('submit', function(e) {
+
+                $.ajaxSetup({
+                    header: $('meta[name="_token"]').attr('content')
+                })
+                e.preventDefault(e);
+                var id = $(this).attr('id');
+
+                var reply_id = id.substr(16, id.length - 1)
+
+                var reply_like_id = $("#reply_like_id_" + reply_id).val();
+                var user_like_id = $("#user_like_id_" + reply_id).val();
+                $.ajax({
+                    url: '/replylike/create',
+                    type: "PUT",
+                    data: {
+                        replyId: reply_like_id,
+                        userId: user_like_id
+                    },
+                    dataType: 'json',
+                    success: function(data) {
+                        if (data.created) {
+                            $("#reply-like-" + reply_like_id).html(
+                                `<span>{{ svg('grommet-like') }}</span> ` + data.likes);
+                            $("#reply-dislike-" + reply_like_id).html(
+                                `<span>{{ svg('grommet-dislike') }}</span> ` + data
+                                .dislikes);
+                            $("#reply-like-" + reply_like_id).addClass(
+                                "text-danger border-danger");
+                        }
+                        if (data.removed) {
+                            $("#reply-like-" + reply_like_id).html(
+                                `<span>{{ svg('grommet-like') }}</span> ` + data.likes);
+                            $("#reply-dislike-" + reply_like_id).html(
+                                `<span>{{ svg('grommet-dislike') }}</span> ` + data
+                                .dislikes);
+                            $("#reply-like-" + reply_like_id).removeClass(
+                                "text-danger border-danger");
+                        }
+                        if (data.updated) {
+                            $("#reply-like-" + reply_like_id).html(
+                                `<span>{{ svg('grommet-like') }}</span> ` + data.likes);
+                            $("#reply-dislike-" + reply_like_id).html(
+                                `<span>{{ svg('grommet-dislike') }}</span> ` + data
+                                .dislikes);
+                            $("#reply-like-" + reply_like_id).addClass(
+                                "text-danger border-danger");
+                            $("#reply-dislike-" + reply_like_id).removeClass(
+                                "text-secondary border-secondary")
+                        }
+
+                    }
+                });
+            })
+
+            //dislike ajax
+            $('form.reply-dislike').on('submit', function(e) {
+                $.ajaxSetup({
+                    header: $('meta[name="_token"]').attr('content')
+                })
+                e.preventDefault(e);
+                var id = $(this).attr('id');
+                var reply_id = id.substr(19, id.length - 1)
+                console.log(id, reply_id);
+                var reply_dislike_id = $("#reply_dislike_id_" + reply_id).val();
+                var user_dislike_id = $("#user_dislike_id_" + reply_id).val();
+                $.ajax({
+                    type: "PUT",
+                    url: '{{ Route('replydislike.create') }}',
+                    data: {
+                        replyId: reply_dislike_id,
+                        userId: user_dislike_id,
+                    },
+                    dataType: 'json',
+                    success: function(data) {
+                        if (data.created) {
+                            $("#reply-like-" + reply_dislike_id).html(
+                                `<span>{{ svg('grommet-like') }}</span> ` + data.likes);
+                            $("#reply-dislike-" + reply_dislike_id).html(
+                                `<span>{{ svg('grommet-dislike') }}</span> ` + data
+                                .dislikes);
+                            $("#reply-dislike-" + reply_dislike_id).addClass(
+                                "text-secondary border-secondary");
+                        }
+                        if (data.removed) {
+                            $("#reply-like-" + reply_dislike_id).html(
+                                `<span>{{ svg('grommet-like') }}</span> ` + data.likes);
+                            $("#reply-dislike-" + reply_dislike_id).html(
+                                `<span>{{ svg('grommet-dislike') }}</span> ` + data
+                                .dislikes);
+                            $("#reply-dislike-" + reply_dislike_id).removeClass(
+                                "text-secondary border-secondary");
+                        }
+                        if (data.updated) {
+                            $("#reply-like-" + reply_dislike_id).html(
+                                `<span>{{ svg('grommet-like') }}</span> ` + data.likes);
+                            $("#reply-dislike-" + reply_dislike_id).html(
+                                `<span>{{ svg('grommet-dislike') }}</span> ` + data
+                                .dislikes);
+                            $("#reply-like-" + reply_dislike_id).removeClass(
+                                "text-danger border-danger");
+                            $("#reply-dislike-" + reply_dislike_id).addClass(
+                                "text-secondary border-secondary");
+                        }
+
+                    }
+                })
+            });
         });
     </script>
-@endsection
+@endpush

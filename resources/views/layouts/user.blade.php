@@ -21,12 +21,14 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
     <!-- Styles -->
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/jquery.webui-popover/1.2.1/jquery.webui-popover.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-typeahead/2.11.0/jquery.typeahead.css" integrity="sha512-AQG3JVpy/h0TsLsFs/HDLjnkq1ih9uUliGGXdQ7LQcGQt7GD+1b7HWOQ2oeCH7tKdtrfRg75CGApafi+//9Dbw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.0.0/mdb.min.css" rel="stylesheet" />
     <link href="{{ asset('assets') }}/css/home.css" rel="stylesheet" />
-
-    @yield('style')
+    
+    
+    @stack('styles')
 </head>
 
 <body>
@@ -37,25 +39,8 @@
             <div class="user-main-panel ">
                 <div class="left">
                     <div class="content">
-                        {{-- @yield('content-left') --}}
-                        <div id="gtm-content-others" class="position-relative"
-                            style="min-height:175px;margin-bottom: 1rem;">
-                            <div class="position-absolute w-100 justify-content-center">
-                                <div class="border border-info shadow-3 rounded overflow-hidden"
-                                    style="border-color: rgba(133, 214, 251, .3) !important;">
-                                    <span class="dc-content-animation mx-2 mb-2 mt-3" style="width: 40%;"></span>
-                                    <span class="dc-content-animation mx-2 mb-1" style="width: 70%;"></span>
-                                    <span class="dc-content-animation mx-2 mb-1"></span>
-                                    <span class="dc-content-animation mx-2 mb-1" style="width: 80%;"></span>
-                                    <span class="dc-content-animation mx-2 mb-1" style="width: 70%;"></span>
-
-
-                                </div>
-                            </div>
-
-                            <div id="gtmDC-scroll-unlogged" style="min-height:1px"></div>
-
-                        </div>
+                        @yield('content-left')
+                       
                     </div>
                 </div>
                 <div class="middle">
@@ -81,7 +66,10 @@
     <script src="{{ asset('assets') }}/js/plugins/bootstrap-notify.js"></script>
      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.0.0/mdb.min.js"></script>
     {{-- <script src="{{ asset('assets') }}/js/theme.js"></script> --}}
-    @yield('script')
+    <script src="https://cdn.jsdelivr.net/npm/webui-popover@1.2.18/dist/jquery.webui-popover.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-typeahead/2.11.0/jquery.typeahead.min.js" integrity="sha512-Rc24PGD2NTEGNYG/EMB+jcFpAltU9svgPcG/73l1/5M6is6gu3Vo1uVqyaNWf/sXfKyI0l240iwX9wpm6HE/Tg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  
+    @stack('scripts')
 </body>
 
 </html>

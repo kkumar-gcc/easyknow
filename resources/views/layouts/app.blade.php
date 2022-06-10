@@ -22,8 +22,8 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
     <!-- Styles -->
-     <link rel="stylesheet" href="https://cdn.jsdelivr.net/jquery.webui-popover/1.2.1/jquery.webui-popover.min.css">
-    <link rel="stylesheet" type="text/css" href={{ asset('css/prism.css') }}>
+    <link href="{{ asset('assets') }}/css/webui-popover.css" rel="stylesheet">
+     <link rel="stylesheet" type="text/css" href={{ asset('css/prism.css') }}>
 
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.0.0/mdb.min.css" rel="stylesheet" />

@@ -25,11 +25,11 @@
         <div class="e-card" style="border-radius:0px 0px 0.5rem 0.5rem">
             <div class="card-body profile-body">
                 <div class="background-image">
-                    <img src="https://picsum.photos/400/300" alt="">
+                    <img src="{{ asset($user->background_image ?? '') }}" alt="">
                 </div>
                 <div class="profile-image">
                     <div class="user-image">
-                        <img src="https://picsum.photos/400/300" alt="">
+                        <img src="{{ asset($user->profile_image ?? '') }}" alt="">
                     </div>
                     <div class="user-detail">
                         <h1>{{ $user->username }}</h1>
@@ -39,7 +39,6 @@
                     <div class="user-btn">
                         @guest
                             <a class="btn btn-danger link" href="#">
-                                {{-- {{ svg('gmdi-person-add-alt-1-r') }} --}}
                                 {{ __('Follow') }}
                             </a>
                         @else
@@ -118,49 +117,46 @@
                     </div>
                 </div>
                 <hr>
-                <ul class="nav nav-tabs nav-fill" id="ex1" role="tablist">
+                <ul class="nav nav-tabs" role="tablist"  id="details">
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link active" id="ex2-tab-1" data-mdb-toggle="tab" href="#ex2-tabs-1" role="tab"
-                            aria-controls="ex2-tabs-1" aria-selected="true">About</a>
+                        <a class="nav-link {{ $tab == 'about' ? 'active' : '' }}"
+                            href="/users/{{ $user->id }}/{{ $user->username }}/public?tab=about#details"
+                            role="tab">About Me</a>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link" id="ex2-tab-2" data-mdb-toggle="tab" href="#ex2-tabs-2" role="tab"
-                            aria-controls="ex2-tabs-2" aria-selected="false">Blogs ({{ $user->blogs->count() }})</a>
+                        <a class="nav-link {{ $tab == 'blogs' ? 'active' : '' }}"
+                            href="/users/{{ $user->id }}/{{ $user->username }}/public?tab=blogs#details"
+                            role="tab">Blogs ({{ nice_number($user->blogs->where('status','=','posted')->count()) }})</a>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link" id="ex2-tab-3" data-mdb-toggle="tab" href="#ex2-tabs-3" role="tab"
-                            aria-controls="ex2-tabs-3" aria-selected="false">Liked ({{ $user->blogs->count() }})</a>
+                        <a class="nav-link {{ $tab == 'bookmarks' ? 'active' : '' }}"
+                            href="/users/{{ $user->id }}/{{ $user->username }}/public?tab=bookmarks#details"
+                            role="tab">Bookmarks ({{ nice_number($user->bookmarks->count()) }})</a>
                     </li>
-                    <li class="nav-item" role="presentation">
-                        <a class="nav-link" id="ex2-tab-4" data-mdb-toggle="tab" href="#ex2-tabs-4" role="tab"
-                            aria-controls="ex2-tabs-4" aria-selected="false">Activity</a>
-                    </li>
+                    {{-- <li class="nav-item" role="presentation">
+                        <a class="nav-link {{ $tab == 'activity' ? 'active' : '' }}"
+                            href="/users/{{ $user->id }}/{{ $user->username }}/public?tab=activity#details"
+                            role="tab">Activity</a>
+                    </li> --}}
+                    {{-- <li class="nav-item" role="presentation">
+                        <a class="nav-link {{ $tab == 'activity' ? 'active' : '' }}"
+                            href="/users/{{ $user->id }}/{{ $user->username }}/public?tab=activity#details"
+                            role="tab">Activity</a>
+                    </li> --}}
                 </ul>
-            </div>
 
+            </div>
         </div>
         <div>
-            <div class="tab-content" id="ex2-content">
-
-                <div class="tab-pane fade show active" id="ex2-tabs-1" role="tabpanel" aria-labelledby="ex2-tab-1">
-                    @include('profile.public.partials.aboutTab', [
-                        'user' => $user,
-                    ])
-                </div>
-                <div class="tab-pane fade" id="ex2-tabs-2" role="tabpanel" aria-labelledby="ex2-tab-2">
-                    @include('profile.public.partials.blogTab', [
-                        'blogs' => $blogs,
-                    ])
-                </div>
-                <div class="tab-pane fade" id="ex2-tabs-3" role="tabpanel" aria-labelledby="ex2-tab-3">
-                    @include('profile.public.partials.likeTab', ['blogs' => $blogs])
-                </div>
-                <div class="tab-pane fade" id="ex2-tabs-4" role="tabpanel" aria-labelledby="ex2-tab-4">
-                    @include('profile.public.partials.profileTab', [
-                        'user' => $user,
-                    ])
-                </div>
-            </div>
+            @if ($tab == 'about')
+                @include('profile.public.partials.aboutTab', ['user' => $user])
+            @elseif($tab == 'blogs')
+                @include('profile.public.partials.blogTab', ['blogs' => $blogs])
+            @elseif($tab == 'bookmarks')
+                @include('profile.public.partials.bookmarkTab', ['bookmarks' => $bookmarks])
+            {{-- @elseif ($tab == 'activity')
+                @include('profile.public.partials.activityTab', ['user' => $user]) --}}
+            @endif
         </div>
     </div>
 @endsection

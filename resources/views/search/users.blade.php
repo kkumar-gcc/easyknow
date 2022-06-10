@@ -1,6 +1,6 @@
 @if (count($users) > 0)
     @foreach ($users as $user)
-        <div class="e-card e-card-center e-card-hover">
+        <div class="e-card e-card-center e-card-hover mt-3">
             <div class="e-card-image">
                 <a href="/users/{{ $user->id }}/{{ $user->username }}/public" class="global-image">
                     <img class="user-image" src="https://picsum.photos/400/300" alt="">
@@ -102,8 +102,7 @@
                     </div>
                 </div>
                 <div class="auther-description">
-                    If you`ve been programming for long enough, you have heard about the concept of a graph.
-
+                   {!! $user->short_bio !!}
                 </div>
             </div>
         </div>

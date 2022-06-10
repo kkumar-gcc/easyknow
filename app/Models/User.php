@@ -11,35 +11,46 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
-    
-    public function blogs(){
+
+    public function blogs()
+    {
         return $this->hasMany(Blog::class);
     }
-    public function friendships(){
+    public function friendships()
+    {
         return $this->hasMany(Friendship::class);
     }
-    public function bookmarks(){
+    public function bookmarks()
+    {
         return $this->hasMany(Bookmark::class);
     }
-   
-    public function comments(){
+    public function pins()
+    {
+        return $this->hasMany(BlogPin::class);
+    }
+    public function comments()
+    {
         return $this->hasMany(Comment::class);
     }
-    public function replies(){
+    public function replies()
+    {
         return $this->hasMany(Reply::class);
     }
-    public function commentlikes(){
+    public function commentlikes()
+    {
         return $this->hasMany(BlogLike::class);
     }
-    public function replylikes(){
+    public function replylikes()
+    {
         return $this->hasMany(ReplyLike::class);
     }
-    public function bloglikes(){
+    public function bloglikes()
+    {
         return $this->hasMany(BlogLike::class);
     }
     public function isFollower()
     {
-        return $this->friendships()->where('follower_id','=', auth()->user()->id)->exists();
+        return $this->friendships()->where('follower_id', '=', auth()->user()->id)->exists();
     }
     /**
      * The attributes that are mass assignable.
@@ -47,14 +58,20 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
+        'email',
+        'username',
         'name',
         'first_name',
         'last_name',
-        'email',
-        'username',
         'password',
-        'description',
-        'image',
+        'about_me',
+        'short_bio',
+        'profile_image',
+        'background_image', 
+        "website_url", 
+        'twitter_url', 
+        'github_url', 
+        'facebook_url'
     ];
     /**
      * The attributes that should be hidden for serialization.

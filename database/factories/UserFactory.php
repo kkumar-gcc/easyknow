@@ -19,12 +19,17 @@ class UserFactory extends Factory
     {
         return [
             'name' => $this->faker->name(),
-            'first_name'=>$this->faker->firstName(),
-            'last_name'=>$this->faker->lastName(),
+            'first_name' => $this->faker->firstName(),
+            'last_name' => $this->faker->lastName(),
             'email' => $this->faker->unique()->safeEmail(),
-            'username'=>$this->faker->unique()->userName(),
+            'username' => $this->faker->unique()->userName(),
             // 'image'=>$this->faker->profile(),
-            'description'=>$this->faker->realText(200),
+            'about_me' => $this->faker->realText(500),
+            'short_bio' => $this->faker->realText(200),
+            "website_url" => $this->faker->url(),
+            'twitter_url' => $this->faker->url(),
+            'github_url' => $this->faker->url(),
+            'facebook_url' => $this->faker->url(),
             'email_verified_at' => now(),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'remember_token' => Str::random(10),

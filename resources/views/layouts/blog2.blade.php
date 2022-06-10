@@ -27,11 +27,12 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.0.0/mdb.min.css" rel="stylesheet" />
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/jquery.webui-popover/1.2.1/jquery.webui-popover.min.css">
+
+    <link href="{{ asset('assets') }}/css/home.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-typeahead/2.11.0/jquery.typeahead.css"
         integrity="sha512-AQG3JVpy/h0TsLsFs/HDLjnkq1ih9uUliGGXdQ7LQcGQt7GD+1b7HWOQ2oeCH7tKdtrfRg75CGApafi+//9Dbw=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link href="{{ asset('assets') }}/css/home.css" rel="stylesheet" />
+    <link href="{{ asset('assets') }}/css/webui-popover.css" rel="stylesheet">
     @stack('styles')
 
 </head>
@@ -64,23 +65,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-typeahead/2.11.0/jquery.typeahead.min.js"
         integrity="sha512-Rc24PGD2NTEGNYG/EMB+jcFpAltU9svgPcG/73l1/5M6is6gu3Vo1uVqyaNWf/sXfKyI0l240iwX9wpm6HE/Tg=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script>
-        // $(document).ready(function() { 
-        //   $('#right').css('top', ($(window).height()-$('#right').outerHeight()) +
-        //         'px');
-        //         console.log($(window).height()-$('#right').height())
-
-        // }); 
-        document.querySelector('.right2').style.top = (window.innerHeight - document.querySelector('.right2').offsetHeight) +
-            'px';
-
-        window.addEventListener('resize', function() {
-            document.querySelector('.right2').style.top = (window.innerHeight - document.querySelector('.right2')
-                .offsetHeight) + 'px';
-        })
-    </script>
-
-
     @stack('scripts')
 
 </body>

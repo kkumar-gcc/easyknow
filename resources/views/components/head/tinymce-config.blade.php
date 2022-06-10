@@ -3,7 +3,7 @@
     const useDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
     const isSmallScreen = window.matchMedia('(max-width: 1023.5px)').matches;
     tinymce.init({
-        selector: "textarea#myeditorinstance",
+        selector: "#myeditorinstance",
         plugins: [
             'advlist', 'autolink', 'importcss', 'link', 'image', 'lists', 'charmap', 'preview', 'anchor',
             'pagebreak',

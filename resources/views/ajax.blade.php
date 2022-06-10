@@ -666,8 +666,9 @@
                             $('#' + id).webuiPopover({
                                 content: ` <div class="e-card  shadow-1  ">
                                         <div class="e-card-body">
-                                            <a href="blogs/tagged/` + data.tag[0].title + `">
-                                            <span class="modern-badge  modern-badge-` + data.tag[0].color + `">#` + data
+                                            <a href="/blogs/tagged/` + data.tag[0].title + `">
+                                            <span class="modern-badge  modern-badge-` + data.tag[0].color + `">#` +
+                                    data
                                     .tag[0].title + `</span></a>
 
                                             <p class="mt-3 mb-3">Some quick example text to build on the card title and make up the bulk of
@@ -846,7 +847,7 @@
                     template: function(query, item) {
                         return `  
                                 <span
-                                    id="searchTag-` + item.id+ `" class="modern-badge  modern-badge-` + item.color + ` tag-popover">
+                                    id="searchTag-` + item.id + `" class="modern-badge  modern-badge-` + item.color + ` tag-popover">
                                     #` + item.title + `
                                 </span>`
                     }
@@ -922,6 +923,74 @@
                 },
             },
         });
+        //drag and drop
+        document.querySelectorAll(".drop-zone__input").forEach((inputElement) => {
+            const dropZoneElement = inputElement.closest(".drop-zone");
 
+            dropZoneElement.addEventListener("click", (e) => {
+
+                inputElement.click();
+            });
+
+            inputElement.addEventListener("change", (e) => {
+                var dump = dropZoneElement.getAttribute('id').split("-");
+                var id = dump[0];
+                if (inputElement.files.length) {
+                    updateThumbnail(dropZoneElement, inputElement.files[0], id);
+                }
+            });
+
+            dropZoneElement.addEventListener("dragover", (e) => {
+                e.preventDefault();
+                dropZoneElement.classList.add("drop-zone--over");
+            });
+
+            ["dragleave", "dragend"].forEach((type) => {
+                dropZoneElement.addEventListener(type, (e) => {
+                    dropZoneElement.classList.remove("drop-zone--over");
+                });
+            });
+
+            dropZoneElement.addEventListener("drop", (e) => {
+                e.preventDefault();
+                var dump = dropZoneElement.getAttribute('id').split("-");
+                var id = dump[0];
+                if (e.dataTransfer.files.length) {
+                    inputElement.files = e.dataTransfer.files;
+                    updateThumbnail(dropZoneElement, e.dataTransfer.files[0], id);
+                }
+                dropZoneElement.classList.remove("drop-zone--over");
+            });
+        });
+
+        function updateThumbnail(dropZoneElement, file, id) {
+            let thumbnailElement = dropZoneElement.querySelector(".drop-zone__thumb");
+
+            // First time - remove the prompt
+            if (dropZoneElement.querySelector(".drop-zone__prompt")) {
+                dropZoneElement.querySelector(".drop-zone__prompt").remove();
+            }
+
+            // First time - there is no thumbnail element, so lets create it
+            if (!thumbnailElement) {
+                thumbnailElement = document.createElement("div");
+                thumbnailElement.classList.add("drop-zone__thumb");
+                dropZoneElement.appendChild(thumbnailElement);
+            }
+
+            thumbnailElement.dataset.label = file.name;
+
+            // Show thumbnail for image files
+            if (file.type.startsWith("image/")) {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => {
+                    thumbnailElement.style.backgroundImage = `url('${reader.result}')`;
+                    $("#" + id).attr("src", `${reader.result}`);
+                };
+            } else {
+                thumbnailElement.style.backgroundImage = null;
+            }
+        }
     });
 </script>

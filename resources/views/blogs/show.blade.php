@@ -440,9 +440,7 @@
                                 </div>
                             </div>
                             <div class="auther-description">
-                                If you`ve been programming for long enough, you have heard about the concept of a graph.
-                                It`s required content for a degree in computer science, and many top-level companies test
-                                for an understanding of graph theory during technical interviews
+                                {!! $blog->user->short_bio !!}
                             </div>
                         </div>
                     </div>

@@ -30,27 +30,31 @@
                     @csrf
                     @method('PUT')
                     <input type="hidden" id="blog_id" name="blog_id" value="{{ old('blog_id', $draft->id ?? '') }} " />
-                    <div class="form-group mb-4 ">
-                        <label class="form-label" for="blog_image">Add a cover image</label>
-                        <input type="file" class="form-control  form-control-lg" id="blog_image" name="image" />
-                    </div>
-
-
-                    <div class="form-outline mb-4">
-                        <input type="text" id="blog_title" class="form-control form-control-lg" name="title"
-                            value="{{ old('title', $draft->title ?? '') }}" />
-                        <label class="form-label " for="blog_title">Post Title</label>
-                    </div>
-
-
 
                     <div class="form-group mb-4">
+                        <label class="form-label" for="blog_image">Add a cover image</label>
+                        <i class="fas fa-exclamation-circle trailing"></i>
+                        <div class="drop-zone" id="blog_image">
+                            <p class="drop-zone__prompt">Drop file here or click to upload</p>
+                            <input type="file" name="image" id="blog_image" class="form-control drop-zone__input">
+                        </div>
+                    </div>
+                    <div class="form-group mb-4">
+                        <label class="form-label " for="blog_title">Title</label>
+                        <i class="fas fa-exclamation-circle trailing"></i>
+                        <input type="text" id="blog_title" class="form-control" name="title"
+                            value="{{ old('title', $draft->title ?? '') }}" />
+                    </div>
+                    <div class="form-group mb-4">
+                        <label class="form-label" for="myeditorinstance">Description</label>
+                        <i class="fas fa-exclamation-circle trailing"></i>
                         <textarea id="myeditorinstance" name="description"> {{ old('description', $draft->description ?? '') }} </textarea>
                     </div>
 
                     <input type="hidden" name="tags" id="tag-input" value="{{ old('tags', $tagTitles ?? '') }}">
                     <div class="form-group mb-4 ">
-                        <label class="form-label" for="blog_image">Add Tags</label>
+                        <label class="form-label" for="js-typeahead-tags">Add Tags</label>
+                        <i class="fas fa-exclamation-circle trailing"></i>
                         <div class="typeahead__container">
                             <div class="typeahead__field">
                                 <div class="typeahead__query">
@@ -61,7 +65,7 @@
                         </div>
                     </div>
                     <div class="clearfix">
-                        <div class=" float-end" id="autoSave">
+                        <div class="float-end" id="autoSave">
 
                         </div>
                     </div>
@@ -74,6 +78,7 @@
     </div>
 @endsection
 @push('scripts')
+    @include('ajax')
     <script>
         $(document).ready(function() {
             $.ajaxSetup({

@@ -21,7 +21,7 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
     <!-- Styles -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/jquery.webui-popover/1.2.1/jquery.webui-popover.min.css">
+    <link href="{{ asset('assets') }}/css/webui-popover.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-typeahead/2.11.0/jquery.typeahead.css" integrity="sha512-AQG3JVpy/h0TsLsFs/HDLjnkq1ih9uUliGGXdQ7LQcGQt7GD+1b7HWOQ2oeCH7tKdtrfRg75CGApafi+//9Dbw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.0.0/mdb.min.css" rel="stylesheet" />
@@ -49,16 +49,12 @@
                     </div>
                 </div>
 
-                {{-- <div class="content">
-                        @yield('content')
-                    </div> --}}
-
             </div>
         </div>
     </div>
     <script src="{{ asset('assets') }}/js/core/jquery.min.js"></script>
     <script src="{{ asset('assets') }}/js/core/popper.min.js"></script>
-    <script src="{{ asset('assets') }}/js/core/bootstrap.min.js"></script>
+    {{-- <script src="{{ asset('assets') }}/js/core/bootstrap.min.js"></script> --}}
     <!-- Chart JS -->
     {{-- <script src="{{ asset('assets') }}/js/plugins/chartjs.min.js"></script> --}}
     <!--  Notifications Plugin    -->
@@ -68,7 +64,11 @@
     {{-- <script src="{{ asset('assets') }}/js/theme.js"></script> --}}
     <script src="https://cdn.jsdelivr.net/npm/webui-popover@1.2.18/dist/jquery.webui-popover.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-typeahead/2.11.0/jquery.typeahead.min.js" integrity="sha512-Rc24PGD2NTEGNYG/EMB+jcFpAltU9svgPcG/73l1/5M6is6gu3Vo1uVqyaNWf/sXfKyI0l240iwX9wpm6HE/Tg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  
+    <script>
+        $(function() {
+            $('[data-bs-toggle="popover"]').popover()
+        })
+    </script>
     @stack('scripts')
 </body>
 

@@ -24,6 +24,10 @@ class Blog extends Model
     {
         return $this->hasMany(Bookmark::class);
     }
+    public function pins()
+    {
+        return $this->hasMany(BlogPin::class);
+    }
     public function comments()
     {
         return $this->hasMany(Comment::class);

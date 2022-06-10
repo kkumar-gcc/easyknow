@@ -104,14 +104,11 @@
     border-color: rgba(38, 169, 225, 0.1);
 }
 .modern-badge-warning {
-    /* background: rgba(246, 147, 30, 0.1);
-    color: #f6931e; */
     color: #feb801;
     border-color: rgba(254, 184, 1, 0.1);
     background: rgba(254, 184, 1, 0.1);
 }
 .modern-badge-primary {
-    color: #057177 !important;
     border-color: rgba(9, 189, 199, 0.1) !important;
     background: rgba(9, 189, 199, 0.1);
 }
@@ -792,8 +789,9 @@
 }
 /* profile page styling */
 
-/* .profile {
-} */
+.profile {
+    padding: 0px 10px 20px 10px;
+}
 .profile h2 {
     font-size: 36px;
     font-weight: 600;
@@ -1289,7 +1287,6 @@ main {
 .blog-content figure {
     margin: 15px auto;
     text-align: center;
-    
 }
 .blog-content figure figcaption {
     font-size: 14px;
@@ -1364,7 +1361,6 @@ main {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    margin-top: 10px;
     padding: 10px;
 }
 .e-card-primary {
@@ -1929,9 +1925,45 @@ main {
     margin: 0 0 30px -2px;
     color: var(--color-font-one);
 }
-.typeahead__field input {
-    border-radius: var(--border-radius);
+.response-message {
+    margin: 24px auto;
+    padding: 32px;
+    width: 100%;
+    max-width: 640px;
+    border: 1px solid transparent;
+    border-top-color: transparent;
+    border-right-color: transparent;
+    border-bottom-color: transparent;
+    border-left-color: transparent;
+    color: hsl(210, 8%, 15%);
+    text-align: center;
+    /* border-radius: 10px; */
 }
+.response-success {
+    background-color: rgb(237, 248, 240);
+    border-color: rgb(130, 201, 154);
+}
+.response-danger {
+    background-color: rgb(253, 242, 242);
+    border-color: rgb(244, 180, 182);
+}
+.response-warning {
+    background-color: rgb(253, 247, 226);
+    border-color: rgb(230, 207, 121);
+}
+.input-error {
+    margin-top: 10px;
+    color: rgb(171, 38, 42);
+    font-size: 13px;
+}
+.popover {
+    box-shadow: none !important;
+    border: 1px solid rgba(0, 0, 0, 0.175);
+}
+.popover .popover-arrow {
+    display: block;
+}
+
 @media only screen and (max-width: 1280px) {
     .item.is-hero .item-title {
         font-size: 44px;
@@ -2115,4 +2147,54 @@ main {
         margin: 0 0 30px -2px;
         color: var(--color-font-one);
     }
+}
+
+.drop-zone {
+    height: 200px;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-family: "Quicksand", sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    background-color: rgb(235, 244, 251);
+    border: 3px dashed rgb(166, 206, 237);
+    border-radius: 10px;
+}
+.drop-zone-danger {
+    background-color: rgb(253, 242, 242);
+    border-color: rgb(244, 180, 182);
+}
+.drop-zone--over {
+    background-color: white;
+}
+
+.drop-zone__input {
+    display: none;
+}
+
+.drop-zone__thumb {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    overflow: hidden;
+
+    background-size: cover;
+    position: relative;
+}
+
+.drop-zone__thumb::after {
+    content: attr(data-label);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 5px 0;
+    color: #ffffff;
+    background: rgba(0, 0, 0, 0.75);
+    font-size: 14px;
+    text-align: center;
 }

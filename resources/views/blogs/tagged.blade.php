@@ -38,7 +38,7 @@
 
         <div class="e-card ">
             <div class="e-card-body">
-                <a href="blogs/tagged/{{ $searchTag->title }}" class="tag-popover"
+                <a href="/blogs/tagged/{{ $searchTag->title }}" class="tag-popover"
                     id="tag-{{ $searchTag->id }}"><span
                         class="modern-badge  modern-badge-{{ $searchTag->color }}">
                         #{{ $searchTag->title }}

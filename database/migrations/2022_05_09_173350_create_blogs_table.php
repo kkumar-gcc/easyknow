@@ -22,6 +22,8 @@ return new class extends Migration
             $table->string('title');
             $table->text('description');
             $table->enum("status", ['posted', 'drafted']);
+            $table->enum("type", ['public', 'private','forFollower']);
+            $table->boolean("pinned")->default(false);
             $table->timestamps();
         });
     }

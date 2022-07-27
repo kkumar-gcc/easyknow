@@ -1,87 +1,105 @@
-<div class="user row">
-    <div class="user-left ">
-        <div class="image">
-            <img src="https://picsum.photos/400/300" alt="">
-        </div>
-        <div class="info">
-            <p> <a class="link link-secondary" href="/users/{{ $user->id }}/{{ $user->username }}/public">
-                    {{ __($user->username) }}
-                </a></p>
-            <span id="numberOfFollowers-{{ $user->id }}">{{ $user->friendships->count() }}
-                followers</span>
-        </div>
+<?php
+function nice_number($n)
+{
+    // $n = 0 + int(str_replace(',', '', $n));
+    if (!is_numeric($n)) {
+        return false;
+    }
+    if ($n > 1000000000000) {
+        return round($n / 1000000000000, 1) . 't ';
+    } elseif ($n > 1000000000) {
+        return round($n / 1000000000, 1) . 'b ';
+    } elseif ($n > 1000000) {
+        return round($n / 1000000, 1) . 'm ';
+    } elseif ($n > 1000) {
+        return round($n / 1000, 1) . 'k ';
+    }
+    return number_format($n);
+}
+Str::macro('readDuration', function (...$text) {
+    $totalWords = str_word_count(implode(' ', $text));
+    $minutesToRead = round($totalWords / 200);
+
+    return (int) max(1, $minutesToRead);
+});
+
+?>
+<div class="e-vcard" id="blog-{{ $blog->id }}">
+    <div class="e-vcard-image h-300">
+        <img  src="https://picsum.photos/1200/1000" alt="">
     </div>
-    <div class="user-right">
-        @guest
-            <a class="e-btn e-btn-primary" href="#">
-                {{ __('Follow') }}
-            </a>
-        @else
-            <div id="toast-unfollow">
-
+    <div class="e-vcard-body card-body">
+        <div class="detail">
+            <div class="statics">
+                <span> <small> {{ nice_number($blog->bloglikes->where('status', 1)->count()) }}
+                        likes</small></span>
+                <span class="text-muted"> <small>
+                        {{ nice_number($blog->bloglikes->where('status', 0)->count()) }}
+                        dislikes</small></span>
+                <span class="text-muted"><small> {{ nice_number($blog->blogviews->count()) }}
+                        views</small></span>
             </div>
-            @if (auth()->user()->id == $user->id)
-                <a class="e-btn e-btn-warning" href="/users/{{ $user->id }}/{{ $user->username }}/public">
-                    {{ __('View Profile') }}
-                </a>
+{{-- 
+            @guest
+
+                <span class="bookmark " title="Bookmark this Article">
+                    <a class="e-rbtn"> @svg('gmdi-bookmark-add-o') </a>
+                </span>
             @else
-                @if ($user->isFollower())
-                    <div id="user_follow_option-{{ $user->id }}" style="display: none;">
-                        <form method="post" id="follower_create-{{ $user->id }}" class="follower-create">
-                            @csrf
-                            @method('put')
-                            <input type="hidden" name="follower_id" id="follower_id" value="{{ auth()->user()->id }}">
-                            <input type="hidden" name="user_id" id="user_id" value="{{ $user->id }}">
-                            <button type="submit" class="e-btn e-btn-primary">Follow</button>
-                        </form>
-                    </div>
-                    <div id="user_unfollow_option-{{ $user->id }}">
-                        <button type="button" class="e-btn" data-mdb-ripple-color="dark" data-mdb-toggle="modal"
-                            data-mdb-target="#unfollowModal-{{ $user->id }}">Unfollow</button>
-                    </div>
-                @else
-                    <div id="user_follow_option-{{ $user->id }}">
-                        <form method="post" id="follower_create-{{ $user->id }}" class="follower-create">
-                            @csrf
-                            @method('put')
-                            <input type="hidden" name="follower_id" id="follower_id" value="{{ auth()->user()->id }}">
-                            <input type="hidden" name="user_id" id="user_id" value="{{ $user->id }}">
-                            <button type="submit" class="e-btn e-btn-primary">Follow</button>
-                        </form>
-                    </div>
-                    <div id="user_unfollow_option-{{ $user->id }}" style="display: none;">
-
-                        <button type="button" class="e-btn" data-mdb-ripple-color="dark" data-mdb-toggle="modal"
-                            data-mdb-target="#unfollowModal-{{ $user->id }}">Unfollow</button>
-                    </div>
+                @if (auth()->user()->id != $blog->user_id)
+                    <div id="toast-info"></div>
+                    <form method="POST" id="bookmark-{{ $blog->id }}" class="bookmark_form">
+                        @csrf
+                        @method('PUT')
+                        <input type="hidden" name="user_id" id="user_bookmark_id_{{ $blog->id }}"
+                            value="{{ auth()->user()->id }}">
+                        <input type="hidden" name="blog_id" id="blog_bookmark_id_{{ $blog->id }}"
+                            value="{{ $blog->id }}">
+                        <button type="submit" class="bookmark  e-rbtn">
+                            <span title="Bookmark this Article" class="bookmark_btn_{{ $blog->id }}"
+                                id="bookmark_btn_{{ $blog->id }}">
+                                @if ($blog->isBookmarked())
+                                    @svg('gmdi-bookmark-added-r', 'bookmark-active')
+                                @else
+                                    @svg('gmdi-bookmark-add-o')
+                                @endif
+                            </span>
+                        </button>
+                    </form>
                 @endif
-                <div class="modal fade" id="unfollowModal-{{ $user->id }}" tabindex="-1"
-                    aria-labelledby="unfollowModal-{{ $user->id }}-Label" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-sm">
-                        <div class="modal-content">
 
-                            <div class="card-body text-center">
-                                unfollow to " <strong class="font-weight-bold">{{ $user->username }}
-                                </strong>" ?
-                                <hr>
+            @endguest --}}
 
-                                <form method="POST" id="follower_delete-{{ $user->id }}" class="follower-delete"
-                                    action="{{ Route('follower.delete') }}">
-                                    @csrf
-                                    @method('DELETE')
-                                    <input type="hidden" name="follower_id" id="follower_d_id"
-                                        value="{{ auth()->user()->id }}">
-                                    <input type="hidden" name="user_id" id="user_d_id" value="{{ $user->id }}">
-                                    <div class="form-group">
-                                        <button type="button" class="e-btn" data-mdb-dismiss="modal">No</button>
-                                        <input type="submit" class="e-btn e-btn-warning" value="Unfollow">
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            @endif
-        @endguest
+            <a href="/blogs/{{ Str::slug($blog->title, '-') }}-{{ $blog->id }}" class="link link-secondary">
+                <h5 class="title">{{ $blog->title }}</h5>
+            </a>
+
+
+            <p class="card-text disable">
+                {!! Str::words(strip_tags($blog->description), 20) !!}
+            </p>
+
+
+
+            @foreach ($blog->tags as $tag)
+                <a href="/blogs/tagged/{{ $tag->title }}" >
+                    <span class="modern-badge  modern-badge-{{ $tag->color }}">
+                        #{{ $tag->title }}
+                    </span>
+                </a>
+            @endforeach
+            <p class="mt-3"> by
+                <a href="/users/{{ $blog->user->username }}">
+                    {{ __($blog->user->username) }}
+                </a>
+                <small class="text-muted"> posted
+                    {{ \Carbon\Carbon::parse($blog->created_at)->diffForHumans() }}
+                </small>
+            </p>
+
+            <a class="e-btn e-btn-dark e-btn-lg disable " href="/blogs/{{ Str::slug($blog->title, '-') }}-{{ $blog->id }}">
+                {{ __('Read Article') }}
+            </a>
+        </div>
     </div>
 </div>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreBlogPinRequest;
 use App\Http\Requests\UpdateBlogPinRequest;
+use App\Models\Blog;
 use App\Models\BlogPin;
 
 class BlogPinController extends Controller
@@ -36,7 +37,51 @@ class BlogPinController extends Controller
      */
     public function store(StoreBlogPinRequest $request)
     {
-        //
+        $userId = $request->get('user_id');
+        $blogId = $request->get('blog_id');
+        $exitPin = BlogPin::where([
+            ['user_id', '=', $userId],
+            ['blog_id', '=', $blogId]
+        ])->count();
+        $blog = Blog::find($blogId);
+        if ($exitPin < 1) {
+            $pin = new BlogPin();
+            $pin->user_id = $userId;
+            $pin->blog_id = $blogId;
+            $pin->save();
+            $blog->pinned = true;
+            $blog->save();
+            $pins = BlogPin::where("user_id", "=", auth()->user()->id)->get();
+            $blogs = Blog::where("user_id", "=", $userId)->where([['status', '=', 'posted'],["pinned","=",false]])->paginate(5);
+            $pinPage = view("profile.private.partials.pinTab")->with([
+                "pins" => $pins,
+                "blogs" => $blogs,
+            ])->render();
+            return response()->json([
+                "success" => "Successfully Pinned",
+                "page" => $pinPage,
+                "created" => true,
+            ]);
+        } else {
+            $pin = BlogPin::where([
+                ['user_id', '=', $userId],
+                ['blog_id', '=', $blogId]
+            ])->first();
+            $pin->delete();
+            $blog->pinned = false;
+            $blog->save();
+            $pins = BlogPin::where("user_id", "=", auth()->user()->id)->get();
+            $blogs = Blog::where("user_id", "=", $userId)->where([['status', '=', 'posted'],["pinned","=",false]])->paginate(5);
+            $pinPage = view("profile.private.partials.pinTab")->with([
+                "pins" => $pins,
+                "blogs" => $blogs
+            ])->render();
+            return response()->json([
+                "success" => "Removed from your Pins",
+                "removed" => true,
+                "page" => $pinPage,
+            ]);
+        }
     }
 
     /**

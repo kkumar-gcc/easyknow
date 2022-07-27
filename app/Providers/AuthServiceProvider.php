@@ -25,8 +25,11 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        Gate::define('isOwner',function($user,$blog){
+        Gate::define('isBlogOwner',function($user,$blog){
             return $blog->user_id==$user->id;
+        });
+        Gate::define('isPodcastOwner',function($user,$podcast){
+            return $podcast->user_id==$user->id;
         });
     }
 }

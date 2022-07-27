@@ -101,8 +101,8 @@
         quickbars_selection_toolbar: 'bold italic | quicklink h2 h3 blockquote quickimage quicktable',
         noneditable_class: 'mceNonEditable',
         contextmenu: 'link image table',
-        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }'
-
+        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }',
+        content_css: '{{ asset('assets') }}/css/home.css?' + new Date().getTime()
     });
     document.addEventListener('focusin', function(e) {
         if (e.target.closest('.tox-tinymce-aux, .moxman-window, .tam-assetmanager-root') !== null) {

@@ -1,5 +1,5 @@
 <div>
-    <div class="e-vcard mt-3">
+    <div class="e-vcard e-vcard-shadow mt-3">
         <form method="POST" id="password_update">
             @csrf
             @method('PUT')
@@ -24,12 +24,12 @@
                         <div class="input-error" id="cNewPasswordError"></div>
                 </div>
                 <div id="response_message"></div>
-                <input type="submit" class="e-btn e-btn-primary" value="set password" />
+                <input type="submit" class="e-btn e-btn-success" value="set password" />
                 
             </div>
         </form>
     </div>
-    <div class="e-vcard mt-3 border border-danger">
+    <div class="e-vcard e-vcard-shadow mt-3 border border-danger">
         <div class="card-body">
             <form method="POST" id="profile_update">
                 <h4 class="card-title text-danger">Delete Account</h4>

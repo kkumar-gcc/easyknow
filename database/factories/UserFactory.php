@@ -26,7 +26,7 @@ class UserFactory extends Factory
             // 'image'=>$this->faker->profile(),
             'about_me' => $this->faker->realText(500),
             'short_bio' => $this->faker->realText(200),
-            "website_url" => $this->faker->url(),
+            "portfolio_url" => $this->faker->url(),
             'twitter_url' => $this->faker->url(),
             'github_url' => $this->faker->url(),
             'facebook_url' => $this->faker->url(),

@@ -12,6 +12,14 @@ class Tag extends Model
     {
         return $this->belongsToMany(Blog::class);
     }
+    public function funs()
+    {
+        return $this->belongsToMany(Fun::class);
+    }
+    public function videos()
+    {
+        return $this->belongsToMany(Video::class);
+    }
     protected $fillable = [
         'title',
         'description',

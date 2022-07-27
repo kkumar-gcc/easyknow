@@ -8,104 +8,112 @@ use App\Models\Friendship;
 use App\Models\User;
 use Illuminate\Http\Request;
 // use Illuminate\Support\Facades\Validator;
-use App\Http\Traits\ImageTrait;
+use App\Http\Traits\AllTrait;
+use App\Models\BlogPin;
+use App\Models\Comment;
+use Illuminate\Support\Facades\Auth;
 
 class PrivateProfileController extends Controller
 {
-    use ImageTrait;
+    use AllTrait;
 
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request, $id, $username)
+    public function index(Request $request)
     {
-        if ($id == auth()->user()->id) {
-            $tab = "profile";
-            if ($request->tab == 'profile') {
-                $tab = 'profile';
-                return view("profile.private.index")->with([
-                    "user" => auth()->user(),
-                    "tab" => $tab
-                ]);
-            } else if ($request->tab == "password") {
-                $tab = 'password';
-                return view("profile.private.index")->with([
-                    "user" => auth()->user(),
-                    "tab" => $tab
-                ]);
-            } else if ($request->tab == "blogs") {
-                $tab = 'blogs';
-                $blogs = Blog::where("user_id", "=", $id)->where('status', '=', 'posted')->paginate(5);
-                return view("profile.private.index")->with([
-                    "user" => auth()->user(),
-                    "blogs" => $blogs,
-                    "tab" => $tab
-                ]);
-            } else if ($request->tab == "drafts") {
-                $tab = 'drafts';
-                $drafts = Blog::where("user_id", "=", $id)->where('status', '=', 'drafted')->paginate(5);
-                return view("profile.private.index")->with([
-                    "user" => auth()->user(),
-                    "drafts" => $drafts,
-                    "tab" => $tab
-                ]);
-            } else if ($request->tab == 'bookmarks') {
-                $tab = 'bookmarks';
-                $bookmarks = Bookmark::where("user_id", "=", $id)->paginate(5);
-                return view("profile.private.index")->with([
-                    "user" => auth()->user(),
-                    "bookmarks" => $bookmarks,
-                    "tab" => $tab
-                ]);
-            } else if ($request->tab == 'follower') {
-                $tab = 'follower';
-                $followers = Friendship::where("user_id", "=", $id)->paginate(5);
-                return view("profile.private.index")->with([
-                    "user" => auth()->user(),
-                    "followers" => $followers,
-                    "tab" => $tab
-                ]);
-            } else if ($request->tab == 'following') {
-                $tab = 'following';
-                $followings = Friendship::where("follower_id", "=", $id)->paginate(5);
-                // dd($followings);
-                return view("profile.private.index")->with([
-                    "user" => auth()->user(),
-                    "followings" => $followings,
-                    "tab" => $tab
-                ]);
-            } else if ($request->tab == 'pins') {
-                $tab = 'pins';
-                return view("profile.private.index")->with([
-                    "user" => auth()->user(),
-                    "tab" => $tab
-                ]);
-            } else  if ($request->tab == 'tags') {
-                $tab = 'tags';
-                return view("profile.private.index")->with([
-                    "user" => auth()->user(),
-                    "tab" => $tab
-                ]);
-            } else if ($request->tab == 'comments') {
-                $tab = 'comments';
-                return view("profile.private.index")->with([
-                    "user" => auth()->user(),
-                    "tab" => $tab
-                ]);
-            } else if ($request->tab == "about") {
-                $tab = "about";
-                return view("profile.private.index")->with([
-                    "user" => auth()->user(),
-                    "tab" => $tab
-                ]);
-            } else {
-                return view("profile.private.index")->with([
-                    "user" => auth()->user(),
-                    "tab" => $tab
-                ]);
-            }
+
+        $tab = "profile";
+        if ($request->tab == 'profile') {
+            $tab = 'profile';
+            return view("profile.private.index")->with([
+                "user" => auth()->user(),
+                "tab" => $tab
+            ]);
+        } else if ($request->tab == "password") {
+            $tab = 'password';
+            return view("profile.private.index")->with([
+                "user" => auth()->user(),
+                "tab" => $tab
+            ]);
+        } else if ($request->tab == "social_links") {
+            $tab = 'social_links';
+            return view("profile.private.index")->with([
+                "user" => auth()->user(),
+                "tab" => $tab
+            ]);
+        } else if ($request->tab == "blogs") {
+            $tab = 'blogs';
+            $blogs = Blog::where("user_id", "=", auth()->user()->id)->where('status', '=', 'posted')->paginate(5);
+            return view("profile.private.index")->with([
+                "user" => auth()->user(),
+                "blogs" => $blogs,
+                "tab" => $tab
+            ]);
+        } else if ($request->tab == "drafts") {
+            $tab = 'drafts';
+            $drafts = Blog::where("user_id", "=", auth()->user()->id)->where('status', '=', 'drafted')->paginate(5);
+            return view("profile.private.index")->with([
+                "user" => auth()->user(),
+                "drafts" => $drafts,
+                "tab" => $tab
+            ]);
+        } else if ($request->tab == 'bookmarks') {
+            $tab = 'bookmarks';
+            $bookmarks = Bookmark::where("user_id", "=", auth()->user()->id)->paginate(5);
+            return view("profile.private.index")->with([
+                "user" => auth()->user(),
+                "bookmarks" => $bookmarks,
+                "tab" => $tab
+            ]);
+        } else if ($request->tab == 'follower') {
+            $tab = 'follower';
+            $followers = Friendship::where("user_id", "=", auth()->user()->id)->paginate(5);
+            return view("profile.private.index")->with([
+                "user" => auth()->user(),
+                "followers" => $followers,
+                "tab" => $tab
+            ]);
+        } else if ($request->tab == 'following') {
+            $tab = 'following';
+            $followings = Friendship::where("follower_id", "=", auth()->user()->id)->paginate(5);
+            // dd($followings);
+            return view("profile.private.index")->with([
+                "user" => auth()->user(),
+                "followings" => $followings,
+                "tab" => $tab
+            ]);
+        } else if ($request->tab == 'pins') {
+            $tab = 'pins';
+            $pins = BlogPin::where("user_id", "=", auth()->user()->id)->get();
+            $blogs = Blog::where("user_id", "=", auth()->user()->id)->where([['status', '=', 'posted'], ["pinned", "=", false]])->paginate(5);
+            return view("profile.private.index")->with([
+                "user" => auth()->user(),
+                "tab" => $tab,
+                "pins" => $pins,
+                "blogs" => $blogs
+            ]);
+        } else if ($request->tab == 'comments') {
+            $tab = 'comments';
+            $comments = Comment::where('user_id', '=', Auth()->user()->id)->paginate(5);
+            return view("profile.private.index")->with([
+                "user" => auth()->user(),
+                "comments" => $comments,
+                "tab" => $tab
+            ]);
+        } else if ($request->tab == "about") {
+            $tab = "about";
+            return view("profile.private.index")->with([
+                "user" => auth()->user(),
+                "tab" => $tab
+            ]);
+        } else {
+            return view("profile.private.index")->with([
+                "user" => auth()->user(),
+                "tab" => $tab
+            ]);
         }
 
         return redirect()->back();
@@ -120,6 +128,28 @@ class PrivateProfileController extends Controller
     {
         //
     }
+    public function draft($id)
+    {
+        if (Auth::check()) {
+            $draft = Blog::where([['id', $id], ['status', "drafted"], ["user_id", auth()->user()->id]])->first();
+            if ($draft->count() > 0) {
+                $tagTitles = [];
+                if ($draft) {
+                    foreach ($draft->tags as $tag) {
+                        $tagTitles[] = $tag->title;
+                    }
+                }
+                $isDraftNull = 0;
+                if ($draft) {
+                    $isDraftNull = 1;
+                }
+                return view("blogs.draft")
+                    ->with(["draft" => $draft, "tagTitles" => json_encode($tagTitles), "isDraftNull" => $isDraftNull]);
+            }
+        } else {
+            return view("auth.login")->with(["warning" => "You must be logged in to create Blog."]);
+        }
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -132,15 +162,16 @@ class PrivateProfileController extends Controller
         $validation = $request->validate([
             "profile_image" => 'sometimes|mimes:png,jpg,jpeg,gif,svg|max:2048',
             "background_image" => 'sometimes|mimes:png,jpg,jpeg,gif,svg|max:2048',
-            "username"=>'required'
+            "username" => 'required',
+            "short_bio" => "required|min:20|max:300"
         ]);
-        if (auth()->user()->id == $request->get('user_id')) { 
+        if (auth()->user()->id == $request->get('user_id')) {
             $user = User::find(auth()->user()->id);
-            if($request->hasFile('profile_image')){
+            if ($request->hasFile('profile_image')) {
                 $profileImage = $this->uploads($request->file('profile_image'));
                 $user->profile_image = $profileImage['filePath'];
             }
-            if($request->hasFile('background_image')){
+            if ($request->hasFile('background_image')) {
                 $backgroundImage = $this->uploads($request->file('background_image'));
                 $user->background_image = $backgroundImage['filePath'];
             }
@@ -149,17 +180,37 @@ class PrivateProfileController extends Controller
             $user->last_name = $request->get('last_name');
             $user->about_me = $request->get('about_me');
             $user->short_bio = $request->get('short_bio');
-            $user->website_url = $request->get('website_url');
+            $user->portfolio_url = $request->get('website_url');
             $user->twitter_url = $request->get('twitter_url');
             $user->github_url = $request->get('github_url');
             $user->facebook_url = $request->get('facebook_url');
             $saved = $user->save();
             if ($saved) {
-                return response()->json(["success"=>"profile updated successfully"]);
+                return response()->json(["success" => "profile updated successfully"]);
             }
         }
     }
-
+    public function social(Request $request)
+    {
+        $user = User::find(auth()->user()->id);
+        $user->twitter_url = $request->get('twitter_username');
+        $user->facebook_url = $request->get('facebook_username');
+        $user->linkedin_url = $request->get('linkedin_username');
+        $user->stackoverflow_url = $request->get('stackoverflow_username');
+        $user->reddit_url = $request->get('reddit_username');
+        $user->instagram_url = $request->get('instagram_username');
+        $user->youtube_url = $request->get('youtube_channel');
+        $user->quora_url = $request->get('quora_username');
+        $user->laracasts_url = $request->get('laracasts_username');
+        $user->github_url = $request->get('github_username');
+        $user->medium_url = $request->get('medium_username');
+        $user->codepen_url = $request->get('codepen_username');
+        $saved = $user->save();
+        if($saved){
+            return redirect()->back()->with(['success'=>'social links updated successfully.']);
+        }
+        
+    }
     /**
      * Display the specified resource.
      *

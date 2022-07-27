@@ -1,5 +1,5 @@
-<div>
-    <div class="e-card" style="border-radius:0px 0px 0.5rem 0.5rem">
+<div class="profile">
+    <div class="e-card e-card-shadow" style="border-radius:0px 0px 0.5rem 0.5rem">
 
         <div class="card-body profile-body">
             <form method="POST" id="profile_update" enctype="multipart/form-data">
@@ -23,7 +23,7 @@
                             followers<span>
                     </div>
                     <div class="user-btn">
-                        <a class="e-btn e-btn-warning" href="/users/{{ $user->id }}/{{ $user->username }}/public">
+                        <a class="e-btn e-btn-success" href="/users/{{ $user->username }}">
                             {{ __('View Public Profile') }}
                         </a>
                     </div>
@@ -54,18 +54,18 @@
                     <div class="input-error" id="usernameError"></div>
                 </div>
                 <div class=" mb-4"> <label class="form-label" for="name">Name</label>
-                    <i class="fas fa-exclamation-circle trailing" data-mdb-toggle="popover"
-                        data-mdb-content="And here's some amazing content. It's very engaging. Right?"></i>
+                    {{-- <i class="fas fa-exclamation-circle trailing" data-mdb-toggle="popover"
+                        data-mdb-content="And here's some amazing content. It's very engaging. Right?"></i> --}}
                     <input type="text" id="name" class="form-control" name="name"
                         value="{{ old('title', $user->name ?? '') }}" />
                     <div class="input-error" id="nameError"></div>
                 </div>
-                {{-- <div class=" mb-4">
+                <div class=" mb-4">
                     <label class="form-label" for="location">location</label>
                     <input type="text" id="location" class="form-control" name="location"
                         value="{{ old('location', $user->location ?? '') }}" />
                         <div class="input-error" id="locationError"></div>
-                </div> --}}
+                </div>
                 <div class="row" style="padding:7px">
                     <div class="col-lg-6 mb-4">
                         <label class="form-label" for="first_name">First Name</label>
@@ -83,14 +83,14 @@
                 <div class=" mb-5">
                     <label class="form-label" for="short_bio">Short Bio</label>
                     <div class="form-outline">
-                        <textarea id="short_bio" class="form-control" name="short_bio" data-mdb-showcounter="true" maxlength="200" rows="2">{{ old('short_bio', $user->short_bio ?? '') }}</textarea>
+                        <textarea id="short_bio" class="form-control" name="short_bio" data-mdb-showcounter="true" maxlength="200" rows="4">{{ old('short_bio', $user->short_bio ?? '') }}</textarea>
                         <div class="form-helper"></div>
                     </div>
                     <div class="input-error" id="shortBioError"></div>
                 </div>
                 <div class=" mb-4">
                     <label class="form-label" for="editor2">About Me</label>
-                    <textarea type="text" class="form-control" name="about_me" id="editor2">{{ old('about_me', $user->about_me ?? '') }}</textarea>
+                    <textarea type="text" class="form-control text-editor" name="about_me" id="editor2">{{ old('about_me', $user->about_me ?? '') }}</textarea>
                     <div class="input-error" id="aboutMeError"></div>
                 </div>
                 <div class=" mb-4">
@@ -102,7 +102,7 @@
                 </div>
                 <div id="response_message">
                 </div>
-                <input type="submit" class="e-btn e-btn-primary" value="save profile info" />
+                <input type="submit" class="e-btn e-btn-success" value="save profile info" />
             </form>
 
         </div>

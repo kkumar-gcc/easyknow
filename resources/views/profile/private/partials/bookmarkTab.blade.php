@@ -56,7 +56,7 @@
                                 @endif
 
                             @endguest
-                            <a href="/blogs/{{ $bookmark->blog->id }}" class="link link-secondary">
+                            <a href="/blogs/{{ Str::slug($bookmark->blog->title, '-') }}-{{ $bookmark->blog->id }}" class="link link-secondary">
                                 <h5 class="title">{{ $bookmark->blog->title }}</h5>
                             </a>
 
@@ -75,7 +75,7 @@
                             {{-- <p class="card-text"><small class="text-muted">Last updated </small></p> --}}
                             <p class="mt-3"> by
                                 <a class="btn-link link-secondary"
-                                    href="/users/{{ $bookmark->blog->user_id }}/{{ $bookmark->blog->user->username }}/public">
+                                    href="/users/{{ $bookmark->blog->user->username }}">
                                     {{ __($bookmark->blog->user->username) }}
                                 </a>
                                 <small class="text-muted"> posted
@@ -83,7 +83,7 @@
                                 </small>
                             </p>
 
-                            <a class="btn btn-secondary disable link" href="/blogs/{{ $bookmark->blog->id }}">
+                            <a class="btn btn-secondary disable link" href="/blogs/{{ Str::slug($bookmark->blog->title, '-') }}-{{ $bookmark->blog->id }}">
                                 {{ __('Read Article') }}
                             </a>
                         </div>

@@ -1,4 +1,4 @@
-@extends('layouts.user')
+@extends('layouts.blog')
 @push('styles')
     <x-head.tinymce-config />
 @endpush
@@ -22,10 +22,10 @@
         return number_format($n);
     }
     ?>
-    <div class="container-fluid blog-create">
-        <div class="e-card card">
+    <div class="container-fluid blog-section">
+        <div class="e-card">
             <div class="card-body profile-body">
-                <h1 class="title">Create Post</h1>
+                <h1 class="title mb-4">Create Post</h1>
                 <form method="POST" action="{{ Route('blog.create') }}">
                     @csrf
                     @method('PUT')
@@ -33,7 +33,7 @@
 
                     <div class="form-group mb-4">
                         <label class="form-label" for="blog_image">Add a cover image</label>
-                        <i class="fas fa-exclamation-circle trailing"></i>
+                       
                         <div class="drop-zone" id="blog_image">
                             <p class="drop-zone__prompt">Drop file here or click to upload</p>
                             <input type="file" name="image" id="blog_image" class="form-control drop-zone__input">
@@ -41,20 +41,19 @@
                     </div>
                     <div class="form-group mb-4">
                         <label class="form-label " for="blog_title">Title</label>
-                        <i class="fas fa-exclamation-circle trailing"></i>
+                       
                         <input type="text" id="blog_title" class="form-control" name="title"
                             value="{{ old('title', $draft->title ?? '') }}" />
                     </div>
                     <div class="form-group mb-4">
                         <label class="form-label" for="myeditorinstance">Description</label>
-                        <i class="fas fa-exclamation-circle trailing"></i>
+                        
                         <textarea id="myeditorinstance" name="description"> {{ old('description', $draft->description ?? '') }} </textarea>
                     </div>
 
                     <input type="hidden" name="tags" id="tag-input" value="{{ old('tags', $tagTitles ?? '') }}">
                     <div class="form-group mb-4 ">
                         <label class="form-label" for="js-typeahead-tags">Add Tags</label>
-                        <i class="fas fa-exclamation-circle trailing"></i>
                         <div class="typeahead__container">
                             <div class="typeahead__field">
                                 <div class="typeahead__query">
@@ -70,7 +69,7 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="mt-2 btn btn-primary border-primary"> Post
+                    <button type="submit" class="mt-2 e-btn e-btn-success"> Post
                     </button>
                 </form>
             </div>

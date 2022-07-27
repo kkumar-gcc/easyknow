@@ -430,6 +430,8 @@
                 }
             })
         });
+
+
         $(document).on('submit', '#blog_comment_form', function(e) {
             $.ajaxSetup({
                 header: $('meta[name="_token"]').attr('content')
@@ -664,7 +666,7 @@
                     success: function(data) {
                         if (data.success) {
                             $('#' + id).webuiPopover({
-                                content: ` <div class="e-card  shadow-1  ">
+                                content: ` <div class="e-card  ">
                                         <div class="e-card-body">
                                             <a href="/blogs/tagged/` + data.tag[0].title + `">
                                             <span class="modern-badge  modern-badge-` + data.tag[0].color + `">#` +
@@ -709,6 +711,7 @@
                 var id = el.attr('id');
                 var dummyVar = id.split('-');
                 var user_id = dummyVar[1];
+                var placement = el.attr('data-popover-placement')??'auto';
                 $.ajax({
                     type: "GET",
                     url: '/user-detail',
@@ -721,12 +724,57 @@
                             content: data,
                             animation: 'pop',
                             trigger: 'hover',
-                            placement: 'auto',
-                            width: 500,
+                            placement: placement,
+                            width: 400,
                             delay: {
                                 show: null,
                                 hide: 300
                             }
+                        });
+                        $('#' + id).webuiPopover('show');
+                    }
+                })
+            }, 2000);
+            el.mouseleave(function() {
+                clearTimeout(timeoutId);
+
+            });
+
+        });
+
+        $(document).on('mouseover', '.blog-popover', function(e) {
+            var el = $(this);
+            e.preventDefault(e);
+            var timeoutId = setTimeout(function() {
+                $.ajaxSetup({
+                    header: $('meta[name="_token"]').attr('content')
+                })
+
+                var id = el.attr('id');
+                var dummyVar = id.split('-');
+                var blog_id = dummyVar[1];
+                $.ajax({
+                    type: "GET",
+                    url: '/blog-detail',
+                    data: {
+                        blogId: blog_id
+                    },
+                    dataType: 'json',
+                    success: function(data) {
+                        $('#' + id).webuiPopover({
+                            content: data,
+
+                            animation: 'pop',
+                            trigger: 'hover',
+                            width: 400,
+                            delay: {
+                                show: null,
+                                hide: 300
+                            },
+                            arrow: true,
+                            placement: 'horizontal',
+                            multi: true,
+
                         });
                         $('#' + id).webuiPopover('show');
                     }
@@ -788,6 +836,11 @@
             })
         });
 
+        function convertToSlug(Text) {
+            return Text.toLowerCase()
+                .replace(/[^\w ]+/g, '')
+                .replace(/ +/g, '-');
+        }
 
         //search ajax 
         typeof $.typeahead === 'function' && $.typeahead({
@@ -795,11 +848,7 @@
             minLength: 1,
             maxItem: 15,
             order: "asc",
-            hint: true,
             maxItemPerGroup: 3,
-            backdrop: {
-                "background-color": "#fff"
-            },
             group: function(group) {
                 return {
                     template: group
@@ -807,7 +856,6 @@
             },
             order: "asc",
             hint: true,
-            blurOnTab: true,
             matcher: function(item, displayKey) {
                 if (item.id === "BOS") {
                     item.disabled = true;
@@ -816,7 +864,6 @@
             },
             dynamic: true,
             hint: true,
-
             templateValue: name,
             emptyTemplate: function(query) {
                 return `no result for "` + query + `"`;
@@ -853,9 +900,9 @@
                     }
                 },
                 users: {
-                    display: ["name", "username"],
+                    display: ["username"],
                     href: function(item) {
-                        return `/users/` + item.id + `/` + item.username + `/public`;
+                        return `/users/` + item.username;
                     },
                     ajax: function(query) {
                         return {
@@ -875,11 +922,11 @@
                     },
                     template: function(query, item) {
                         return `
-                            <div class="search-user">
-                                <div class="image">
+                            <div class="d-flex search-user">
+                                <div class="image flex-none">
                                     <img class="user-img" src="https://picsum.photos/400/300" alt="">
                                 </div>
-                                <div class="user-detail">
+                                <div class="user-detail flex-1">
                                     ` + item.username + `
                                 </div>
                             </div>`
@@ -888,7 +935,7 @@
                 blogs: {
                     display: "title",
                     href: function(item) {
-                        return `/blogs/` + item.id;
+                        return `/blogs/` + convertToSlug(item.title) + `-` + item.id;
                     },
                     ajax: function(query) {
                         return {
@@ -905,23 +952,45 @@
                             }
                         }
                     },
+
                     template: function(query, item) {
-                        return ` <div class="e-card  shadow-1  ">
-                        <div class="e-card-body">
-                            <a>
-                                <span>` + item.title + `</span>
-                            </a>
-                            <p class="mt-3 mb-3">Some quick example text to build on the card title and make up the bulk of
-                                the card's content.Some quick example text to build on the card title and make up the bulk of
-                                the card's content.Some quick example text to build on the card title and make up the bulk of
-                                the card's content.Some quick example text to build on the card title and make up the bulk of
-                                the card's content.</p>
-                            <span class="text-muted">blogs</span>
+                        return `
+                        <div class="e-scard e-scard-hover  e-scard-secondary " id="blog-` + item.id + `">
+                            <div class="card-body">
+                                <div class="image">
+                                    <img class ="shadow-md" src="https://picsum.photos/400/300" alt="">
+                                </div>
+                                <div class="detail">
+                                    <a href="/blogs/` + convertToSlug(item.title) + `-` + item.id + `" class="link link-secondary">
+                                        <h5 class="title">` + item.title + `</h5>
+                                    </a>
+                                    <p class="mt-3 text-black">
+                                        by
+                                        <a class="btn-link link-secondary user-popover"
+                                            href="/users/"
+                                            id="user-">
+                                            
+                                        </a>
+                                        <small class="text-muted"> posted
+                                            
+                                        </small>
+                                    </p>
+                                </div>
+                            </div>
                         </div>
-                    </div>`
+                       `
                     },
                 },
             },
+            selector: {
+                result: "search__result",
+                list: "search__list",
+                group: "search__group",
+                item: "search__item",
+                empty: "search__empty",
+
+            },
+
         });
         //drag and drop
         document.querySelectorAll(".drop-zone__input").forEach((inputElement) => {
@@ -992,5 +1061,85 @@
                 thumbnailElement.style.backgroundImage = null;
             }
         }
+
+        // pin blog 
+        $(document).on('submit', ".blogpin_form", function(e) {
+            $.ajaxSetup({
+                header: $('meta[name="_token"]').attr('content')
+            })
+            e.preventDefault(e);
+            $.ajax({
+                type: "PUT",
+                url: '{{ Route('blogpin.create') }}',
+                data: $(this).serialize(),
+                dataType: 'json',
+                beforeSend: function() {
+                    $("#loading").html(`
+                    <div class="text-center">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>`);
+                },
+                complete: function() {
+                    $("#loading").html('');
+                },
+                success: function(data) {
+                    if (data.created) {
+                        $("#pinTab").html(data.page)
+                            .fadeIn(150);
+                        $("#toast-info").html(`<div class="toast toast-fixed  show fade  " id="placement-toast" role="alert" aria-live="assertive"
+                            aria-atomic="true"  data-mdb-width="350px"
+                            style="width: 350px; display: block; top: unset; left: 10px; bottom: 10px; right: unset; transform: unset;"
+                            data-mdb-autohide="true" data-mdb-position="top-right" data-mdb-append-to-body="true">
+                            <div class="toast-body ">` + data.success + `</div>
+                            </div>`);
+                        setInterval(() => {
+                            $("#toast-info").html('');
+                        }, 5000);
+                    }
+                    if (data.removed) {
+                        $("#pinTab").html(data.page);
+                        $("#toast-info").html(`<div class="toast toast-fixed bg-danger text-white show fade  " id="placement-toast" role="alert" aria-live="assertive"
+                            aria-atomic="true"  data-mdb-width="350px"
+                            style="width: 350px; display: block; top: unset; left: 10px; bottom: 10px; right: unset; transform: unset;"
+                            data-mdb-autohide="true" data-mdb-position="top-right" data-mdb-append-to-body="true">
+                            <div class="toast-body ">` + data.success + `</div>
+                            </div>`);
+                        setInterval(() => {
+                            $("#toast-info").html('');
+                        }, 5000);
+                    }
+                }
+            })
+        });
+        //navbar toggler 
+        $(document).on('click', '#guide-toggler', function(e) {
+            if ($(this).attr('data-nav-open') === 'false') {
+                $(this).html(`@svg('css-close')`).delay(500);
+                $("#guide-mobile-menu").fadeIn();
+                $(this).attr('data-nav-open', 'true');
+
+            } else {
+                $(this).html(`@svg('heroicon-o-menu')`).delay(500);
+                $("#guide-mobile-menu").fadeOut();
+                $(this).attr('data-nav-open', 'false');
+            }
+        });
+
+        //open search using CTRL + K
+        $(document).on('keydown', function(e) {
+            if ((e.metaKey || e.ctrlKey) && (String.fromCharCode(e.which).toLowerCase() === 'k')) {
+                e.preventDefault();
+                $("#searchModal").show();
+            }
+        });
+        $(document).on('keydown', function(e) {
+            if ((e.key == "Escape")) {
+                e.preventDefault();
+                $("#searchModal").hide();
+            }
+        });
+
     });
 </script>

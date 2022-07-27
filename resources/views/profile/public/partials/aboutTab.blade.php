@@ -1,5 +1,5 @@
-<div>
-    <div class="e-card">
+<div class="mt-3">
+    <div class="e-card e-card-shadow">
         <div class="card-body">
             <div>
                 {!! $user->about_me !!}

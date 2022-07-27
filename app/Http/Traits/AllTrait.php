@@ -5,7 +5,7 @@ namespace App\Http\Traits;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
-trait ImageTrait
+trait AllTrait
 {
     /**
      * Check if the authenticated user is following this user.

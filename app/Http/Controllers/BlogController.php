@@ -10,9 +10,13 @@ use App\Models\BlogView;
 use App\Models\Comment;
 use App\Models\Friendship;
 use App\Models\Tag;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\URL;
+use Jorenvh\Share\Share;
+use Jorenvh\Share\ShareFacade;
 
 class BlogController extends Controller
 {
@@ -40,12 +44,16 @@ class BlogController extends Controller
         if ($request->tab) {
             $tab = $request->tab;
         }
-        $tags = Tag::all();
+        $topUsers = User::withCount('friendships')->orderByDesc('friendships_count')->limit(5)->get();
+        $topTags = Tag::withCount(['blogs' => function ($q) {
+            $q->where('status', '=', "posted");
+        }])->orderByDesc('blogs_count')->limit(10)->get();
         return view("blogs.index")->with([
             "blogs" => $blogs,
             "blogCount" => $blogCount,
             "tab" => $tab,
-            "tags" => $tags
+            "topTags" => $topTags,
+            "topUsers" => $topUsers
         ]);
     }
 
@@ -140,13 +148,25 @@ class BlogController extends Controller
      * @param  \App\Models\Blog  $blog
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, $id)
+    public function show(Request $request, $title)
     {
-// dd(request()->userAgent());
+        $titleArray = explode('-',$title);
+        $id = end($titleArray);
         $blog = Blog::find($id);
         $like = NULL;
-        if ($blog) {
+        if ($blog){
             if ($blog->status == "posted") {
+                $shareBlog =  ShareFacade::page(
+                    URL::current(),
+                    $blog->title,
+                )
+                ->facebook()
+                ->twitter()
+                ->linkedin()
+                ->telegram()
+                ->whatsapp()        
+                ->reddit()
+                ->getRawLinks();
 
                 $existView = BlogView::where([['ip_address', "=", $request->ip()], ["blog_id", "=", $id]])->count();
                 if ($existView < 1) {
@@ -165,11 +185,10 @@ class BlogController extends Controller
                         ["user_id", "=", auth()->user()->id]
                     ])->first();
                 }
-                $related = Blog::with('tags')->whereHas('tags', function ($query) use ($blog) {
+                $related = Blog::where("status", "=", "posted")->with('tags')->whereHas('tags', function ($query) use ($blog) {
                     $query->whereIn('title', $blog->tags->pluck('title'));
                 }, '>=', count($blog->tags->pluck('title')))->where("id", "!=", $blog->id)->limit(5)->withCount('tags')
                     ->get();
-                // dd($related);
                 if ($request->tab == 'likes') {
                     $comments = Comment::where("blog_id", "=", $id)->withCount(['commentlikes' => function ($q) {
                         $q->where('status', '=', 1);
@@ -183,13 +202,13 @@ class BlogController extends Controller
                 } else {
                     $comments = Comment::where("blog_id", "=", $id)->orderByDesc("created_at")->paginate(5)->fragment('comments');
                 }
-
                 return view("blogs.show")->with([
                     "blog" => $blog,
                     "comments" => $comments,
                     "like" => $like,
                     "tagTitles" => json_encode($tagTitles),
-                    "related" => $related
+                    "related" => $related,
+                    "shareBlog"=>$shareBlog,
                 ]);
             }
         }
@@ -197,7 +216,6 @@ class BlogController extends Controller
     }
     public function ndshow($id)
     {
-
         $blog = Blog::find($id);
         $friendship = NULL;
         $like = NULL;
@@ -213,7 +231,6 @@ class BlogController extends Controller
                         ["user_id", "=", auth()->user()->id]
                     ])->first();
                 }
-
                 $comments = Comment::where("blog_id", "=", $id)->paginate(5)->fragment('comments');
                 return view("blogs.ndshow")->with([
                     "blog" => $blog,
@@ -322,6 +339,20 @@ class BlogController extends Controller
         }
         return view("error");
     }
+
+    public function detailCard(Request $request)
+    {
+        $blogId = $request->get('blogId');
+
+        $blog= Blog::query()->where('id', '=', $blogId)->first();
+        
+        $html = view("blogs.popover")
+            ->with([
+                "blog" => $blog,
+            ])->render();
+        return response()->json($html);
+    }
+
     public function tagSearch(Request $request, $title)
     {
         $searchTag = Tag::where("title", "=", $title)->first();
@@ -353,13 +384,23 @@ class BlogController extends Controller
         if ($request->tab) {
             $tab = $request->tab;
         }
+        $topBlogs = Blog::where("status", "=", "posted")->withCount('blogviews')->orderByDesc('blogviews_count')->limit(5)->get();
+        
+        $topUsers = User::withCount('friendships')->orderByDesc('friendships_count')->limit(5)->get();
+        $topTags = Tag::withCount(['blogs' => function ($q) {
+            $q->where('status', '=', "posted");
+        }])->orderByDesc('blogs_count')->limit(10)->get();
         return view("blogs.tagged")->with([
             "blogs" => $blogs,
             "blogCount" => $blogCount,
             "searchTag" => $searchTag,
-            "tab" => $tab
+            "tab" => $tab,
+            "topUsers" => $topUsers,
+            "topTags" =>$topTags,
+            "topBlogs"=>$topBlogs
         ]);
     }
+    
     /**
      * Remove the specified resource from storage.
      *
@@ -371,7 +412,6 @@ class BlogController extends Controller
         if (auth()->user()->id == $request->get('user_id')) {
             $blog = Blog::findOrFail($id);
             $blog->delete();
-
             return redirect('/blogs')->with(["deleteSuccess" => "blog deleted successfully."]);
         }
         return view('error');

@@ -2,7 +2,7 @@
 @push('styles')
     <x-head.tinymce-config />
 @endpush
-@section('content')
+@section('content-left')
     <?php
     function nice_number($n)
     {
@@ -23,64 +23,128 @@
         return number_format($n);
     }
     ?>
-    <div class="">
-        <h2>Settings</h2>
-        <ul class="nav nav-tabs  mb-3" role="tablist">
+    <nav class="desktop-nav-tab">
+        <ul class="nav nav-tabs flex-column  mb-3" role="tablist">
             <li class="nav-item" role="presentation">
-                <a class="nav-link {{ $tab == 'profile' ? 'active' : '' }}"
-                    href="/users/{{ $user->id }}/{{ $user->username }}?tab=profile" role="tab">Profile</a>
+                <a class="nav-link {{ $tab == 'profile' ? 'active' : '' }}" href="/settings?tab=profile" role="tab">Edit
+                    Profile</a>
             </li>
 
             <li class="nav-item" role="presentation">
-                <a class="nav-link {{ $tab == 'password' ? 'active' : '' }}"
-                    href="/users/{{ $user->id }}/{{ $user->username }}?tab=password" role="tab">Password
+                <a class="nav-link {{ $tab == 'password' ? 'active' : '' }}" href="/settings?tab=password"
+                    role="tab">Password
                 </a>
             </li>
             <li class="nav-item" role="presentation">
-                <a class="nav-link {{ $tab == 'blogs' ? 'active' : '' }}"
-                    href="/users/{{ $user->id }}/{{ $user->username }}?tab=blogs" role="tab">Blogs
+                <a class="nav-link {{ $tab == 'social_links' ? 'active' : '' }}" href="/settings?tab=social_links"
+                    role="tab">Social Links</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link {{ $tab == 'blogs' ? 'active' : '' }}" href="/settings?tab=blogs" role="tab">Blogs
                     ({{ nice_number($user->blogs->where('status', '=', 'posted')->count()) }})
                 </a>
             </li>
             <li class="nav-item" role="presentation">
-                <a class="nav-link {{ $tab == 'drafts' ? 'active' : '' }}"
-                    href="/users/{{ $user->id }}/{{ $user->username }}?tab=drafts" role="tab">Drafts
+                <a class="nav-link {{ $tab == 'drafts' ? 'active' : '' }}" href="/settings?tab=drafts"
+                    role="tab">Drafts
                     ({{ nice_number($user->blogs->where('status', '=', 'drafted')->count()) }})
                 </a>
             </li>
             <li class="nav-item" role="presentation">
-                <a class="nav-link {{ $tab == 'bookmarks' ? 'active' : '' }}"
-                    href="/users/{{ $user->id }}/{{ $user->username }}?tab=bookmarks" role="tab">Bookmarks
+                <a class="nav-link {{ $tab == 'bookmarks' ? 'active' : '' }}" href="/settings?tab=bookmarks"
+                    role="tab">Bookmarks
                     ({{ nice_number($user->bookmarks->count()) }})</a>
             </li>
             <li class="nav-item" role="presentation">
-                <a class="nav-link {{ $tab == 'follower' ? 'active' : '' }}"
-                    href="/users/{{ $user->id }}/{{ $user->username }}?tab=follower" role="tab">Follower
-                    ({{ nice_number($user->friendships->count()) }})</a>
+                <a class="nav-link {{ $tab == 'follower' ? 'active' : '' }}" href="/settings?tab=follower"
+                    role="tab">Follower</a>
             </li>
             <li class="nav-item" role="presentation">
-                <a class="nav-link {{ $tab == 'following' ? 'active' : '' }}"
-                    href="/users/{{ $user->id }}/{{ $user->username }}?tab=following" role="tab">Following
-                    ({{ nice_number($user->friendships->where('follower_id', '=', $user->id)->count()) }})</a>
+                <a class="nav-link {{ $tab == 'following' ? 'active' : '' }}" href="/settings?tab=following"
+                    role="tab">Following</a>
             </li>
             <li class="nav-item" role="presentation">
-                <a class="nav-link {{ $tab == 'pins' ? 'active' : '' }}"
-                    href="/users/{{ $user->id }}/{{ $user->username }}?tab=pins" role="tab">Pinned</a>
+                <a class="nav-link {{ $tab == 'pins' ? 'active' : '' }}" href="/settings?tab=pins"
+                    role="tab">Pinned</a>
             </li>
             <li class="nav-item" role="presentation">
-                <a class="nav-link {{ $tab == 'comments' ? 'active' : '' }}"
-                    href="/users/{{ $user->id }}/{{ $user->username }}?tab=comments" role="tab">comments</a>
+                <a class="nav-link {{ $tab == 'podcasts' ? 'active' : '' }}" href="/settings?tab=podcasts"
+                    role="tab">Podcasts</a>
             </li>
             <li class="nav-item" role="presentation">
-                <a class="nav-link {{ $tab == 'tags' ? 'active' : '' }}"
-                    href="/users/{{ $user->id }}/{{ $user->username }}?tab=tags" role="tab">Tags</a>
+                <a class="nav-link {{ $tab == 'comments' ? 'active' : '' }}" href="/settings?tab=comments"
+                    role="tab">comments</a>
             </li>
+
         </ul>
+    </nav>
+@endsection
+@section('content')
+    <div class="profile">
+        <nav class="tabs mobile-nav-tab">
+            <ul class="nav nav-tabs mb-3 -primary" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link {{ $tab == 'profile' ? 'active' : '' }}" href="/settings?tab=profile"
+                        role="tab">Edit Profile</a>
+                </li>
+
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link {{ $tab == 'password' ? 'active' : '' }}" href="/settings?tab=password"
+                        role="tab">Password
+                    </a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link {{ $tab == 'social_links' ? 'active' : '' }}" href="/settings?tab=social_links"
+                        role="tab">Social Links</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link {{ $tab == 'blogs' ? 'active' : '' }}" href="/settings?tab=blogs"
+                        role="tab">Blogs
+                        ({{ nice_number($user->blogs->where('status', '=', 'posted')->count()) }})
+                    </a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link {{ $tab == 'drafts' ? 'active' : '' }}" href="/settings?tab=drafts"
+                        role="tab">Drafts
+                        ({{ nice_number($user->blogs->where('status', '=', 'drafted')->count()) }})
+                    </a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link {{ $tab == 'bookmarks' ? 'active' : '' }}" href="/settings?tab=bookmarks"
+                        role="tab">Bookmarks
+                        ({{ nice_number($user->bookmarks->count()) }})</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link {{ $tab == 'follower' ? 'active' : '' }}" href="/settings?tab=follower"
+                        role="tab">Follower</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link {{ $tab == 'following' ? 'active' : '' }}" href="/settings?tab=following"
+                        role="tab">Following</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link {{ $tab == 'pins' ? 'active' : '' }}" href="/settings?tab=pins"
+                        role="tab">Pinned</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link {{ $tab == 'podcasts' ? 'active' : '' }}" href="/settings?tab=podcasts"
+                        role="tab">Podcasts</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link {{ $tab == 'comments' ? 'active' : '' }}" href="/settings?tab=comments"
+                        role="tab">Comments</a>
+                </li>
+            </ul>
+        </nav>
         <div>
+            <div id="loading"></div>
+
             @if ($tab == 'profile')
                 @include('profile.private.partials.profileTab', ['user' => $user])
             @elseif ($tab == 'password')
                 @include('profile.private.partials.passwordTab', ['user' => $user])
+            @elseif ($tab == 'social_links')
+                @include('profile.private.partials.socialTab', ['user' => $user])
             @elseif($tab == 'blogs')
                 @include('profile.private.partials.blogTab', ['blogs' => $blogs])
             @elseif ($tab == 'drafts')
@@ -92,7 +156,13 @@
             @elseif($tab == 'following')
                 @include('profile.private.partials.followingTab', ['followings' => $followings])
             @elseif ($tab == 'pins')
-                @include('profile.private.partials.pinTab', ['user' => $user])
+                <div id="pinTab">
+                    @include('profile.private.partials.pinTab', ['pins' => $pins, 'blogs' => $blogs])
+                </div>
+            @elseif($tab == 'comments')
+                @include('profile.private.partials.commentTab', ['comments' => $comments])
+            @elseif($tab == 'podcasts')
+                @include('profile.private.partials.podcastTab', ['user' => $user])
             @endif
         </div>
 
@@ -127,7 +197,7 @@
                         $('#locationError').text(response.responseJSON.errors.location);
                         $('#firstNameError').text(response.responseJSON.errors.first_name);
                         $('#lastNameError').text(response.responseJSON.errors.last_name);
-                        $('#shortBioError').text(response.responseJSON.errors.short_biio);
+                        $('#shortBioError').text(response.responseJSON.errors.short_bio);
                         $('#aboutMeError').text(response.responseJSON.errors.about_me);
                         $('#websiteUrlError').text(response.responseJSON.errors.website_url);
                         if (response.responseJSON.errors.background_image) {
@@ -180,7 +250,10 @@
 
                     }
                 });
+
             })
+
+
 
         });
     </script>

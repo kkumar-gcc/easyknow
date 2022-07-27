@@ -24,7 +24,7 @@ class Blog extends Model
     {
         return $this->hasMany(Bookmark::class);
     }
-    public function pins()
+    public function blogpins()
     {
         return $this->hasMany(BlogPin::class);
     }
@@ -44,7 +44,10 @@ class Blog extends Model
     {
         return $this->bookmarks()->where('user_id','=', auth()->user()->id)->exists();
     }
-
+    // public function isPinned()
+    // {
+    //     return $this->blogpins()->where('user_id','=', auth()->user()->id)->exists();
+    // }
     protected $fillable = [
         'user_id',
         'title',

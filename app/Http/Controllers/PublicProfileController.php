@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Blog;
+use App\Models\BlogPin;
 use App\Models\Bookmark;
 use App\Models\Friendship;
 use App\Models\User;
@@ -17,45 +18,49 @@ class PublicProfileController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request, $id, $username)
+    public function index(Request $request, $username)
     {
-        $user = User::find($id);
-
-        $tab = "about";
-        if ($request->tab == 'blogs') {
-            $tab = 'blogs';
-            $blogs = Blog::where("user_id", "=", $id)->where('status', '=', 'posted')->paginate(5);
-            return view("profile.public.index")->with([
-                "user" => $user,
-                "blogs" => $blogs,
-                "tab" => $tab
-            ]);
-        } else if ($request->tab == 'bookmarks') {
-            $tab = 'bookmarks';
-            $bookmarks = Bookmark::where("user_id", "=", $id)->paginate(5);
-            return view("profile.public.index")->with([
-                "user" => $user,
-                "bookmarks" => $bookmarks,
-                "tab" => $tab
-            ]);
-        } else if ($request->tab == 'activity') {
-            $tab = 'activity';
-            return view("profile.public.index")->with([
-                "user" => $user,
-                "tab" => $tab
-            ]);
-        } else if ($request->tab == "about") {
+        $user = User::where("username", "=", $username)->first();
+        if ($user) {
+            $id = $user->id;
             $tab = "about";
-            return view("profile.public.index")->with([
-                "user" => $user,
-                "tab" => $tab
-            ]);
-        }
-        else{
-             return view("profile.public.index")->with([
-                "user" => $user,
-                "tab" => $tab
-            ]);
+            if ($request->tab == 'blogs') {
+                $tab = 'blogs';
+                $pins = BlogPin::where("user_id", "=", $id)->get();
+                $blogs = Blog::where("user_id", "=", $id)->where([['status', '=', 'posted'], ["pinned", "=", false]])->paginate(5);
+
+                return view("profile.public.index")->with([
+                    "user" => $user,
+                    "pins" => $pins,
+                    "blogs" => $blogs,
+                    "tab" => $tab
+                ]);
+            } else if ($request->tab == 'bookmarks') {
+                $tab = 'bookmarks';
+                $bookmarks = Bookmark::where("user_id", "=", $id)->paginate(5);
+                return view("profile.public.index")->with([
+                    "user" => $user,
+                    "bookmarks" => $bookmarks,
+                    "tab" => $tab
+                ]);
+            } else if ($request->tab == 'activity') {
+                $tab = 'activity';
+                return view("profile.public.index")->with([
+                    "user" => $user,
+                    "tab" => $tab
+                ]);
+            } else if ($request->tab == "about") {
+                $tab = "about";
+                return view("profile.public.index")->with([
+                    "user" => $user,
+                    "tab" => $tab
+                ]);
+            } else {
+                return view("profile.public.index")->with([
+                    "user" => $user,
+                    "tab" => $tab
+                ]);
+            }
         }
     }
     public function detailCard(Request $request)
@@ -72,7 +77,7 @@ class PublicProfileController extends Controller
             ])->count();
         }
 
-        $html = view("blogs.popover")
+        $html = view("profile.public.popover")
             ->with([
                 "user" => $user,
                 "friendship" => $friendship,

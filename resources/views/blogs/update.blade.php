@@ -41,7 +41,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <button type="submit" class="mt-2 btn btn-primary border-primary"> Update
+                                <button type="submit" class="mt-2 e-btn e-btn-success"> Update
                                 </button>
                             </form>
                         </div>

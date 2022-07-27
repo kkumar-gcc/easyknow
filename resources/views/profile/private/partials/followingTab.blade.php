@@ -2,14 +2,14 @@
     @foreach ($followings as $following)
         <div class="e-card e-card-center e-card-hover mt-3">
             <div class="e-card-image">
-                <a href="/users/{{ $following->user->id }}/{{ $following->user->username }}/public" class="global-image">
+                <a href="/users/{{ $following->user->username }}" class="global-image">
                     <img class="user-image" src="https://picsum.photos/400/300" alt="">
                 </a>
             </div>
             <div class="e-card-body">
                 <div class="e-card-body-top">
                     <div class="top-left">
-                        <a href="/users/{{ $following->user->id }}/{{ $following->user->username }}/public"
+                        <a href="/users/{{ $following->user->username }}"
                             class="username">
                             {{ __($following->user->username) }}
                         </a>
@@ -21,7 +21,7 @@
                     </div>
                     <div class="top-right">
                         @guest
-                            <a class="e-btn e-btn-primary" href="#">
+                            <a class="e-btn e-btn-success" href="#">
                                 {{ __('Follow') }}
                             </a>
                         @else
@@ -36,7 +36,7 @@
                                         <input type="hidden" name="follower_id" id="follower_id"
                                             value="{{ auth()->user()->id }}">
                                         <input type="hidden" name="user_id" id="user_id" value="{{ $following->user->id }}">
-                                        <button type="submit" class="e-btn e-btn-primary">Follow</button>
+                                        <button type="submit" class="e-btn e-btn-success">Follow</button>
                                     </form>
                                 </div>
                                 <div id="user_unfollow_option-{{ $following->user->id }}">
@@ -53,7 +53,7 @@
                                         <input type="hidden" name="follower_id" id="follower_id"
                                             value="{{ auth()->user()->id }}">
                                         <input type="hidden" name="user_id" id="user_id" value="{{ $following->user->id }}">
-                                        <button type="submit" class="e-btn e-btn-primary">Follow</button>
+                                        <button type="submit" class="e-btn e-btn-success">Follow</button>
                                     </form>
                                 </div>
                                 <div id="user_unfollow_option-{{ $following->user->id }}" style="display: none;">
@@ -84,7 +84,7 @@
                                                 <div class="form-group">
                                                     <button type="button" class="e-btn"
                                                         data-mdb-dismiss="modal">No</button>
-                                                    <input type="submit" class="e-btn e-btn-warning" value="Unfollow">
+                                                    <input type="submit" class="e-btn e-btn-success" value="Unfollow">
                                                 </div>
                                             </form>
                                         </div>

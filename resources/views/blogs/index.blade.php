@@ -22,6 +22,7 @@
     }
     
     ?>
+
     <div class="container-fluid blog">
 
         @if (session()->has('deleteSuccess'))
@@ -36,39 +37,42 @@
             </section>
         @endif
 
-
-
-        <ul class="nav nav-tabs mb-3" role="tablist">
-            <li class="nav-item" role="presentation">
-                <a class="nav-link {{ $tab == 'newest' ? 'active' : '' }}" href="/blogs?tab=newest" role="tab">Newest</a>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link {{ $tab == 'likes' ? 'active' : '' }}" href="/blogs?tab=likes" role="tab">Most Liked</a>
-            </li>
-            <li class="nav-item" role="presentation">
-                <a class="nav-link {{ $tab == 'views' ? 'active' : '' }}" href="/blogs?tab=views" role="tab">Top
-                    Viewed</a>
-            </li>
-        </ul>
+        <div class="tabs mb-4  mt-4 border-b border-gray-200 dark:border-gray-700">
+            <ul class="flex flex-wrap -mb-px text-sm font-medium text-center -primary" role="tablist">
+                <li class="mr-2" role="presentation">
+                    <a class="inline-block p-4 rounded-t-lg border-b-2  {{ $tab == 'newest' ? 'text-gray-700 hover:text-gray-800 dark:text-white  border-purple-700 dark:border-purple-600' : 'hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 dark:border-transparent text-gray-500 dark:text-gray-400 border-gray-100 dark:border-gray-700' }}"
+                        href="/blogs?tab=newest" role="tab">Newest</a>
+                </li>
+                <li class="mr-2" role="presentation">
+                    <a class="inline-block p-4 rounded-t-lg border-b-2  {{ $tab == 'likes' ? 'text-gray-700 hover:text-gray-800 dark:text-white  border-purple-700 dark:border-purple-600' : 'hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 dark:border-transparent text-gray-500 dark:text-gray-400 border-gray-100 dark:border-gray-700' }}"
+                        href="/blogs?tab=likes" role="tab">Most Liked</a>
+                </li>
+                <li class="mr-2" role="presentation">
+                    <a class="inline-block p-4 rounded-t-lg border-b-2  {{ $tab == 'views' ? 'text-gray-700 hover:text-gray-800 dark:text-white  border-purple-700 dark:border-purple-600' : 'hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 dark:border-transparent text-gray-500 dark:text-gray-400 border-gray-100 dark:border-gray-700' }}"
+                        href="/blogs?tab=views" role="tab">Top Viewed</a>
+                </li>
+            </ul>
+        </div>
         @foreach ($blogs as $blog)
-            <div class="e-scard-hover e-scard" id="blog-{{ $blog->id }}">
-                <div class="card-body">
-                    <div class="image">
-                        <img src="https://picsum.photos/400/300" alt="">
+            <div class="relative mt-3 w-full p-2.5 text-base text-left  border border-transparent rounded-3xl font-normal text-gray-700 dark:text-gray-400 hover:bg-gray-100 hover:shadow-md dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
+                id="blog-{{ $blog->id }}">
+                <div class="flex flex-col items-stretch justify-center p-6 sm:flex-row">
+                    <div class="basis-1/3 relative text-center min-h-fit">
+                        <img class="block relative w-full h-full rounded-xl  object-cover shadow-md hover:shadow-sm sm:absolute sm:top-0 sm:left-0 "
+                            src="https://picsum.photos/400/300" alt="">
                     </div>
-                    <div class="detail">
-                        <div class="statics">
-                            <span> <small> {{ nice_number($blog->bloglikes->where('status', 1)->count()) }}
-                                    likes</small></span>
-                            <span class="text-muted"> <small>
-                                    {{ nice_number($blog->bloglikes->where('status', 0)->count()) }}
-                                    dislikes</small></span>
-                            <span class="text-muted"><small> {{ nice_number($blog->blogviews->count()) }} views</small></span>
+                    <div class="basis-2/3 mt-2 relative leading-normal sm:mt-0 sm:px-4">
+                        <div class="mb-1">
+                            <span class="text-sm">
+                                {{ nice_number($blog->bloglikes->where('status', 1)->count()) }} likes
+                            </span>
+                            <span class="text-sm">
+                                {{ nice_number($blog->blogviews->count()) }} views
+                            </span>
                         </div>
-
                         @guest
 
-                            <span class="bookmark " title="Bookmark this Article">
+                            <span class="absolute top-0 right-0 bookmark" title="Bookmark this Article">
                                 <a class="e-rbtn"> @svg('gmdi-bookmark-add-o') </a>
                             </span>
                         @else
@@ -81,7 +85,7 @@
                                         value="{{ auth()->user()->id }}">
                                     <input type="hidden" name="blog_id" id="blog_bookmark_id_{{ $blog->id }}"
                                         value="{{ $blog->id }}">
-                                    <button type="submit" class="bookmark  e-rbtn">
+                                    <button type="submit" class="absolute top-0 right-0 bookmark  e-rbtn">
                                         <span title="Bookmark this Article" class="bookmark_btn_{{ $blog->id }}"
                                             id="bookmark_btn_{{ $blog->id }}">
                                             @if ($blog->isBookmarked())
@@ -96,17 +100,15 @@
 
                         @endguest
 
-                        <a href="/blogs/{{ $blog->id }}" class="link link-secondary">
-                            <h5 class="title">{{ $blog->title }}</h5>
+                        <a href="/blogs/{{ Str::slug($blog->title, '-') }}-{{ $blog->id }}"
+                            class="link link-secondary">
+                            <h5 class="mb-2 text-2xl font-bold line-clamp-3 tracking-tight text-gray-900 dark:text-white">
+                                {{ $blog->title }}
+                            </h5>
                         </a>
-
-
-                        <p class="card-text disable">
+                        <p class="font-normal line-clamp-3 text-gray-700 dark:text-gray-400 sm:hidden">
                             {!! Str::words(strip_tags($blog->description), 50) !!}
                         </p>
-
-
-
                         @foreach ($blog->tags as $tag)
                             <a href="/blogs/tagged/{{ $tag->title }}" class="tag-popover"
                                 id="tag{{ $blog->id }}-{{ $tag->id }}">
@@ -115,80 +117,105 @@
                                 </span>
                             </a>
                         @endforeach
-                        <p class="mt-3"> by
-                            <a class="btn-link link-secondary user-popover"
-                                href="/users/{{ $blog->user_id }}/{{ $blog->user->username }}/public"
+                        <p class="mt-3">
+                            <span>By </span>
+                            <a class="text-sm font-medium text-gray-900 truncate dark:text-white user-popover"
+                                href="/users/{{ $blog->user->username }}"
                                 id="user{{ $blog->id }}-{{ $blog->user_id }}">
                                 {{ __($blog->user->username) }}
                             </a>
-                            <small class="text-muted"> posted
-                                {{ \Carbon\Carbon::parse($blog->created_at)->diffForHumans() }}
-                            </small>
+                            <span class="text-sm">posted 3 weeks ago</span>
                         </p>
-
-                        <a class="e-btn e-btn-dark e-btn-lg disable " href="/blogs/{{ $blog->id }}">
-                            {{ __('Read Article') }}
+                        <a class="e-btn e-btn-dark e-btn-lg mt-5 w-full sm:hidden"
+                            href="/blogs/{{ Str::slug($blog->title, '-') }}-{{ $blog->id }}">
+                            Read
+                            Article
                         </a>
                     </div>
                 </div>
             </div>
         @endforeach
-
-        {!! $blogs->withQueryString()->onEachSide(3)->links('pagination::bootstrap-5') !!}
+        {!! $blogs->withQueryString()->links('pagination::tailwind') !!}
     </div>
 @endsection
 @section('content-right')
     <article>
         <div class="form-group mb-4 ">
-            <div class="typeahead__container">
-                <div class="typeahead__field">
-                    <div class="typeahead__query">
-                        <form method="GET" action="/search">
-                            <input type="search" class="js-typeahead-search form-control " autocomplete="off"
-                                placeholder="Search" name="query" id="js-typeahead-search" required>
-                            <input type="submit" hidden />
-                        </form>
-                    </div>
-                </div>
-            </div>
+            <button
+                class="space-x-2 flex w-full justify-start items-center font-semibold whitespace-nowrap select-none mx-[2px] my-[1px]  p-3 text-sm rounded-lg text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200  dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+                type="button" data-modal-toggle="searchModal">
+                @svg('heroicon-o-search', 'flex-none')
+                <span class="flex-1 text-left">search </span>
+                <span class="flex-none hidden sm:block">
+                    <kbd
+                        class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg dark:bg-gray-600 dark:text-gray-100 dark:border-gray-500">
+                        Ctrl</kbd>
+                    +
+                    <kbd
+                        class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg dark:bg-gray-600 dark:text-gray-100 dark:border-gray-500">
+                        K</kbd>
+                </span>
+            </button>
         </div>
-        <div class="e-vcard">
-            <div class="e-vcard-title">
-                <span class="modern-badge modern-badge-info">#Help</span>
-                {{-- <h3>#help</h3> --}}
-            </div>
 
-            <ul class="e-vcard-list">
-                <li>one</li>
-                <li>two</li>
-            </ul>
-        </div>
-        <div class="e-vcard">
-            <div class="e-vcard-title">
-                <span class="modern-badge modern-badge-danger">#important</span>
-                {{-- <h3>#important</h3> --}}
+        @if ($topUsers->count() > 3)
+            <div
+                class="relative mt-3 w-full  text-base text-left  border  border-gray-200 rounded-xl font-normal   hover:shadow-md dark:border-gray-700 dark:bg-gray-800 ">
+                <header class="py-3 px-4 text-2xl font-semibold text-gray-700 dark:text-white">
+                    <h3> Top Users</h3>
+                </header>
+                <ul class="p-0 list-none">
+                    @foreach ($topUsers as $topUser)
+                        <li
+                            class="border-t py-3 px-4 last:rounded-b-xl border-gray-200 text-gray-700 dark:text-gray-400 dark:hover:text-white dark:border-gray-700 hover:bg-gray-100 hover:shadow-md dark:bg-gray-800 dark:hover:bg-gray-700">
+                            <a href="/users/{{ $topUser->username }}" class="flex items-center space-x-4 user-popover"
+                                id="user-1" id="user-{{ $topUser->id }}" data-popover-placement="left">
+                                <img class="w-12 h-12 rounded-full"
+                                    src="{{ asset($topUser->profile_image ?? 'images/1654760695anime3.png') }}"
+                                    alt="">
+                                <div class="space-y-1 font-medium ">
+                                    <div>{{ $topUser->username }}</div>
+                                </div>
+                            </a>
+                        </li>
+                    @endforeach
+                </ul>
             </div>
-            <div class="e-vcard-image">
+        @endif
+        <div
+            class="relative mt-3 w-full  text-base text-left  border  border-gray-200 rounded-xl font-normal   hover:shadow-md dark:border-gray-700 dark:bg-gray-800 ">
+            <header class="py-3 px-4 text-2xl font-semibold text-gray-700 dark:text-white">
+                <span class="modern-badge modern-badge-danger">#Advertisment</span>
+            </header>
+            <div
+                class="border-t py-3 px-4 last:rounded-b-xl border-gray-200 text-gray-700 dark:text-gray-400 dark:hover:text-white dark:border-gray-700 hover:bg-gray-100 hover:shadow-md dark:bg-gray-800 dark:hover:bg-gray-700">
+
                 <img src="https://picsum.photos/1200/1000" alt="">
             </div>
-            <div class="e-vcard-body">
-                <a href="#">hello</a>
-            </div>
         </div>
-        <div class="e-vcard">
-            <div class="e-vcard-title">
-                <h3>Top Tags</h3>
-            </div>
-            <div class="e-vcard-body">
-                @foreach($tags as $tag)
-                <a href="/blogs/tagged/{{ $tag->title }}" class="tag-popover"
-                    id="sidebarTag-{{ $tag->id }}">
-                    <span class="modern-badge modern-badge-{{ $tag->color }}">
-                        {{ $tag->title }}
-                    </span>
-                </a>
+
+        <div
+            class="relative mt-3 w-full  text-base text-left  border  border-gray-200 rounded-xl font-normal   hover:shadow-md dark:border-gray-700 dark:bg-gray-800 ">
+            <header class="py-3 px-4 text-2xl font-semibold text-gray-700 dark:text-white">
+                <span class="modern-badge modern-badge-danger">Top Tags</span>
+            </header>
+            <div
+                class="border-t py-3 px-4 last:rounded-b-xl border-gray-200 text-gray-700 dark:text-gray-400 dark:hover:text-white dark:border-gray-700 hover:bg-gray-100 hover:shadow-md dark:bg-gray-800 dark:hover:bg-gray-700">
+
+                @foreach ($topTags as $topTag)
+                    <div data-name="{{ $topTag->title }}">
+                        <a href="/blogs/tagged/{{ $topTag->title }}" class="tag-popover"
+                            id="sidebarTag-{{ $topTag->id }}">
+                            <span class="modern-badge modern-badge-{{ $topTag->color }}">
+                                #{{ $topTag->title }}
+                            </span>
+                        </a>
+                        <span class="item-multiplier">
+                            <span class="item-multiplier-x">×</span>&nbsp;
+                            <span class="item-multiplier-count">{{ $topTag->blogs_count }}</span>
+                        </span>
+                    </div>
                 @endforeach
-                
             </div>
         </div>
     </article>

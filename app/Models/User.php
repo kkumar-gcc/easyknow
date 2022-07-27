@@ -16,6 +16,18 @@ class User extends Authenticatable
     {
         return $this->hasMany(Blog::class);
     }
+    public function funs()
+    {
+        return $this->hasMany(Fun::class);
+    }
+    public function videos()
+    {
+        return $this->hasMany(Video::class);
+    }
+    public function podcasts()
+    {
+        return $this->hasMany(Podcast::class);
+    }
     public function friendships()
     {
         return $this->hasMany(Friendship::class);

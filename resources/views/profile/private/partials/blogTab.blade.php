@@ -51,7 +51,7 @@
                                 @endif
 
                             @endguest
-                            <a href="/blogs/{{ $blog->id }}" class="link link-secondary">
+                            <a href="/blogs/{{ Str::slug($blog->title, '-') }}-{{ $blog->id }}" class="link link-secondary">
                                 <h5 class="title">{{ $blog->title }}</h5>
                             </a>
 
@@ -68,17 +68,13 @@
                                     class="modern-badge  modern-badge-{{ $tag->color }}">#{{ $tag->title }}</span>
                             @endforeach
                             {{-- <p class="card-text"><small class="text-muted">Last updated </small></p> --}}
-                            <p class="mt-3"> by
-                                <a class="btn-link link-secondary"
-                                    href="/users/{{ $blog->user_id }}/{{ $blog->user->username }}/public">
-                                    {{ __($blog->user->username) }}
-                                </a>
+                            <p class="mt-3"> 
                                 <small class="text-muted"> posted
                                     {{ \Carbon\Carbon::parse($blog->created_at)->diffForHumans() }}
                                 </small>
                             </p>
 
-                            <a class="btn btn-secondary disable link" href="/blogs/{{ $blog->id }}">
+                            <a class="btn btn-secondary disable link" href="/blogs/{{ Str::slug($blog->title, '-') }}-{{ $blog->id }}">
                                 {{ __('Read Article') }}
                             </a>
                         </div>

@@ -1,23 +1,24 @@
 @if (count($blogs) > 0)
     @foreach ($blogs as $blog)
-        <div class="e-scard-hover e-scard" id="blog-{{ $blog->id }}">
-            <div class="card-body">
-                <div class="image">
-                    <img src="https://picsum.photos/400/300" alt="">
+        <div class="relative mt-3 w-full p-2.5 text-base text-left  border border-transparent rounded-3xl font-normal text-gray-700 dark:text-gray-400 hover:bg-gray-100 hover:shadow-md dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
+            id="blog-{{ $blog->id }}">
+            <div class="flex flex-col items-stretch justify-center p-6 sm:flex-row">
+                <div class="basis-1/3 relative text-center min-h-fit">
+                    <img class="block relative w-full h-full rounded-xl  object-cover shadow-md hover:shadow-sm sm:absolute sm:top-0 sm:left-0 "
+                        src="https://picsum.photos/400/300" alt="">
                 </div>
-                <div class="detail">
-                    <div class="statics">
-                        <span> <small> {{ nice_number($blog->bloglikes->where('status', 1)->count()) }}
-                                likes</small></span>
-                        <span class="text-muted"> <small>
-                                {{ nice_number($blog->bloglikes->where('status', 0)->count()) }}
-                                dislikes</small></span>
-                        <span class="text-muted"><small> {{ nice_number($blog->likes) }} views</small></span>
+                <div class="basis-2/3 mt-2 relative leading-normal sm:mt-0 sm:px-4">
+                    <div class="mb-1">
+                        <span class="text-sm">
+                            {{ nice_number($blog->bloglikes->where('status', 1)->count()) }} likes
+                        </span>
+                        <span class="text-sm">
+                            {{ nice_number($blog->blogviews->count()) }} views
+                        </span>
                     </div>
-
                     @guest
 
-                        <span class="bookmark " title="Bookmark this Article">
+                        <span class="absolute top-0 right-0 bookmark" title="Bookmark this Article">
                             <a class="e-rbtn"> @svg('gmdi-bookmark-add-o') </a>
                         </span>
                     @else
@@ -30,7 +31,7 @@
                                     value="{{ auth()->user()->id }}">
                                 <input type="hidden" name="blog_id" id="blog_bookmark_id_{{ $blog->id }}"
                                     value="{{ $blog->id }}">
-                                <button type="submit" class="bookmark  e-rbtn">
+                                <button type="submit" class="absolute top-0 right-0 bookmark  e-rbtn">
                                     <span title="Bookmark this Article" class="bookmark_btn_{{ $blog->id }}"
                                         id="bookmark_btn_{{ $blog->id }}">
                                         @if ($blog->isBookmarked())
@@ -45,47 +46,45 @@
 
                     @endguest
 
-                    <a href="/blogs/{{ $blog->id }}" class="link link-secondary">
-                        <h5 class="title">{{ $blog->title }}</h5>
+                    <a href="/blogs/{{ Str::slug($blog->title, '-') }}-{{ $blog->id }}"
+                        class="link link-secondary">
+                        <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                            {{ $blog->title }}
+                        </h5>
                     </a>
-
-
-                    <p class="card-text disable">
+                    <p class="font-normal text-gray-700 dark:text-gray-400 sm:hidden">
                         {!! Str::words(strip_tags($blog->description), 50) !!}
                     </p>
-
-
-
                     @foreach ($blog->tags as $tag)
                         <a href="/blogs/tagged/{{ $tag->title }}" class="tag-popover"
                             id="tag{{ $blog->id }}-{{ $tag->id }}">
                             <span class="modern-badge  modern-badge-{{ $tag->color }}">
-                                {{ $tag->title }}
+                                #{{ $tag->title }}
                             </span>
                         </a>
                     @endforeach
-                    <p class="mt-3"> by
-                        <a class="btn-link link-secondary user-popover"
-                            href="/users/{{ $blog->user_id }}/{{ $blog->user->username }}/public"
+                    <p class="mt-3">
+                        <span>By </span>
+                        <a class="text-sm font-medium text-gray-900 truncate dark:text-white user-popover"
+                            href="/users/{{ $blog->user->username }}"
                             id="user{{ $blog->id }}-{{ $blog->user_id }}">
                             {{ __($blog->user->username) }}
                         </a>
-                        <small class="text-muted"> posted
-                            {{ \Carbon\Carbon::parse($blog->created_at)->diffForHumans() }}
-                        </small>
+                        <span class="text-sm">posted 3 weeks ago</span>
                     </p>
-
-                    <a class="e-btn e-btn-dark e-btn-lg disable " href="/blogs/{{ $blog->id }}">
-                        {{ __('Read Article') }}
+                    <a class="e-btn e-btn-dark e-btn-lg mt-5 w-full sm:hidden"
+                        href="/blogs/{{ Str::slug($blog->title, '-') }}-{{ $blog->id }}">
+                        Read
+                        Article
                     </a>
                 </div>
             </div>
         </div>
     @endforeach
 
-    {!! $blogs->withQueryString()->onEachSide(3)->links('pagination::bootstrap-5') !!}
+    {!! $blogs->withQueryString()->onEachSide(3)->links('pagination::tailwind') !!}
 @else
-    <div >
+    <div>
         <ul>
             <li>Make sure all words are spelled correctly.</li>
             <li>Try different keywords.</li>

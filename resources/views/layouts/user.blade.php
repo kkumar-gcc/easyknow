@@ -15,60 +15,62 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
-
+    <script src="{{ asset('js/theme.js') }}"></script>
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
     <!-- Styles -->
-    <link href="{{ asset('assets') }}/css/webui-popover.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-typeahead/2.11.0/jquery.typeahead.css" integrity="sha512-AQG3JVpy/h0TsLsFs/HDLjnkq1ih9uUliGGXdQ7LQcGQt7GD+1b7HWOQ2oeCH7tKdtrfRg75CGApafi+//9Dbw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.0.0/mdb.min.css" rel="stylesheet" />
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/webui-popover/2.1.15/jquery.webui-popover.min.css"
+        integrity="sha512-n48mMpd2Ez+soTQuZManEgeJeSeBNynyPL7S23uY5zKXZiEpKn529rl4Zu01ZiJEyJPBYMPp5AxNQD3XRh1oeg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-typeahead/2.11.0/jquery.typeahead.css"
+        integrity="sha512-AQG3JVpy/h0TsLsFs/HDLjnkq1ih9uUliGGXdQ7LQcGQt7GD+1b7HWOQ2oeCH7tKdtrfRg75CGApafi+//9Dbw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
     <link href="{{ asset('assets') }}/css/home.css" rel="stylesheet" />
-    
-    
+
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     @stack('styles')
+    <style>
+        .left-inner {
+            position: sticky;
+            top: 90px;
+        }
+    </style>
 </head>
 
 <body>
 
     <div id="app">
-        <div class="wrapper">
+        <div class="wrapper w-screen dark:bg-gray-900">
             @include('layouts.navbars.navbars')
-            <div class="user-main-panel ">
-                <div class="left">
-                    <div class="content">
+            <div class="mt-2 flex-col-reverse flex justify-between w-screen  lg:flex-row max-w-7xl">
+                <div class="flex-auto w-full lg:w-1/4 mt-4 shadow-sm sticky top-24 p-2">
+                    <div class="content left-inner">
                         @yield('content-left')
-                       
                     </div>
                 </div>
-                <div class="middle">
+                <div class="flex-auto w-full lg:w-3/4 ">
                     <div class="content">
                         @yield('content')
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
-    <script src="{{ asset('assets') }}/js/core/jquery.min.js"></script>
-    <script src="{{ asset('assets') }}/js/core/popper.min.js"></script>
-    {{-- <script src="{{ asset('assets') }}/js/core/bootstrap.min.js"></script> --}}
-    <!-- Chart JS -->
-    {{-- <script src="{{ asset('assets') }}/js/plugins/chartjs.min.js"></script> --}}
-    <!--  Notifications Plugin    -->
-
-    <script src="{{ asset('assets') }}/js/plugins/bootstrap-notify.js"></script>
-     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.0.0/mdb.min.js"></script>
-    {{-- <script src="{{ asset('assets') }}/js/theme.js"></script> --}}
-    <script src="https://cdn.jsdelivr.net/npm/webui-popover@1.2.18/dist/jquery.webui-popover.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-typeahead/2.11.0/jquery.typeahead.min.js" integrity="sha512-Rc24PGD2NTEGNYG/EMB+jcFpAltU9svgPcG/73l1/5M6is6gu3Vo1uVqyaNWf/sXfKyI0l240iwX9wpm6HE/Tg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script>
-        $(function() {
-            $('[data-bs-toggle="popover"]').popover()
-        })
-    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-typeahead/2.11.0/jquery.typeahead.min.js"
+        integrity="sha512-Rc24PGD2NTEGNYG/EMB+jcFpAltU9svgPcG/73l1/5M6is6gu3Vo1uVqyaNWf/sXfKyI0l240iwX9wpm6HE/Tg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/webui-popover/2.1.15/jquery.webui-popover.min.js"
+        integrity="sha512-PnQiQIdb86U1QdVJOzyZQWS0deb1BFZisR6aEuRtc8KZopFYm5wLqL6+LZMgHmg/niTTEXjUA0C3bhc8CFUzjQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src={{ asset('js/prism.js') }}></script>
+    <script src={{ asset('js/flowbite.js') }}></script>
     @stack('scripts')
 </body>
 

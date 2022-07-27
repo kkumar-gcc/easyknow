@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTagRequest;
 use App\Http\Requests\UpdateTagRequest;
+use App\Models\Blog;
 use App\Models\Tag;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class TagController extends Controller
@@ -17,13 +19,23 @@ class TagController extends Controller
     public function index(Request $request)
     {
         if ($request->tab == 'name') {
-            $tags = Tag::orderBy('title')->paginate(20);
+            $tags = Tag::withCount(['blogs' => function ($q) {
+                $q->where('status', '=', "posted");
+            }])->orderBy('title')->paginate(18);
         } else if ($request->tab == 'newest') {
-            $tags = Tag::orderByDesc('created_at')->paginate(20);
+            $tags = Tag::withCount(['blogs' => function ($q) {
+                $q->where('status', '=', "posted");
+            }])->orderByDesc('created_at')->paginate(18);
+        } else  if ($request->tab == 'popular') {
+            $tags = Tag::withCount(['blogs' => function ($q) {
+                $q->where('status', '=', "posted");
+            }])->orderByDesc('blogs_count')->paginate(18);
         } else {
-            $tags = Tag::paginate(20);
+            $tags = Tag::paginate(18);
         }
-        return view('tags.index')->with(["tags" => $tags]);
+        $topUsers = User::withCount('friendships')->orderByDesc('friendships_count')->limit(5)->get();
+       
+        return view('tags.index')->with(["tags" => $tags, "topUsers" => $topUsers]);
     }
 
     /**
@@ -75,28 +87,33 @@ class TagController extends Controller
      */
     public function store(StoreTagRequest $request)
     {
-        $userId = $request->get('user_id');
-        $title = strtolower($request->get('title'));
-        $existTag = Tag::where('title', "=", $title)->count();
-        if ($title == trim($title) && str_contains($title, ' ')) {
-            return response()->json([
-                "error" => "tag shouldn't contain whitespace."
-            ]);
-        } else {
-            if ($existTag < 1) {
-                $tag = new Tag();
-                $tag->title = $title;
-                $tag->user_id = $userId;
-                $tag->save();
+        if ($request->get('title') != '') {
+            $userId = $request->get('user_id');
+            $title = strtolower($request->get('title'));
+            $existTag = Tag::where('title', "=", $title)->count();
+            if ($title == trim($title) && str_contains($title, ' ')) {
                 return response()->json([
-                    "success" => "tag successfully created."
+                    "error" => "tag shouldn't contain whitespace."
                 ]);
             } else {
-                return response()->json([
-                    "error" => "tag already exists."
-                ]);
+                if ($existTag < 1) {
+                    $tag = new Tag();
+                    $tag->title = $title;
+                    $tag->user_id = $userId;
+                    $tag->save();
+                    return response()->json([
+                        "success" => "tag successfully created."
+                    ]);
+                } else {
+                    return response()->json([
+                        "error" => "tag already exists."
+                    ]);
+                }
             }
         }
+        return response()->json([
+            "error" => "empty tag isn't allowed."
+        ]);
     }
 
     /**

@@ -218,7 +218,7 @@
                                                         <input type="hidden" name="replied_user_id"
                                                             value="{{ $reply->user_id }}">
                                                         <textarea type="text" class="form-control" name="content" id="editor2">
-                                                            <a class="link link-secondary text-danger" style="text-decoration:none;color:red" href="/users/{{ $reply->user_id }}/{{ $reply->user->username }}/public"><code> {{ '@' }}{{ $reply->user->username }}</code></a>
+                                                            <a class="link link-secondary text-danger user-popover" id="commentReply{{auth()->user()->id}}-{{ $reply->user_id }}" style="text-decoration:none;color:red" href="/users/{{ $reply->user_id }}/{{ $reply->user->username }}/public"><code> {{ '@' }}{{ $reply->user->username }}</code></a>
                                                         </textarea>
                                                         <button type="submit"
                                                             class="mt-2 ml-2 btn2 btn-sm btn btn-outline-primary">reply</button>

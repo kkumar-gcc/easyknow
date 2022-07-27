@@ -15,7 +15,7 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
-
+    <script src="{{ asset('js/theme.js') }}" defer></script>
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
@@ -23,64 +23,31 @@
     <!-- Styles -->
 
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.0.0/mdb.min.css" rel="stylesheet" />
     <link href="{{ asset('assets') }}/css/home.css" rel="stylesheet" />
     @stack('styles')
 </head>
 
 <body>
     <div id="app">
-        <div class="wrapper">
+        <div class="wrapper  w-full">
             @include('layouts.navbars.navbars')
-            {{-- <div class="main-panel"> --}}
-                {{-- <div class="left">
-                    <div class="content">
-                        @yield('content-left')
-                    </div>
-                </div>
-                <div class="middle">
-                    <div class="content">
-                        @yield('content')
-                    </div>
-                </div>
-                <div class="right">
-                    <div class="content">
-                        @yield('content-right')
-                    </div>
-                </div> --}}
-                {{-- @guest
-                    @if (Route::has('login'))
-                        <li class="nav-item ">
-                            <a class="link link-secondary sbtn " href="{{ route('login') }}">{{ __('Login') }}</a>
-                        </li>
-                    @endif
-
-                    @if (Route::has('register'))
-                        <li class="nav-item ">
-                            <a class="link link-secondary sbtn ml-3"
-                                href="{{ route('register') }}">{{ __('Register') }}</a>
-                        </li>
-                    @endif
-                @endguest --}}
-                    <div class="content">
-                        @yield('content')
-                    </div>
-
-                {{-- </div> --}}
+            <div class="content">
+                @yield('content')
             </div>
         </div>
-        <script src="{{ asset('assets') }}/js/core/jquery.min.js"></script>
-        <script src="{{ asset('assets') }}/js/core/popper.min.js"></script>
-        <script src="{{ asset('assets') }}/js/core/bootstrap.min.js"></script>
-        <!-- Chart JS -->
-        {{-- <script src="{{ asset('assets') }}/js/plugins/chartjs.min.js"></script> --}}
-        <!--  Notifications Plugin    -->
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-typeahead/2.11.0/jquery.typeahead.min.js"
+        integrity="sha512-Rc24PGD2NTEGNYG/EMB+jcFpAltU9svgPcG/73l1/5M6is6gu3Vo1uVqyaNWf/sXfKyI0l240iwX9wpm6HE/Tg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/webui-popover/2.1.15/jquery.webui-popover.min.js"
+        integrity="sha512-PnQiQIdb86U1QdVJOzyZQWS0deb1BFZisR6aEuRtc8KZopFYm5wLqL6+LZMgHmg/niTTEXjUA0C3bhc8CFUzjQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src={{ asset('js/prism.js') }}></script>
+    <script src={{ asset('js/flowbite.js') }}></script>
 
-        <script src="{{ asset('assets') }}/js/plugins/bootstrap-notify.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.0.0/mdb.min.js"></script>
-    
-        {{-- <script src="{{ asset('assets') }}/js/theme.js"></script> --}}
-        @stack('scripts')
-    </body>
+    @stack('scripts')
+</body>
 
-    </html>
+</html>

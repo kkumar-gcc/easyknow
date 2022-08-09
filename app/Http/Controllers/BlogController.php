@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\URL;
 use Jorenvh\Share\Share;
 use Jorenvh\Share\ShareFacade;
+use Illuminate\Support\Str;
 
 class BlogController extends Controller
 {
@@ -44,7 +45,8 @@ class BlogController extends Controller
         if ($request->tab) {
             $tab = $request->tab;
         }
-        $topUsers = User::withCount('friendships')->orderByDesc('friendships_count')->limit(5)->get();
+        // Unknown column 'friendships.user_id' in 'where clause'
+        $topUsers = User::limit(5)->get();
         $topTags = Tag::withCount(['blogs' => function ($q) {
             $q->where('status', '=', "posted");
         }])->orderByDesc('blogs_count')->limit(10)->get();
@@ -150,23 +152,23 @@ class BlogController extends Controller
      */
     public function show(Request $request, $title)
     {
-        $titleArray = explode('-',$title);
+        $titleArray = explode('-', $title);
         $id = end($titleArray);
         $blog = Blog::find($id);
         $like = NULL;
-        if ($blog){
+        if ($blog) {
             if ($blog->status == "posted") {
                 $shareBlog =  ShareFacade::page(
                     URL::current(),
                     $blog->title,
                 )
-                ->facebook()
-                ->twitter()
-                ->linkedin()
-                ->telegram()
-                ->whatsapp()        
-                ->reddit()
-                ->getRawLinks();
+                    ->facebook()
+                    ->twitter()
+                    ->linkedin()
+                    ->telegram()
+                    ->whatsapp()
+                    ->reddit()
+                    ->getRawLinks();
 
                 $existView = BlogView::where([['ip_address', "=", $request->ip()], ["blog_id", "=", $id]])->count();
                 if ($existView < 1) {
@@ -208,7 +210,7 @@ class BlogController extends Controller
                     "like" => $like,
                     "tagTitles" => json_encode($tagTitles),
                     "related" => $related,
-                    "shareBlog"=>$shareBlog,
+                    "shareBlog" => $shareBlog,
                 ]);
             }
         }
@@ -248,10 +250,6 @@ class BlogController extends Controller
      * @param  \App\Models\Blog  $blog
      * @return \Illuminate\Http\Response
      */
-    public function edit(Blog $blog)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
@@ -262,8 +260,6 @@ class BlogController extends Controller
      */
     public function post(Request $request)
     {
-
-
         $blogId = $request->get('blog_id');
         $blogTitle = $request->get('title');
         $blogDescription = $request->get('description');
@@ -301,14 +297,32 @@ class BlogController extends Controller
 
             $blogId = $blog->id;
         }
-
-
         return redirect()->to("blogs/" . $blogId)->with([
             "blog" => $blog,
             "success" => 'blog created successfully.'
         ]);
     }
-    public function update(Request $request)
+    public function edit(Request $request, $title)
+    {
+        $titleArray = explode('-', $title);
+        $id = end($titleArray);
+        $blog = Blog::find($id);
+        if ($blog) {
+
+            if (auth()->user()->id == $blog->user_id) {
+                $tagTitles = [];
+                foreach ($blog->tags as $tag) {
+                    $tagTitles[] = $tag->title;
+                }
+                return view("blogs.update")->with([
+                    "blog" => $blog,
+                    "tagTitles" => json_encode($tagTitles),
+                ]);
+            }
+        }
+        return view("error");
+    }
+    public function editStore(Request $request)
     {
         if (auth()->user()->id == $request->get('user_id')) {
             $blogId = $request->get('blog_id');
@@ -339,20 +353,82 @@ class BlogController extends Controller
         }
         return view("error");
     }
+    public function manage(Request $request, $title)
+    {
+        $titleArray = explode('-', $title);
+        $id = end($titleArray);
+        $blog = Blog::find($id);
+        if ($blog) {
+            if (auth()->user()->id == $blog->user_id) {
+                return view("blogs.manage")->with([
+                    "blog" => $blog,
+                ]);
+            }
+        }
+        return view("error");
+    }
+    public function seo(Request $request)
+    {
 
+        if (auth()->user()->id == $request->get('user_id')) {
+            $blogId = $request->get('blog_id');
+            $blog = Blog::find($blogId);
+            if ($blog) {
+                if ($request->get('user_id') == auth()->user()->id) {
+                    $blog->meta_title = $request->get('seo_title');
+                    $blog->meta_description = $request->get('seo_description');
+                    $saved = $blog->save();
+                    return response()->json(["success" => "SEO settings updated successfully."]);
+                }
+            }
+        }
+        return view("error");
+    }
+    public function stats(Request $request, $title)
+    {
+        $titleArray = explode('-', $title);
+        $id = end($titleArray);
+        $blog = Blog::find($id);
+        if ($blog) {
+
+            if (auth()->user()->id == $blog->user_id) {
+                return view("blogs.stats")->with([
+                    "blog" => $blog,
+                ]);
+            }
+        }
+        return view("error");
+    }
+    public function manageStore(Request $request)
+    {
+        if (auth()->user()->id == $request->get('user_id')) {
+            $blogId = $request->get('blog_id');
+            $blog = Blog::find($blogId);
+            if ($blog) {
+                if ($request->get('user_id') == auth()->user()->id) {
+                    $blog->access = $request->get('blog_access');
+                    $blog->comment_access = $request->get('comment_access');
+                    $blog->adult_warning = $request->boolean('adult_warning');
+                    $blog->age_confirmation  = $request->boolean('age_confirmation');
+                    $saved = $blog->save();
+                    return response()->json(["success" => "Blog updated successfully."]);
+                }
+            }
+        }
+        return view("error");
+    }
     public function detailCard(Request $request)
     {
         $blogId = $request->get('blogId');
 
-        $blog= Blog::query()->where('id', '=', $blogId)->first();
-        
+        $blog = Blog::query()->where('id', '=', $blogId)->first();
+
         $html = view("blogs.popover")
             ->with([
                 "blog" => $blog,
             ])->render();
         return response()->json($html);
     }
-
     public function tagSearch(Request $request, $title)
     {
         $searchTag = Tag::where("title", "=", $title)->first();
@@ -385,8 +461,8 @@ class BlogController extends Controller
             $tab = $request->tab;
         }
         $topBlogs = Blog::where("status", "=", "posted")->withCount('blogviews')->orderByDesc('blogviews_count')->limit(5)->get();
-        
-        $topUsers = User::withCount('friendships')->orderByDesc('friendships_count')->limit(5)->get();
+
+        $topUsers = User::limit(5)->get();
         $topTags = Tag::withCount(['blogs' => function ($q) {
             $q->where('status', '=', "posted");
         }])->orderByDesc('blogs_count')->limit(10)->get();
@@ -396,11 +472,11 @@ class BlogController extends Controller
             "searchTag" => $searchTag,
             "tab" => $tab,
             "topUsers" => $topUsers,
-            "topTags" =>$topTags,
-            "topBlogs"=>$topBlogs
+            "topTags" => $topTags,
+            "topBlogs" => $topBlogs
         ]);
     }
-    
+
     /**
      * Remove the specified resource from storage.
      *

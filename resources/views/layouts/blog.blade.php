@@ -11,18 +11,13 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
     <!-- Icons -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
-    <link href="{{ asset('assets') }}/css/nucleo-icons.css" rel="stylesheet" />
-
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
-
+    <script src="{{ asset('js/theme.js') }}" defer></script>
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
     <!-- Styles -->
-    <script src="{{ asset('js/theme.js') }}" defer></script>
+
     <link rel="stylesheet" type="text/css" href={{ asset('css/prism.css') }}>
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/webui-popover/2.1.15/jquery.webui-popover.min.css"
@@ -41,9 +36,10 @@
             border-radius: 22px;
         }
     </style>
+
 </head>
 
-<body>
+<body class="selection:bg-rose-600 dark:selection:bg-rose-500 selection:text-white">
     <?php
     Str::macro('readDuration', function (...$text) {
         $totalWords = str_word_count(implode(' ', $text));
@@ -51,20 +47,14 @@
         return (int) max(1, $minutesToRead);
     });
     ?>
-    <div id="app">
-        <div class="wrapper w-full dark:bg-neutral-900 dark:text-gray-500">
-            @include('layouts.navbars.navbars')
-            <div class="mt-2 flex-col flex justify-between w-screen  lg:flex-row max-w-7xl">
-                <div class="blog">
-                    @yield('content')
-                </div>
-            </div>
+    <div class="w-full h-full dark:bg-gray-900 ">
+        @include('layouts.navbars.navbars')
+        <div class="w-full px-2 mt-2 text-gray-700 sm:px-6 sm:mt-6 md:px-20 md:mt-16 dark:text-gray-300">
+            @yield('content')
         </div>
     </div>
-    <script src="{{ asset('assets') }}/js/core/jquery.min.js"></script>
-    <script src={{ asset('js/flowbite.js') }}></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/4.0.0/mdb.min.js"></script>
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-typeahead/2.11.0/jquery.typeahead.min.js"
         integrity="sha512-Rc24PGD2NTEGNYG/EMB+jcFpAltU9svgPcG/73l1/5M6is6gu3Vo1uVqyaNWf/sXfKyI0l240iwX9wpm6HE/Tg=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -72,9 +62,8 @@
         integrity="sha512-PnQiQIdb86U1QdVJOzyZQWS0deb1BFZisR6aEuRtc8KZopFYm5wLqL6+LZMgHmg/niTTEXjUA0C3bhc8CFUzjQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src={{ asset('js/prism.js') }}></script>
-
+    <script src={{ asset('js/flowbite.js') }}></script>
     @stack('scripts')
-
 </body>
 
 </html>

@@ -45,7 +45,7 @@
 
 <body>
     <div id="app">
-        <div class="wrapper w-full dark:bg-gray-900">
+        <div class="wrapper w-full dark:bg-gray-900 text-gray-700 dark:text-gray-300">
             @include('layouts.navbars.navbars')
             <div class="mt-2 flex-col flex justify-between w-screen  lg:flex-row max-w-7xl">
                 <div class="flex-auto w-full lg:w-3/4 ">

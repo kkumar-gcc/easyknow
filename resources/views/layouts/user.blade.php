@@ -34,22 +34,17 @@
 
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     @stack('styles')
-    <style>
-        .left-inner {
-            position: sticky;
-            top: 90px;
-        }
-    </style>
+    
 </head>
 
 <body>
 
     <div id="app">
-        <div class="wrapper w-screen dark:bg-gray-900">
+        <div class="wrapper  w-full text-gray-700 dark:text-gray-300 dark:bg-gray-900">
             @include('layouts.navbars.navbars')
-            <div class="mt-2 flex-col-reverse flex justify-between w-screen  lg:flex-row max-w-7xl">
-                <div class="flex-auto w-full lg:w-1/4 mt-4 shadow-sm sticky top-24 p-2">
-                    <div class="content left-inner">
+            <div class=" flex flex-col-reverse justify-between w-screen  lg:flex-row max-w-7xl">
+                <div class="flex-auto w-full lg:w-1/4  shadow-sm sticky top-24 p-2">
+                    <div id="sticky-sidebar">
                         @yield('content-left')
                     </div>
                 </div>

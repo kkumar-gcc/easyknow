@@ -28,10 +28,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Podcast::class);
     }
-    public function friendships()
-    {
-        return $this->hasMany(Friendship::class);
-    }
+    // public function friendships()
+    // {
+    //     return $this->hasMany(Friendship::class);
+    // }
     public function bookmarks()
     {
         return $this->hasMany(Bookmark::class);
@@ -60,10 +60,21 @@ class User extends Authenticatable
     {
         return $this->hasMany(BlogLike::class);
     }
-    public function isFollower()
+    public function followings()
     {
-        return $this->friendships()->where('follower_id', '=', auth()->user()->id)->exists();
+        return $this->belongsToMany(User::class, 'friendships', 'follower_id', 'following_id');
     }
+    // users that follow this user
+    public function followers()
+    {
+        return $this->belongsToMany(User::class, 'friendships', 'following_id', 'follower_id');
+    }
+    public function isFollowing()
+    {
+        return $this->followers()->where('follower_id', '=', auth()->user()->id)->exists();
+    }
+    
+   
     /**
      * The attributes that are mass assignable.
      *
@@ -79,10 +90,10 @@ class User extends Authenticatable
         'about_me',
         'short_bio',
         'profile_image',
-        'background_image', 
-        "website_url", 
-        'twitter_url', 
-        'github_url', 
+        'background_image',
+        "website_url",
+        'twitter_url',
+        'github_url',
         'facebook_url'
     ];
     /**

@@ -20,7 +20,7 @@ return new class extends Migration
             ->onUpdate('cascade');
             $table->integer('serial_number')->default(0);
             $table->string('link');
-            $table->string('image');
+            $table->string('image')->nullable();
             $table->string('title');
             $table->text('description');
             $table->timestamps();

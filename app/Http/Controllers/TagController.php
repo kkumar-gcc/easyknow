@@ -33,7 +33,7 @@ class TagController extends Controller
         } else {
             $tags = Tag::paginate(18);
         }
-        $topUsers = User::withCount('friendships')->orderByDesc('friendships_count')->limit(5)->get();
+        $topUsers = User::limit(5)->get();
        
         return view('tags.index')->with(["tags" => $tags, "topUsers" => $topUsers]);
     }

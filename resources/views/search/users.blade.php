@@ -1,116 +1,77 @@
 @if (count($users) > 0)
     @foreach ($users as $user)
-        <div class="e-card e-card-center e-card-hover mt-3">
-            <div class="e-card-image">
-                <a href="/users/{{ $user->username }}" class="global-image">
-                    <img class="user-image" src="https://picsum.photos/400/300" alt="">
-                </a>
-            </div>
-            <div class="e-card-body">
-                <div class="e-card-body-top">
-                    <div class="top-left">
-                        <a href="/users/{{ $user->username }}" class="username">
-                            {{ __($user->username) }}
-                        </a>
-                        <div class="e-card-line">
-                            <span id="numberOfFollowers-{{ $user->id }}">
-                                {{ $user->friendships->count() }} followers
-                            </span>
+        <div
+            class="mt-3 max-w-full text-base w-full border  border-gray-200 rounded-xl font-normal  dark:border-gray-700 dark:bg-gray-800 ">
+            <div
+                class="py-3 px-4 rounded-xl not-prose dark:bg-gray-800 ">
+                <header class="flex flex-col md:flex-row">
+                    <div class="flex-1 flex items-center ">
+                        <img class="w-10 h-10 rounded-full"
+                            src="{{ asset($user->profile_image)}}" onerror="this.onerror=null;this.src=`https://avatars.dicebear.com/api/bottts/:{{ $user->username }}.svg`" alt="">
+                        <div class="ml-2 font-medium ">
+                            <div class="dark:text-white">
+                                <a href="/users/{{ $user->username }}">{{ $user->username }} </a></div>
+                            <div class="text-sm ">Joined in
+                                {{ \Carbon\Carbon::parse($user->created_at)->format('F Y') }}
+                            </div>
                         </div>
                     </div>
-                    <div class="top-right">
+                    <div class="mt-3">
+                        <div class="mb-3 md:hidden">
+                            {!! $user->short_bio !!}
+                        </div>
                         @guest
-                            <a class="e-btn e-btn-success" href="#">
+                            <button type="button"
+                                class="w-full inline-flex justify-center items-center font-medium rounded-lg text-sm px-5 py-2.5 text-center no-underline  cursor-pointer whitespace-nowrap text-white bg-gradient-to-br from-rose-600 to-pink-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-rose-300 dark:focus:ring-rose-800"
+                                data-modal-toggle="loginMessageModal">
+                                {{ svg('bi-person-plus-fill', 'mr-2 -ml-1 w-5 h-5') }}
                                 {{ __('Follow') }}
-                            </a>
+                            </button>
                         @else
-                            <div id="toast-unfollow">
-
-                            </div>
                             @if (auth()->user()->id == $user->id)
-                                <a class="e-btn e-btn-success"
+                                <a class="w-full inline-flex justify-center items-center font-medium rounded-lg text-sm px-5 py-2.5 text-center no-underline cursor-pointer whitespace-nowrap text-white bg-gradient-to-br from-rose-600 to-pink-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-rose-300 dark:focus:ring-rose-800"
                                     href="/users/{{ $user->username }}">
+                                    {{ svg('coolicon-edit', 'mr-2 -ml-1 w-5 h-5') }}
                                     {{ __('View Profile') }}
                                 </a>
                             @else
-                                @if ($user->isFollower())
-                                    <div id="user_follow_option-{{ $user->id }}" style="display: none;">
-                                        <form method="post" id="follower_create-{{ $user->id }}"
-                                            class="follower-create">
-                                            @csrf
-                                            @method('put')
-                                            <input type="hidden" name="follower_id" id="follower_id"
-                                                value="{{ auth()->user()->id }}">
-                                            <input type="hidden" name="user_id" id="user_id" value="{{ $user->id }}">
-                                            <button type="submit" class="e-btn e-btn-success">Follow</button>
-                                        </form>
-                                    </div>
-                                    <div id="user_unfollow_option-{{ $user->id }}">
-                                        <button type="button" class="e-btn" data-mdb-ripple-color="dark"
-                                            data-mdb-toggle="modal"
-                                            data-mdb-target="#unfollowModal-{{ $user->id }}">Unfollow</button>
-                                    </div>
-                                @else
-                                    <div id="user_follow_option-{{ $user->id }}">
-                                        <form method="post" id="follower_create-{{ $user->id }}"
-                                            class="follower-create">
-                                            @csrf
-                                            @method('put')
-                                            <input type="hidden" name="follower_id" id="follower_id"
-                                                value="{{ auth()->user()->id }}">
-                                            <input type="hidden" name="user_id" id="user_id" value="{{ $user->id }}">
-                                            <button type="submit" class="e-btn e-btn-success">Follow</button>
-                                        </form>
-                                    </div>
-                                    <div id="user_unfollow_option-{{ $user->id }}" style="display: none;">
-
-                                        <button type="button" class="e-btn" data-mdb-ripple-color="dark"
-                                            data-mdb-toggle="modal"
-                                            data-mdb-target="#unfollowModal-{{ $user->id }}">Unfollow</button>
-                                    </div>
-                                @endif
-                                <div class="modal fade" id="unfollowModal-{{ $user->id }}" tabindex="-1"
-                                    aria-labelledby="unfollowModal-{{ $user->id }}-Label" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-sm">
-                                        <div class="modal-content">
-
-                                            <div class="card-body text-center">
-                                                unfollow to " <strong class="font-weight-bold">{{ $user->username }}
-                                                </strong>" ?
-                                                <hr>
-
-                                                <form method="POST" id="follower_delete-{{ $user->id }}"
-                                                    class="follower-delete" action="{{ Route('follower.delete') }}">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <input type="hidden" name="follower_id" id="follower_d_id"
-                                                        value="{{ auth()->user()->id }}">
-                                                    <input type="hidden" name="user_id" id="user_d_id"
-                                                        value="{{ $user->id }}">
-                                                    <div class="form-group">
-                                                        <button type="button" class="e-btn"
-                                                            data-mdb-dismiss="modal">No</button>
-                                                        <input type="submit" class="e-btn e-btn-success" value="Unfollow">
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                {{-- @if ($blog->user->isFollower()) --}}
+                                <form method="post" id="follow-{{ $user->id }}" class="follow">
+                                    @csrf
+                                    @method('put')
+                                    <input type="hidden" name="follower_id" id="follower_id" value="{{ auth()->user()->id }}">
+                                    <input type="hidden" name="user_id" id="user_id" value="{{ $user->id }}">
+                                    @if ($user->isFollowing())
+                                        <button type="submit"
+                                            class="follow_button_{{ $user->id }} w-full inline-flex justify-center items-center font-medium rounded-lg text-sm px-5 py-2.5 text-center no-underline cursor-pointer whitespace-nowrap text-white bg-gradient-to-br from-rose-600 to-pink-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-rose-300 dark:focus:ring-rose-800">
+                                            {{ svg('bi-person-check-fill', 'mr-2 -ml-1 w-5 h-5') }}
+                                            {{ __('Following') }}
+                                        </button>
+                                    @else
+                                        <button type="submit"
+                                            class="follow_button_{{ $user->id }} w-full inline-flex justify-center items-center font-medium rounded-lg text-sm px-5 py-2.5 text-center no-underline  cursor-pointer whitespace-nowrap text-white bg-gradient-to-br from-rose-600 to-pink-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-rose-300 dark:focus:ring-rose-800">
+    
+                                            {{ svg('bi-person-plus-fill', 'mr-2 -ml-1 w-5 h-5') }}
+                                            {{ __('Follow') }}
+                                        </button>
+                                    @endif
+                                </form>
                             @endif
                         @endguest
                     </div>
+
+                </header>
+                <div class="mt-3 hidden md:block">
+                    {!! $user->short_bio !!}
                 </div>
-                <div class="auther-description">
-                   {!! $user->short_bio !!}
-                </div>
+                
             </div>
         </div>
     @endforeach
 
-    {!! $users->withQueryString()->onEachSide(3)->links('pagination::bootstrap-5') !!}
+    {!! $users->withQueryString()->onEachSide(3)->links('pagination::tailwind') !!}
 @else
-    <div>
+    <div class="prose">
         <ul>
             <li>Make sure all words are spelled correctly.</li>
             <li>Try different keywords.</li>

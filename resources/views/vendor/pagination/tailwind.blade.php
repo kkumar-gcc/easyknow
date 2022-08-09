@@ -1,6 +1,6 @@
 @if ($paginator->hasPages())
-    <nav role="navigation" aria-label="{{ __('Pagination Navigation') }}" class="flex items-center justify-between my-4">
-        <div class="flex justify-between flex-1 md:hidden">
+    <nav role="navigation" aria-label="{{ __('Pagination Navigation') }}" class="flex items-center justify-between my-4 not-prose">
+        <div class="flex justify-between flex-1 md:hidden not-prose">
             @if ($paginator->onFirstPage())
                 <span
                     class="relative  inline-flex items-center py-2 px-4 mr-3 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
@@ -117,7 +117,7 @@
                         @if ($i >= $paginator->currentPage() - 2 && $i <= $paginator->currentPage() + 2)
                             @if ($i == $paginator->currentPage())
                                 <span aria-current="page"
-                                    class="relative inline-flex items-center py-2 px-3 leading-tight text-green-600 bg-green-50 border border-gray-300 cursor-pointer hover:bg-green-100 hover:text-green-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white ">{{ $i }}</span>
+                                    class="relative inline-flex items-center py-2 px-3 leading-tight text-rose-600 bg-rose-50 border border-rose-300 cursor-pointer hover:bg-rose-100 hover:text-rose-600 dark:border-gray-700 dark:bg-gray-700 dark:text-white ">{{ $i }}</span>
                             @else
                                 <a href="{{ $paginator->url($i) }}"
                                     class="relative inline-flex items-center py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 cursor-pointer hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
@@ -151,7 +151,7 @@
                             @foreach ($element as $page => $url)
                                 @if ($page == $paginator->currentPage())
                                     <span aria-current="page"
-                                        class="relative inline-flex items-center py-2 px-3 leading-tight text-green-600 bg-green-50 border border-gray-300 cursor-pointer hover:bg-green-100 hover:text-green-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white ">{{ $page }}</span>
+                                        class="relative inline-flex items-center py-2 px-3 leading-tight text-rose-600 bg-rose-50 border border-gray-300 cursor-pointer hover:bg-rose-100 hover:text-rose-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white ">{{ $page }}</span>
                                 @else
                                     <a href="{{ $url }}"
                                         class="relative inline-flex items-center py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 cursor-pointer hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"

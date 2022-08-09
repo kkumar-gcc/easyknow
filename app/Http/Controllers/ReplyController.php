@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreReplyRequest;
 use App\Http\Requests\UpdateReplyRequest;
+use App\Models\Comment;
 use App\Models\Reply;
 
 class ReplyController extends Controller
@@ -40,20 +41,22 @@ class ReplyController extends Controller
         $commentId = $request->get('comment_id');
         $description = $request->get('content');
         $repliedUserId = $request->get('replied_user_id');
+        $comment = Comment::find($commentId);
+        if ($comment->blog->comment_access == 'enable') {
+            $reply = new Reply();
+            $reply->user_id = $userId;
+            $reply->comment_id = $commentId;
+            $reply->description = $description;
+            $saved = $reply->save();
 
-        $reply = new Reply();
-        $reply->user_id = $userId;
-        $reply->comment_id = $commentId;
-        $reply->description = $description;
-        $saved = $reply->save();
-
-        if ($saved) {
-            return response()->json([
-                "success" => "comment created",
-                "created" => true,
-                "reply" => $reply,
-                "user"=>auth()->user()
-            ]);
+            if ($saved) {
+                return response()->json([
+                    "success" => "comment created",
+                    "created" => true,
+                    "reply" => $reply,
+                    "user" => auth()->user()
+                ]);
+            }
         }
         return view("error");
     }

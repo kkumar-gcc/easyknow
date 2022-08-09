@@ -1,2 +1,2 @@
-require('./bootstrap');
+const hcSticky = require('hc-sticky');
 

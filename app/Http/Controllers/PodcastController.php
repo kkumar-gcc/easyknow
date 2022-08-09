@@ -25,7 +25,7 @@ class PodcastController extends Controller
         $tab = "newest";
         $topBlogs = Blog::where("status", "=", "posted")->withCount('blogviews')->orderByDesc('blogviews_count')->limit(5)->get();
 
-        $topUsers = User::withCount('friendships')->orderByDesc('friendships_count')->limit(5)->get();
+        $topUsers = User::limit(5)->get();
         $topTags = Tag::withCount(['blogs' => function ($q) {
             $q->where('status', '=', "posted");
         }])->orderByDesc('blogs_count')->limit(10)->get();

@@ -1,101 +1,221 @@
-<div class="comments" id="comments">
-    <div class="shadow-2 card">
-        <div class="m-2 ">
-            @auth
-                <div class="form">
-                    <form method="POST" id="blog_comment_form">
-                        @csrf
-                        @method('put')
-                        <input type="hidden" name="blog_id" id="comment_blog_id" value="{{ $blog->id }}">
-                        <input type="hidden" name="user_id" id="comment_user_id" value="{{ auth()->user()->id }}">
-                        <textarea type="text" class="form-control" name="comment" id="editor2">Write a comment </textarea>
-                        <button type="submit" class="mt-2 ml-2 btn btn-outline-primary">comment</button>
-                    </form>
+<section class="max-w-full py-8">
+    <header class="flex flex-row items-center justify-between mb-6 not-prose">
+        <div class="">
+            <h2 class="text-2xl font-bold dark:text-white">Comments <span class=""
+                    data-comments-count="{{ $blog->comments->count() }}">({{ $blog->comments->count() }})</span>
+            </h2>
+        </div>
+        <div>
+            <div class="dropdown">
+                <button type="button"
+                    class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-2 focus:ring-gray-200 font-medium text-center inline-flex items-center rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+                    data-dropdown-toggle="commentDropdown" data-dropdown-placement="bottom-end">
+                    Sort By
+                    <svg class="w-4 h-4 ml-2" aria-hidden="true" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+                <!-- Dropdown menu -->
+                <div id="commentDropdown"
+                    class="z-10 hidden bg-white divide-y divide-gray-100 rounded shadow w-44 dark:bg-gray-700 dark:divide-gray-600"
+                    data-popper-reference-hidden="" data-popper-escaped="" data-popper-placement="bottom-end">
+                    <ul class="py-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefault">
+                        <li>
+                            <a href="/blogs/{{ Str::slug($blog->title, '-') }}-{{ $blog->id }}?tab=newest#comments"
+                                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Newest</a>
+                        </li>
+                        <li>
+                            <a href="/blogs/{{ Str::slug($blog->title, '-') }}-{{ $blog->id }}?tab=likes#comments"
+                                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Most
+                                Liked</a>
+                        </li>
+                        <li>
+                            <a href="/blogs/{{ Str::slug($blog->title, '-') }}-{{ $blog->id }}?tab=dislikes#comments"
+                                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Most
+                                disliked</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="">
+        @auth
+            @if ($blog->comment_access == 'enable')
+                <div class="flex items-center space-x-4 not-prose">
+                    <img class="w-10 h-10 rounded-full cursor-pointer "
+                        src="{{ asset(Auth::user()->profile_image ?? 'https://picsum.photos/400/300') }}"
+                        alt="User dropdown">
+                    <div class="space-y-1 font-medium ">
+                        <p>Add a comment</p>
+                        {{-- <div class="text-sm text-gray-500 dark:text-gray-400">Joined in August 2014</div> --}}
+                    </div>
+                </div>
+                <div class="mt-2">
+
+                    <div class="form">
+                        <form method="POST" id="blog_comment_form">
+                            @csrf
+                            @method('put')
+                            <input type="hidden" name="blog_id" id="comment_blog_id" value="{{ $blog->id }}">
+                            <input type="hidden" name="user_id" id="comment_user_id" value="{{ auth()->user()->id }}">
+                            <textarea type="text" class="form-control" name="comment" id="editor2" placeholder="Type your comment... "></textarea>
+                            <button type="submit"
+                                class="inline-block font-medium rounded-lg text-sm px-5 py-2.5 text-center no-underline my-1.5 cursor-pointer whitespace-nowrap text-white bg-gradient-to-br from-rose-600 to-pink-500 hover:bg-gradient-to-bl focus:ring-2 focus:outline-none focus:ring-rose-300 dark:focus:ring-rose-800">{{ __('Comment') }}</button>
+                        </form>
+                    </div>
                 </div>
             @else
-                <span>
-                    Please <a href="{{ Route('login') }}" class="link">login </a> or <a
-                        href="{{ Route('register') }}" class="link">create an account </a> participate in this
-                    conversation.
-                </span>
-            @endauth
-        </div>
-        <hr>
-        <div id="new-comment">
-
-        </div>
-        @foreach ($comments as $comment)
-            <div class="comment m-1 showElement responsive-disable" id="comment-{{ $comment->id }}" >
-                <div class="image">
-                    <img class="user-img" src="https://picsum.photos/400/300" alt="">
+                <div class="not-prose">
+                    <div
+                        class="flex flex-col items-center justify-center  px-8 py-8 mb-4 text-sm text-[#1f2833] leading-6 border not-prose  border-rose-200 bg-rose-50 rounded-xl dark:bg-[#fddfd8] ">
+                        <p class="text-base">Comments are turned off . <a href="#"
+                                class="font-black text-rose-600">learn more</a></p>
+                    </div>
                 </div>
-                <div class="comment-body">
-                    <span><a class="link link-secondary user-popover"
-                            href="/users/{{ $comment->user_id }}/{{ $comment->user->username }}/public" id="user{{ $comment->id }}-{{ $comment->user_id }}">{{ $comment->user->username }}</a>
-                        <small class="text-muted">
-                            {{ \Carbon\Carbon::parse($comment->created_at)->diffForHumans() }}
-                        </small>
-                    </span>
-                    @if ($comment->user_id == $blog->user_id)
-                        <span class="modern-badge modern-badge-warning">auther</span>
-                    @endif
-                    <p class=" disable mt-2">{!! $comment->description !!}</p>
-                    <div class="action">
-                        @guest
-                            <span>
-                                <a href="#" class="action-btn link link-secondary"><span>
-                                        {{ svg('grommet-like') }}</span></a>{{ nice_number($comment->commentlikes->where('status', 1)->count()) }}</span>
-                            <span>
-                                <a href="#" class="action-btn link link-secondary">
-                                    <span>{{ svg('grommet-dislike') }}</span>
-                                </a>
-                                {{ nice_number($comment->commentlikes->where('status', 0)->count()) }}
-                            </span>
-                            <span><a href="/login" class="action-btn link link-secondary ">Login to
-                                    Reply</a></span>
-                        @else
-                            <span>
-                                <form method="POST" id="comment_like_form_{{ $comment->id }}"
-                                    class="d-inline comment-like">
-                                    @csrf
-                                    @method('PUT')
-                                    <input type="hidden" name="comment_id" id="comment_like_id_{{ $comment->id }}"
-                                        value="{{ $comment->id }}">
-                                    <input type="hidden" name="user_id" id="user_like_id_{{ $comment->id }}"
-                                        value="{{ auth()->user()->id }}">
-                                    <button type="submit" id="comment-like-{{ $comment->id }}"
-                                        class="action-btn {{ $comment->isAuthUserLikedComment() ? 'text-danger' : '' }} "
-                                        data-mdb-toggle="tooltip" title="likes">
-                                        <span class="r-3">{{ svg('grommet-like') }}</span>
-                                        <span>{{ nice_number($comment->commentlikes->where('status', 1)->count()) }}</span>
-                                    </button>
-                                </form>
+            @endif
+        @else
+            @if ($blog->comment_access == 'disable')
+                <div class="not-prose">
+                    <div
+                        class="flex flex-col items-center justify-center  px-8 py-8 mb-4 text-sm text-[#1f2833] leading-6 border not-prose  border-rose-200 bg-rose-50 rounded-xl dark:bg-[#fddfd8] ">
+                        <p class="text-base">Comments are turned off . <a href="#"
+                                class="font-black text-rose-600">learn more</a></p>
+                    </div>
+                </div>
+            @else
+                <button type="button"
+                    class="flex items-center w-full p-4 space-x-4 border border-gray-200 not-prose rounded-xl hover:border-rose-600 dark:border-gray-700 dark:hover:border-rose-500"
+                    data-modal-toggle="loginMessageModal">
+                    <img class="w-10 h-10 rounded-full cursor-pointer md:w-11 md:h-11 "
+                        src="{{ asset(Auth::user()->profile_image ?? 'https://picsum.photos/400/300') }}"
+                        alt="User dropdown">
+                    <div class="space-y-1 font-medium ">
+                        <p>Add a comment</p>
+                        {{-- <div class="text-sm text-gray-500 dark:text-gray-400">Joined in August 2014</div> --}}
+                    </div>
+                </button>
+            @endif
 
-                            </span>
-                            <span>
-                                <form method="post" id="comment_dislike_form_{{ $comment->id }}"
-                                    class="d-inline comment-dislike">
-                                    @csrf
-                                    @method('PUT')
-                                    <input type="hidden" name="comment_id" id="comment_dislike_id_{{ $comment->id }}"
-                                        value="{{ $comment->id }}">
-                                    <input type="hidden" name="user_id" id="user_dislike_id_{{ $comment->id }}"
-                                        value="{{ auth()->user()->id }}">
-                                    <button type="submit" id="comment-dislike-{{ $comment->id }}"
-                                        class="action-btn {{ $comment->isAuthUserDisLikedComment() ? 'text-secondary' : '' }}"
-                                        data-mdb-toggle="tooltip" title="dislikes">
-                                        <span class="r-3">{{ svg('grommet-dislike') }}</span>
-                                        <span>{{ nice_number($comment->commentlikes->where('status', 0)->count()) }}</span>
-                                    </button>
-                                </form>
-                            </span>
-                            <span class="text-muted">
-                                <a class="link link-secondary " data-mdb-toggle="collapse"
-                                    href="#collapseComment-{{ $comment->id }}" role="button" aria-expanded="false"
-                                    aria-controls="collapseComment-{{ $comment->id }}">
-                                    Reply
-                                </a>
-                                <div class="collapse mt-3" id="collapseComment-{{ $comment->id }}">
+        @endauth
+        <hr>
+        <div class="my-3" id="comments">
+            <div class="">
+                <div id="new-comment">
+                </div>
+                @foreach ($comments as $comment)
+                    <div class="w-full p-4 px-4 my-3 border border-gray-200 not-prose rounded-xl hover:border-rose-600 active:border-rose-600 dark:border-gray-700 dark:hover:border-rose-500"
+                        id="comment-{{ $comment->id }}">
+                        <header class="flex flex-row not-prose">
+                            <div class="flex-1">
+                                <div class="flex items-center space-x-4">
+                                    <img class="w-10 h-10 rounded-full md:w-11 md:h-11"
+                                        src="{{ asset($comment->user->profile_image) }}"
+                                        onerror="this.onerror=null;this.src=`https://avatars.dicebear.com/api/bottts/:{{ $comment->user->username }}.svg`"
+                                        alt="">
+                                    <div class="font-medium ">
+                                        <a class="user-popover dark:text-white"
+                                            href="/users/{{ $comment->user->username }}"
+                                            id="user{{ $comment->id }}-{{ $comment->user_id }}">{{ $comment->user->username }}
+                                            @if ($comment->user_id == $blog->user_id)
+                                                <span class="modern-badge modern-badge-warning">auther</span>
+                                            @endif
+                                        </a>
+                                        <div class="text-sm">
+                                            {{ \Carbon\Carbon::parse($comment->created_at)->diffForHumans() }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-end ">
+                                <button type="button"
+                                    class="hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5">
+                                    @svg('go-kebab-horizontal-16', 'h-5 w-5')
+                                </button>
+                            </div>
+                        </header>
+                        <div class="my-3">
+                            {!! $comment->description !!}
+                        </div>
+                        <footer class="mt-2">
+                            <div class="flex flew-row">
+                                <div class="flex flex-row flex-1">
+                                    @guest
+                                        <button type="button"
+                                            class="flex flex-row items-center mr-2 md:mr-3 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5"
+                                            data-modal-toggle="loginMessageModal">
+                                            {{ svg('grommet-like', 'h-4 w-4') }}
+                                            <span class="ml-3">
+                                                {{ nice_number($comment->commentlikes->where('status', 1)->count()) }}</span>
+                                        </button>
+                                        <button type="button"
+                                            class="flex flex-row items-center mr-2 md:mr-3 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5"
+                                            data-modal-toggle="loginMessageModal">
+                                            {{ svg('grommet-dislike', 'h-4 w-4') }}
+                                        </button>
+                                    @else
+                                        <form method="POST" id="comment_like_form_{{ $comment->id }}"
+                                            class="d-inline comment-like">
+                                            @csrf
+                                            @method('PUT')
+                                            <input type="hidden" name="comment_id"
+                                                id="comment_like_id_{{ $comment->id }}" value="{{ $comment->id }}">
+                                            <input type="hidden" name="user_id" id="user_like_id_{{ $comment->id }}"
+                                                value="{{ auth()->user()->id }}">
+                                            <button type="submit" id="comment-like-{{ $comment->id }}"
+                                                class="flex flex-row items-center {{ $comment->isAuthUserLikedComment() ? 'bg-red-500' : '' }}  mr-2 md:mr-3 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5">
+                                                {{ svg('grommet-like', 'h-4 w-4') }}
+                                                <span class="ml-3">
+                                                    {{ nice_number($comment->commentlikes->where('status', 1)->count()) }}</span>
+                                            </button>
+                                        </form>
+                                        <form method="post" id="comment_dislike_form_{{ $comment->id }}"
+                                            class="d-inline comment-dislike">
+                                            @csrf
+                                            @method('PUT')
+                                            <input type="hidden" name="comment_id"
+                                                id="comment_dislike_id_{{ $comment->id }}" value="{{ $comment->id }}">
+                                            <input type="hidden" name="user_id"
+                                                id="user_dislike_id_{{ $comment->id }}"
+                                                value="{{ auth()->user()->id }}">
+                                            <button type="submit" id="comment-dislike-{{ $comment->id }}"
+                                                class="flex flex-row mr-2 md:mr-3 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5">
+                                                {{ svg('grommet-dislike', 'h-4 w-4') }}
+                                            </button>
+                                        </form>
+                                    @endguest
+                                    @if ($comment->replies->count() > 0)
+                                        <button data-collapse-toggle="replyToggle-{{ $comment->id }}"
+                                            class="collapse-toggle flex flex-row items-center hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5">
+                                            @svg('coolicon-message-round', 'h-5 w-5')
+                                            <span class="ml-1 md:ml-2"> {{ nice_number($comment->replies->count()) }}
+                                                Replies</span>
+                                        </button>
+                                    @endif
+                                </div>
+                                <div class="flex items-center justify-end">
+                                    @guest
+                                        <button type="button"
+                                            class="comment-reply-toggle flex justify-end items-center hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5"
+                                            data-modal-toggle="loginMessageModal">
+                                            <span> Reply</span>
+                                        </button>
+                                    @else
+                                        @if ($blog->comment_access == 'enable')
+                                            <button type="button"
+                                                class="reply-toggle flex justify-end items-center hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5"
+                                                data-reply-toggle="commentReply-{{ $comment->id }}">
+                                                <span> Reply</span>
+                                            </button>
+                                        @endif
+                                    @endguest
+
+                                </div>
+                            </div>
+                        </footer>
+                        @auth
+                            @if ($blog->comment_access == 'enable')
+                                <div class="hidden mt-4" id="commentReply-{{ $comment->id }}">
                                     <form method="POST" class="comment-reply-form"
                                         id="blog_comment_form_{{ $comment->id }}">
                                         @csrf
@@ -103,145 +223,152 @@
                                         <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
                                         <input type="hidden" name="comment_id" value="{{ $comment->id }}">
                                         <input type="hidden" name="replied_user_id" value="{{ $comment->user_id }}">
-                                        <textarea type="text" class="form-control" name="content" id="editor2">Write a reply </textarea>
+                                        <textarea type="text" class="form-control" name="content" id="editor2" placeholder="type comment reply ..."></textarea>
                                         <button type="submit"
-                                            class="mt-2 ml-2 btn2 btn-sm btn btn-outline-primary">reply</button>
+                                            class="inline-block font-medium rounded-lg text-sm px-5 py-2.5 text-center no-underline my-1.5 cursor-pointer whitespace-nowrap text-white bg-gradient-to-br from-rose-600 to-pink-500 hover:bg-gradient-to-bl focus:ring-2 focus:outline-none focus:ring-rose-300 dark:focus:ring-rose-800">{{ __('Reply') }}</button>
                                     </form>
                                 </div>
-                            </span>
-                        @endguest
+                            @endif
+                        @endauth
+                        <div class="hidden p-2 mt-3 border-l-4 border-gray-200 dark:border-gray-700"
+                            id="replyToggle-{{ $comment->id }}" data-collapse-hidden="true">
 
 
-                    </div>
-                    @if ($comment->replies->count() > 0)
-                        <p class="action-btn ">
-                            <a class="link-btn link showElementBtn" target="{{ $comment->id }}" key="comment-{{ $comment->id }}">
-                                {{ nice_number($comment->replies->count()) }}
-                                replies</a>
-                        </p>
-                    @endif
-
-                    <div class="replies targetElement" id="replies-{{ $comment->id }}" style="display:none;">
-
-                        @foreach ($comment->replies as $reply)
-                            <div class="reply" id="reply-{{ $reply->id }}" >
-                                <div class="image">
-                                    <img class="user-img " src="https://picsum.photos/400/300" alt="">
-                                </div>
-                                <div class="reply-body">
-                                    <span>
-                                        <a href="/users/{{ $reply->user_id }}/{{ $reply->user->username }}/public"
-                                            class="link link-secondary user-popover "  id="user-{{ $reply->user_id }}">{{ $reply->user->username }}</a>
-                                        <small class="text-muted">
-                                            {{ \Carbon\Carbon::parse($reply->created_at)->diffForHumans() }}
-                                        </small>
-                                    </span>
-                                    @if ($reply->user_id == $blog->user_id)
-                                        <span class="modern-badge modern-badge-warning">auther</span>
-                                    @endif
-                                    <p class="mt-2">
-                                        {!! $reply->description !!}
-
-                                    </p>
-                                    <div class="action">
-                                        @guest
-                                            <span>
-                                                <a href="#" class="action-btn link link-secondary"><span>
-                                                        {{ svg('grommet-like') }}</span></a>{{ nice_number($reply->replylikes->where('status', 1)->count()) }}</span>
-                                            <span >
-                                                <a href="#" class="action-btn link link-secondary">
-                                                    <span>{{ svg('grommet-dislike') }}</span>
-                                                </a>
-                                                {{ nice_number($reply->replylikes->where('status', 0)->count()) }}
-                                            </span>
-                                            <span><a href="/login" class="action-btn link link-secondary ">Login
-                                                    to
-                                                    Reply</a></span>
-                                        @else
-                                            <span>
-                                                <form method="POST" id="reply_like_form_{{ $reply->id }}"
-                                                    class="d-inline reply-like">
-                                                    @csrf
-                                                    @method('PUT')
-                                                    <input type="hidden" name="reply_id"
-                                                        id="reply_like_id_{{ $reply->id }}"
-                                                        value="{{ $reply->id }}">
-
-                                                    <input type="hidden" name="user_id"
-                                                        id="user_like_id_{{ $reply->id }}"
-                                                        value="{{ auth()->user()->id }}">
-
-                                                    <button type="submit" id="reply-like-{{ $reply->id }}"
-                                                        class="action-btn {{ $reply->isAuthUserLikedReply() ? 'text-danger' : '' }}"
-                                                        data-mdb-toggle="tooltip" title="likes">
-                                                        <span class="r-3">{{ svg('grommet-like') }}</span>
-                                                        <span>{{ nice_number($reply->replylikes->where('status', 1)->count()) }}</span>
-                                                    </button>
-                                                </form>
-
-                                            </span>
-                                            <span>
-                                                <form method="post" id="reply_dislike_form_{{ $reply->id }}"
-                                                    class="d-inline reply-dislike">
-                                                    @csrf
-                                                    @method('PUT')
-                                                    <input type="hidden" name="reply_id"
-                                                        id="reply_dislike_id_{{ $reply->id }}"
-                                                        value="{{ $reply->id }}">
-                                                    <input type="hidden" name="user_id"
-                                                        id="user_dislike_id_{{ $reply->id }}"
-                                                        value="{{ auth()->user()->id }}">
-                                                    <button type="submit" id="reply-dislike-{{ $reply->id }}"
-                                                        class="action-btn {{ $reply->isAuthUserDisLikedReply() ? 'text-secondary' : '' }} "
-                                                        data-mdb-toggle="tooltip" title="dislikes">
-                                                        <span class="r-3">{{ svg('grommet-dislike') }}</span>
-                                                        <span>{{ nice_number($reply->replylikes->where('status', 0)->count()) }}</span>
-                                                    </button>
-                                                </form>
-                                            </span>
-                                            <span class="action-btn text-muted">
-                                                <a class="link link-secondary " data-mdb-toggle="collapse"
-                                                    href="#collapseReply-{{ $reply->id }}" role="button"
-                                                    aria-expanded="false"
-                                                    aria-controls="collapseReply-{{ $reply->id }}">
-                                                    Reply
-                                                </a>
-                                                <div class="collapse mt-3" id="collapseReply-{{ $reply->id }}">
-                                                    <form method="POST" class="comment-reply-form"
-                                                        id="comment_reply_form_{{ $reply->id }}">
-                                                        @csrf
-                                                        @method('put')
-                                                        <input type="hidden" name="user_id"
-                                                            value="{{ auth()->user()->id }}">
-                                                        <input type="hidden" name="comment_id"
-                                                            value="{{ $comment->id }}">
-                                                        <input type="hidden" name="replied_user_id"
-                                                            value="{{ $reply->user_id }}">
-                                                        <textarea type="text" class="form-control" name="content" id="editor2">
-                                                            <a class="link link-secondary text-danger user-popover" id="commentReply{{auth()->user()->id}}-{{ $reply->user_id }}" style="text-decoration:none;color:red" href="/users/{{ $reply->user_id }}/{{ $reply->user->username }}/public"><code> {{ '@' }}{{ $reply->user->username }}</code></a>
-                                                        </textarea>
-                                                        <button type="submit"
-                                                            class="mt-2 ml-2 btn2 btn-sm btn btn-outline-primary">reply</button>
-                                                    </form>
+                            @foreach ($comment->replies as $reply)
+                                <div class="w-full p-4 px-4 my-3 border border-gray-200 not-prose rounded-xl hover:border-rose-600 active:border-rose-600 dark:border-gray-700 dark:hover:border-rose-500"
+                                    id="reply-{{ $reply->id }}">
+                                    <header class="flex flex-row not-prose">
+                                        <div class="flex-1">
+                                            <div class="flex items-center space-x-4 user-popover">
+                                                <img class="w-10 h-10 rounded-full md:w-11 md:h-11"
+                                                    src="{{ asset($reply->user->profile_image) }}"
+                                                    onerror="this.onerror=null;this.src=`https://avatars.dicebear.com/api/bottts/:{{ $reply->user->username }}.svg`"
+                                                    alt="">
+                                                <div class="font-medium">
+                                                    <a class="user-popover dark:text-white"
+                                                        href="/users/{{ $reply->user->username }}"
+                                                        id="user{{ $reply->id }}-{{ $reply->user_id }}">{{ $comment->user->username }}
+                                                        @if ($reply->user_id == $blog->user_id)
+                                                            <span
+                                                                class="modern-badge modern-badge-warning">auther</span>
+                                                        @endif
+                                                    </a>
+                                                    <div class="text-sm ">
+                                                        {{ \Carbon\Carbon::parse($reply->created_at)->diffForHumans() }}
+                                                    </div>
                                                 </div>
-                                            </span>
-                                        @endguest
-
-
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center justify-end ">
+                                            <button type="button"
+                                                class=" hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5">
+                                                @svg('go-kebab-horizontal-16', 'h-5 w-5')
+                                            </button>
+                                        </div>
+                                    </header>
+                                    <div class="my-3">
+                                        {!! $reply->description !!}
                                     </div>
+                                    <footer class="mt-2">
+                                        <div class="flex flew-row">
+                                            <div class="flex flex-row flex-1">
+                                                @guest
+                                                    <button type="button"
+                                                        class="flex flex-row items-center mr-3 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5"
+                                                        data-modal-toggle="loginMessageModal">
+                                                        {{ svg('grommet-like', 'h-4 w-4') }}
+                                                        <span class="ml-3 -mt-0.5">
+                                                            {{ nice_number($reply->replylikes->where('status', 1)->count()) }}</span>
+                                                    </button>
+                                                    <button type="button"
+                                                        class="flex flex-row items-center hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5"
+                                                        data-modal-toggle="loginMessageModal">
+                                                        {{ svg('grommet-dislike', 'h-4 w-4') }}
+                                                    </button>
+                                                @else
+                                                    <form method="POST" id="reply_like_form_{{ $reply->id }}"
+                                                        class="d-inline reply-like">
+                                                        @csrf
+                                                        @method('PUT')
+                                                        <input type="hidden" name="reply_id"
+                                                            id="reply_like_id_{{ $reply->id }}"
+                                                            value="{{ $reply->id }}">
+                                                        <input type="hidden" name="user_id"
+                                                            id="user_like_id_{{ $reply->id }}"
+                                                            value="{{ auth()->user()->id }}">
+                                                        <button type="submit" id="reply-like-{{ $reply->id }}"
+                                                            class="flex flex-row items-center  hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5">
+                                                            {{ svg('grommet-like', 'h-4 w-4') }}
+                                                            <span class="ml-3 -mt-0.5">
+                                                                {{ nice_number($reply->replylikes->where('status', 1)->count()) }}</span>
+                                                        </button>
+                                                    </form>
+                                                    <form method="post" id="reply_dislike_form_{{ $reply->id }}"
+                                                        class="d-inline reply-dislike">
+                                                        @csrf
+                                                        @method('PUT')
+                                                        <input type="hidden" name="reply_id"
+                                                            id="reply_dislike_id_{{ $reply->id }}"
+                                                            value="{{ $reply->id }}">
+                                                        <input type="hidden" name="user_id"
+                                                            id="user_dislike_id_{{ $reply->id }}"
+                                                            value="{{ auth()->user()->id }}">
+                                                        <button type="submit" id="reply-dislike-{{ $reply->id }}"
+                                                            class="flex flex-row items-center mr-3 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5">
+                                                            {{ svg('grommet-dislike', 'h-4 w-4') }}
+                                                        </button>
+                                                    </form>
+                                                @endguest
+                                            </div>
+                                            <div class="flex items-center justify-end">
+                                                @guest
+                                                    <button type="button"
+                                                        class="flex justify-end items-center hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5"
+                                                        data-modal-toggle="loginMessageModal">
+                                                        Reply
+                                                    </button>
+                                                @else
+                                                    @if ($blog->comment_access == 'enable')
+                                                        <button type="button"
+                                                            class="reply-toggle flex justify-end items-center hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5"
+                                                            data-reply-toggle="replyForm-{{ $reply->id }}">
+                                                            <span> Reply</span>
+                                                        </button>
+                                                    @endif
+                                                @endguest
+                                            </div>
+                                        </div>
+                                    </footer>
                                 </div>
-
+                                @auth
+                                    @if ($blog->comment_access == 'enable')
+                                        <div class="hidden" id="replyForm-{{ $reply->id }}">
+                                            <form method="POST" class="comment-reply-form "
+                                                id="comment_reply_form_{{ $reply->id }}">
+                                                @csrf
+                                                @method('put')
+                                                <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
+                                                <input type="hidden" name="comment_id" value="{{ $comment->id }}">
+                                                <input type="hidden" name="replied_user_id"
+                                                    value="{{ $reply->user_id }}">
+                                                <textarea type="text" class="form-control" name="content" id="editor2">
+                                            <a class="link link-secondary text-danger user-popover" id="commentReply{{ auth()->user()->id }}-{{ $reply->user_id }}" style="text-decoration:none;color:red" href="/users/{{ $reply->user->username }}"><code> {{ '@' }}{{ $reply->user->username }}</code></a>
+                                        </textarea>
+                                                <button type="submit"
+                                                    class="inline-block font-medium rounded-lg text-sm px-5 py-2.5 text-center no-underline my-1.5 cursor-pointer whitespace-nowrap text-white bg-gradient-to-br from-rose-600 to-pink-500 hover:bg-gradient-to-bl focus:ring-2 focus:outline-none focus:ring-rose-300 dark:focus:ring-rose-800">{{ __('Reply') }}</button>
+                                            </form>
+                                        </div>
+                                    @endif
+                                @endauth
+                            @endforeach
+                            <div id="new-reply-{{ $comment->id }}">
                             </div>
-                        @endforeach
-                        <div id="new-reply-{{ $comment->id }}">
                         </div>
                     </div>
-                </div>
+                @endforeach
+
             </div>
-            @include('comments.mobileView',["comment"=>$comment])
-        @endforeach
+        </div>
+        <div class="not-prose"> {!! $comments->withQueryString()->links('pagination::tailwind') !!}</div>
     </div>
-
-    {!! $comments->withQueryString()->links('pagination::bootstrap-5') !!}
-
-</div>
+</section>

@@ -273,7 +273,8 @@
 }
 .wrapper,
 .main-panel,
-.blog-main-panel,.podcast-main-panel {
+.blog-main-panel,
+.podcast-main-panel {
     width: 100vw;
     max-width: 1300px;
     margin: auto;
@@ -291,7 +292,7 @@
 @media only screen and (min-width: 900px) {
     .nd-main-panel {
         width: 90vw;
-        margin:  auto;
+        margin: auto;
     }
 }
 @media only screen and (max-width: 900px) {
@@ -310,8 +311,8 @@
 }
 .main-panel,
 .user-main-panel,
-.blog-main-panel,.podcast-main-panel {
-
+.blog-main-panel,
+.podcast-main-panel {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -382,7 +383,8 @@
 }
 @media only screen and (max-width: 840px) {
     .main-panel,
-    .blog-main-panel,.podcast-main-panel {
+    .blog-main-panel,
+    .podcast-main-panel {
         flex-direction: column;
     }
     .mobile-nav-tab {
@@ -392,7 +394,8 @@
         display: none;
     }
     .main-panel .middle,
-    .blog-main-panel .middle,.podcast-main-panel .middle {
+    .blog-main-panel .middle,
+    .podcast-main-panel .middle {
         width: 100vw;
         border: none;
     }
@@ -411,7 +414,6 @@
     .main-panel .right,
     .blog-main-panel .right {
         border: none;
-
     }
 }
 @media only screen and (max-width: 490px) {
@@ -1008,26 +1010,6 @@ main {
 .text-muted {
     color: rgb(117, 117, 117);
 }
-/* .h-300{
-    height: 300px !important;
-} */
-/* a:visited {
-    -webkit-transition: color 200ms ease;
-    transition: color 200ms ease;
-    color: #ea4c89;
-    text-decoration: none;
-  } */
-
-/* .form-outline {
-    border-radius: 8px;
-}
-input:focus,
-.form-control:focus,
-.typeahead__field input:focus {
-    border-color: #44d468;
-    outline: 0;
-    box-shadow: 0 0 0 0.25rem rgba(68, 212, 104, 0.1);
-} */
 .global-main {
     width: 100%;
     max-width: var(--max-width-global-wrap);
@@ -1379,16 +1361,14 @@ figure figcaption {
     color: #000000;
 }
 
-
 .blog-auther {
     margin: 20px auto;
 }
-.alert{
-    border:1px solid transparent;
+.alert {
+    border: 1px solid transparent;
 }
 .e-card,
 .e-scard {
-   
 }
 .e-card-shadow,
 .e-scard-shadow,
@@ -1934,12 +1914,7 @@ figure figcaption {
     padding-right: 15px;
 }
 
-.e-scard .card-body .detail .bookmark {
-    position: absolute;
-    top: -10px;
-    right: -2px;
-    font-size: 24px;
-}
+
 .bookmark-active {
     color: var(--color-secondary);
 }
@@ -2338,19 +2313,13 @@ figure figcaption {
     color: rgb(131, 140, 149);
 }
 
-
-
-
-
-
-
 .accordion-button:not(.collapsed) {
     color: #6e6d7a;
 }
 
-.nav-tabs .nav-link.capitalize{
-    text-transform:capitalize;
-    font-size:16px;
+.nav-tabs .nav-link.capitalize {
+    text-transform: capitalize;
+    font-size: 16px;
 }
 .space-x-2 > :not([hidden]) ~ :not([hidden]) {
     --tw-space-x-reverse: 0;
@@ -2423,5 +2392,3 @@ figure figcaption {
     background-color: rgb(253, 242, 242);
     border-color: rgb(244, 180, 182);
 }
-
-

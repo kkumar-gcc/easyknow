@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCommentRequest;
 use App\Http\Requests\UpdateCommentRequest;
+use App\Models\Blog;
 use App\Models\Comment;
 
 class CommentController extends Controller
@@ -40,21 +41,23 @@ class CommentController extends Controller
         $blog_id = $request->get('blog_id');
         $description = $request->get('comment');
 
-
-        $comment = new Comment();
-        $comment->user_id = $user_id;
-        $comment->blog_id = $blog_id;
-        $comment->description = $description;
-        $saved = $comment->save();
-
-        if ($saved) {
-            return response()->json([
-                "success" => "comment created",
-                "created" => true,
-                "comment" => $comment,
-                "user"=>auth()->user()
-            ]);
+        $blog = Blog::find($blog_id);
+        if($blog->comment_access == 'enable') {
+            $comment = new Comment();
+            $comment->user_id = $user_id;
+            $comment->blog_id = $blog_id;
+            $comment->description = $description;
+            $saved = $comment->save();
+            if ($saved) {
+                return response()->json([
+                    "success" => "comment created",
+                    "created" => true,
+                    "comment" => $comment,
+                    "user" => auth()->user()
+                ]);
+            }
         }
+
         return view("error");
     }
 

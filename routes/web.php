@@ -57,12 +57,16 @@ Route::group(['middleware' => 'HtmlMinifier'], function () {
         Route::middleware(['cors'])->group(function () {
             Route::post("blog/draft", [BlogController::class, 'draft'])->name("blog.draft");
             Route::put("blog/create", [BlogController::class, 'post']);
-            Route::put("blog/update", [BlogController::class, 'update'])->name('blog.update');
+            Route::get("/blogs/edit/{title}", [BlogController::class, 'edit']);
+            Route::put("/blogs/edit", [BlogController::class, 'editStore'])->name('blogs.edit');
+            Route::get("/blogs/manage/{title}", [BlogController::class, 'manage']);
+            Route::put("/blogs/manage/seo", [BlogController::class, 'seo'])->name('blogs.manage.seo');
+            Route::put("/blogs/manage", [BlogController::class, 'manageStore'])->name('blogs.manage');
+            Route::get("/blogs/stats/{title}", [BlogController::class, 'stats']);
             Route::get("blogs/{id}/statics", [BlogController::class, 'statics']);
             Route::get("/drafts/{id}", [PrivateProfileController::class, 'draft']);
             Route::delete("blog/{id}/delete", [BlogController::class, 'destroy']);
-            Route::put("/follower/create", [FriendshipController::class, 'store'])->name("follower.create");
-            Route::delete("/follower/delete", [FriendshipController::class, 'destroy'])->name("follower.delete");
+            Route::put("/follow", [FriendshipController::class, 'store'])->name("follow");
             Route::put("/bloglike/create", [BlogLikeController::class, 'like'])->name("bloglike.create");
             Route::put("/blogdislike/create", [BlogLikeController::class, 'dislike'])->name("blogdislike.create");
             Route::put("/commentlike/create", [CommentLikeController::class, 'like'])->name("commentlike.create");

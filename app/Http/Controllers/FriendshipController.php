@@ -42,32 +42,34 @@ class FriendshipController extends Controller
         $userId = $request->get('user_id');
         if ($userId != auth()->user()->id) {
             $followerId = $request->get("follower_id");
-            $exitFriend = Friendship::where([
-                ["user_id", "=", $userId],
+            $existFriend = Friendship::where([
+                ["following_id", "=", $userId],
                 ["follower_id", "=", $followerId]
-            ])->count();
-            if ($exitFriend < 1) {
+            ]);
+            if ($existFriend->count() < 1) {
 
                 $friendship = new Friendship();
-                $friendship->user_id = $userId;
+                $friendship->following_id = $userId;
                 $friendship->follower_id = $followerId;
                 $friendship->status = 1;
                 $friendship->save();
-
-                $numberOfFollower = Friendship::where("user_id", "=", $userId)->count();
                 return response()->json([
-                    "success" => 'follower added successfully.',
-                    "followers" => $numberOfFollower,
-                    "user_id"=>$userId
+                    "follow" => 'follower added successfully.',
+                    "user_id" => $userId
                 ]);
             } else {
-                $numberOfFollower = Friendship::where("user_id", "=", $userId)->count();
-
-                return response()->json([
-                    "error" => 'you are already a follower.',
-                    "followers" => $numberOfFollower,
-                    "user_id"=>$userId
-                ]);
+                $deleted = $existFriend->delete();
+                if ($deleted) {
+                    return response()->json([
+                        "unfollow" => 'unfollowed successfully',
+                        "user_id" => $userId
+                    ]);
+                } else {
+                    return response()->json([
+                        "error" => 'something goes wrong.',
+                        "user_id" => $userId
+                    ]);
+                }
             }
         }
     }
@@ -114,34 +116,5 @@ class FriendshipController extends Controller
      */
     public function destroy(Request $request)
     {
-        $userId = $request->get('user_id');
-        $followerId = $request->get("follower_id");
-        $exitFriend =  Friendship::where([
-            ["user_id", "=", $userId],
-            ["follower_id", "=", $followerId]
-        ])->count();
-
-        if ($exitFriend == 1) {
-
-            Friendship::where([
-                ["user_id", "=", $userId],
-                ["follower_id", "=", $followerId]
-            ])->delete();
-            $numberOfFollower = Friendship::where("user_id", "=", $userId)->count();
-
-            return response()->json([
-                "success" => 'follower removed successfully.',
-                "followers" => $numberOfFollower,
-                "user_id"=>$userId,
-            ]);
-        } else {
-            $numberOfFollower = Friendship::where("user_id", "=", $userId)->count();
-
-            return response()->json([
-                "error" => 'You haven\'t followed yet.',
-                "followers" => $numberOfFollower,
-                "user_id"=>$userId,
-            ]);
-        }
     }
 }

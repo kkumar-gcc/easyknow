@@ -19,10 +19,15 @@ return new class extends Migration
             $table->foreignId('user_id')
                 ->constrained("users")
                 ->onUpdate('cascade');
-            $table->string('title')->unique();
+            $table->string('title');
+            $table->string('meta_title')->nullable();
             $table->text('description');
+            $table->text('meta_description')->nullable();
             $table->enum("status", ['posted', 'drafted']);
-            $table->enum("type", ['public', 'private','follower'])->default('public');
+            $table->enum("access", ['public', 'private','follower'])->default('public');
+            $table->enum("comment_access", ['enable', 'disable'])->default('enable');
+            $table->boolean("adult_warning")->default(false);
+            $table->boolean("age_confirmation")->default(false);
             $table->boolean("pinned")->default(false);
             $table->timestamps();
         });

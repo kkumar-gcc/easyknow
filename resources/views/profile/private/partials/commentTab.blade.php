@@ -13,7 +13,7 @@
                         <a href="#">{{ $comment->blog->title }}</a>
                         <span class="text-muted ">
                             {!! Str::words($comment->description, 1000) !!}
-                         </span>
+                        </span>
                         {{-- <span class="text-muted d-inline-block">{!! \Carbon\Carbon::parse($comment->created_at)->format("M d") !!}</span> --}}
                     </li>
                 @endforeach
@@ -34,12 +34,12 @@
                   
                 </div> --}}
 
-        {!! $comments->withQueryString()->links('pagination::bootstrap-5') !!}
+
     </div>
+    {!! $comments->withQueryString()->links('pagination::tailwind') !!}
 @else
-    <div class="e-scard e-scard-hover s-empty-state wmx4 p48">
-        <div class="card-body">
-            You haven't written any comment.
-        </div>
+    <div
+        class="py-4 px-5 rounded-xl text-base border   text-gray-700 dark:text-gray-300  dark:border-gray-700 dark:bg-gray-800 ">
+        You haven't written any comment.
     </div>
 @endif

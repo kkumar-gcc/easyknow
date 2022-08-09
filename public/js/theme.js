@@ -9,11 +9,11 @@ function tabOverflowDetect() {
         primary.insertAdjacentHTML(
             "beforeend",
             `
-                <li class="-more mr-2">
-                    <button class="inline-block p-4 rounded-t-lg border-b-2 hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 dark:border-transparent text-gray-500 dark:text-gray-400 border-gray-100 dark:border-gray-700" type="button" aria-haspopup="true" aria-expanded="false" id="tabDropdownToggle" data-dropdown-toggle="tabDropdown">
+            <li class="-more mr-2 relative" role="presentation"> 
+                    <button class="inline-block p-4 rounded-t-lg border-b-4 hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 dark:border-transparent text-gray-500 dark:text-gray-400 border-gray-100 dark:border-gray-700" type="button" aria-haspopup="true" aria-expanded="false" id="tabDropdownToggle" data-dropdown-toggle="tabDropdown">
                     More <span>&darr;</span>
                     </button>
-                    <div id="tabDropdown" class="-secondary hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700">
+                    <div id="tabDropdown" class="-secondary hidden z-10  bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700">
                         <ul class="py-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="tabDropdownToggle">
                            ${primary.innerHTML}
                         </ul>
@@ -98,7 +98,7 @@ function detectTheme() {
     }
 }
 
-function toggleTheme(){
+function toggleTheme() {
     var themeToggleDarkIcon = document.getElementById("theme-toggle-dark-icon");
     var themeToggleLightIcon = document.getElementById(
         "theme-toggle-light-icon"
@@ -145,9 +145,7 @@ function toggleTheme(){
     });
 }
 detectTheme();
-tabOverflowDetect();
-document.addEventListener("DOMContentLoaded", function(event) { 
+// tabOverflowDetect();
+document.addEventListener("DOMContentLoaded", function (event) {
     toggleTheme();
 });
-
-

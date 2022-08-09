@@ -26,29 +26,30 @@ class PrivateProfileController extends Controller
     {
 
         $tab = "profile";
+        $user = User::find(auth()->user()->id);
         if ($request->tab == 'profile') {
             $tab = 'profile';
             return view("profile.private.index")->with([
-                "user" => auth()->user(),
+                "user" => $user,
                 "tab" => $tab
             ]);
         } else if ($request->tab == "password") {
             $tab = 'password';
             return view("profile.private.index")->with([
-                "user" => auth()->user(),
+                "user" =>  $user,
                 "tab" => $tab
             ]);
         } else if ($request->tab == "social_links") {
             $tab = 'social_links';
             return view("profile.private.index")->with([
-                "user" => auth()->user(),
+                "user" => $user,
                 "tab" => $tab
             ]);
         } else if ($request->tab == "blogs") {
             $tab = 'blogs';
             $blogs = Blog::where("user_id", "=", auth()->user()->id)->where('status', '=', 'posted')->paginate(5);
             return view("profile.private.index")->with([
-                "user" => auth()->user(),
+                "user" =>  $user,
                 "blogs" => $blogs,
                 "tab" => $tab
             ]);
@@ -56,7 +57,7 @@ class PrivateProfileController extends Controller
             $tab = 'drafts';
             $drafts = Blog::where("user_id", "=", auth()->user()->id)->where('status', '=', 'drafted')->paginate(5);
             return view("profile.private.index")->with([
-                "user" => auth()->user(),
+                "user" =>  $user,
                 "drafts" => $drafts,
                 "tab" => $tab
             ]);
@@ -64,24 +65,23 @@ class PrivateProfileController extends Controller
             $tab = 'bookmarks';
             $bookmarks = Bookmark::where("user_id", "=", auth()->user()->id)->paginate(5);
             return view("profile.private.index")->with([
-                "user" => auth()->user(),
+                "user" =>  $user,
                 "bookmarks" => $bookmarks,
                 "tab" => $tab
             ]);
         } else if ($request->tab == 'follower') {
             $tab = 'follower';
-            $followers = Friendship::where("user_id", "=", auth()->user()->id)->paginate(5);
+            $followers =$user->followers()->paginate(5);
             return view("profile.private.index")->with([
-                "user" => auth()->user(),
+                "user" =>  $user,
                 "followers" => $followers,
                 "tab" => $tab
             ]);
         } else if ($request->tab == 'following') {
             $tab = 'following';
-            $followings = Friendship::where("follower_id", "=", auth()->user()->id)->paginate(5);
-            // dd($followings);
+            $followings = $user->followings()->paginate(5);
             return view("profile.private.index")->with([
-                "user" => auth()->user(),
+                "user" =>  $user,
                 "followings" => $followings,
                 "tab" => $tab
             ]);
@@ -90,7 +90,7 @@ class PrivateProfileController extends Controller
             $pins = BlogPin::where("user_id", "=", auth()->user()->id)->get();
             $blogs = Blog::where("user_id", "=", auth()->user()->id)->where([['status', '=', 'posted'], ["pinned", "=", false]])->paginate(5);
             return view("profile.private.index")->with([
-                "user" => auth()->user(),
+                "user" =>  $user,
                 "tab" => $tab,
                 "pins" => $pins,
                 "blogs" => $blogs
@@ -99,19 +99,19 @@ class PrivateProfileController extends Controller
             $tab = 'comments';
             $comments = Comment::where('user_id', '=', Auth()->user()->id)->paginate(5);
             return view("profile.private.index")->with([
-                "user" => auth()->user(),
+                "user" =>  $user,
                 "comments" => $comments,
                 "tab" => $tab
             ]);
         } else if ($request->tab == "about") {
             $tab = "about";
             return view("profile.private.index")->with([
-                "user" => auth()->user(),
+                "user" =>  $user,
                 "tab" => $tab
             ]);
         } else {
             return view("profile.private.index")->with([
-                "user" => auth()->user(),
+                "user" =>  $user,
                 "tab" => $tab
             ]);
         }

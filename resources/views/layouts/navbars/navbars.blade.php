@@ -12,24 +12,24 @@
             <div class="dark:text-gray-400 hidden lg:flex basis-1/2 ml-[4%] md:flex-row md:items-center">
                 <div class="relative ml-6">
                     <a href="/home"
-                        class="text-sm font-medium text-gray-900 hover:text-rose-600 dark:text-gray-300 dark:hover:text-rose-500">Home</a>
-                </div>
-                <div class="relative ml-6">
-                    <a href="/docs"
-                        class="text-sm font-medium text-gray-900 hover:text-rose-600 dark:text-gray-300 dark:hover:text-rose-500">Docs</a>
+                        class="text-base font-medium tracking-wider text-gray-800 hover:text-rose-600 dark:text-gray-300 dark:hover:text-rose-500">Home</a>
                 </div>
                 <div class="relative ml-6">
                     <a href="/blogs"
-                        class="text-sm font-medium text-gray-900 hover:text-rose-600 dark:text-gray-300 dark:hover:text-rose-500">Blogs</a>
+                        class="text-base font-medium tracking-wider text-gray-800 hover:text-rose-600 dark:text-gray-300 dark:hover:text-rose-500">Read</a>
                 </div>
 
                 <div class="relative ml-6">
                     <a href="/tags"
-                        class="text-sm font-medium text-gray-900 hover:text-rose-600 dark:text-gray-300 dark:hover:text-rose-500">Tags</a>
+                        class="text-base font-medium tracking-wider text-gray-800 hover:text-rose-600 dark:text-gray-300 dark:hover:text-rose-500">Tags</a>
+                </div>
+                <div class="relative ml-6">
+                    <a href="/tags"
+                        class="text-base font-medium tracking-wider text-gray-800 hover:text-rose-600 dark:text-gray-300 dark:hover:text-rose-500">Writers</a>
                 </div>
                 <div class="relative ml-6">
                     <a href="/podcasts"
-                        class="text-sm font-medium text-gray-900 hover:text-rose-600 dark:text-gray-300 dark:hover:text-rose-500">Podcasts</a>
+                        class="text-base font-medium tracking-wider text-gray-800 hover:text-rose-600 dark:text-gray-300 dark:hover:text-rose-500">Podcasts</a>
                 </div>
             </div>
 
@@ -145,13 +145,10 @@
                             class="flex justify-between py-3 font-medium translate-x-1  transition-colors duration-200 relative  hover:text-gray-900 text-gray-500 dark:text-gray-400 dark:hover:text-white">
                             <a href="/home">Home</a>
                         </div>
-                        <div
-                            class="flex justify-between py-3 font-medium translate-x-1  transition-colors duration-200 relative  hover:text-gray-900 text-gray-500 dark:text-gray-400 dark:hover:text-white ">
-                            <a href="/docs">Docs</a>
-                        </div>
+                        
                         <div
                             class="flex justify-between py-3 font-medium translate-x-1  transition-colors duration-200 relative  hover:text-gray-900 text-gray-500 dark:text-gray-400 dark:hover:text-white">
-                            <a href="/blogs">Blogs</a>
+                            <a href="/blogs">Read</a>
                         </div>
                         <div
                             class="flex justify-between py-3 font-medium translate-x-1  transition-colors duration-200 relative  hover:text-gray-900 text-gray-500 dark:text-gray-400 dark:hover:text-white ">
@@ -159,7 +156,7 @@
                         </div>
                         <div
                             class="flex justify-between py-3 font-medium translate-x-1  transition-colors duration-200 relative  hover:text-gray-900 text-gray-500 dark:text-gray-400 dark:hover:text-white">
-                            <a href="/home">Users</a>
+                            <a href="/home">Writers</a>
                         </div>
                         <div class="border-b border-gray-200 dark:border-gray-700 dark:bg-gray-800">
 

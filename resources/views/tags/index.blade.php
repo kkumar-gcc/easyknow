@@ -33,6 +33,7 @@
         <article>
             <div id="toast-tag"></div>
             @auth
+            
                 <div
                     class="relative mt-3 w-full  text-base text-left  border  border-gray-200 rounded-xl font-normal   hover:shadow-md dark:border-gray-700 dark:bg-gray-800 ">
                     <div class="py-3 px-4 ">
@@ -139,9 +140,30 @@
             </div>
 
         </div>
-
+<div class="p-8">
+                <span class="inline-flex py-1 px-2 mx-[5px] mt-3 text-[10px] font-bold tracking-wide border rounded-[4px] shadow-sm  uppercase "> #friends</span>
+                <span class="inline-flex py-1 px-2 mx-[5px] mt-3 text-[10px] font-bold tracking-wide border rounded-[4px] shadow-sm border-gray-200 uppercase  bg-gray-100 text-gray-600"> #friends</span>
+                <span class="inline-flex py-1 px-2 mx-[5px] mt-3 text-[10px] font-bold tracking-wide border rounded-[4px] shadow-sm border-red-200 uppercase  bg-red-100 text-red-600"> #friends</span>
+                <span class="inline-flex py-1 px-2 mx-[5px] mt-3 text-[10px] font-bold tracking-wide border rounded-[4px] shadow-sm border-orange-200 uppercase  bg-orange-100 text-orange-600"> #friends</span>
+                <span class="inline-flex py-1 px-2 mx-[5px] mt-3 text-[10px] font-bold tracking-wide border rounded-[4px] shadow-sm border-rose-200 uppercase  bg-rose-100 text-rose-600"> #friends</span>
+                <span class="inline-flex py-1 px-2 mx-[5px] mt-3 text-[10px] font-bold tracking-wide border rounded-[4px] shadow-sm border-amber-200 uppercase  bg-amber-100 text-amber-600"> #friends</span>
+                <span class="inline-flex py-1 px-2 mx-[5px] mt-3 text-[10px] font-bold tracking-wide border rounded-[4px] shadow-sm border-yellow-200 uppercase  bg-yellow-100 text-yellow-600"> #friends</span>
+                <span class="inline-flex py-1 px-2 mx-[5px] mt-3 text-[10px] font-bold tracking-wide border rounded-[4px] shadow-sm border-lime-200 uppercase  bg-lime-100 text-lime-600"> #friends</span>
+                <span class="inline-flex py-1 px-2 mx-[5px] mt-3 text-[10px] font-bold tracking-wide border rounded-[4px] shadow-sm border-green-200 uppercase  bg-green-100 text-green-600"> #friends</span>
+                <span class="inline-flex py-1 px-2 mx-[5px] mt-3 text-[10px] font-bold tracking-wide border rounded-[4px] shadow-sm border-emerald-200 uppercase  bg-emerald-100 text-emerald-600"> #friends</span>
+                <span class="inline-flex py-1 px-2 mx-[5px] mt-3 text-[10px] font-bold tracking-wide border rounded-[4px] shadow-sm border-teal-200 uppercase  bg-teal-100 text-teal-600"> #friends</span>
+                <span class="inline-flex py-1 px-2 mx-[5px] mt-3 text-[10px] font-bold tracking-wide border rounded-[4px] shadow-sm border-cyan-200 uppercase  bg-cyan-100 text-cyan-600"> #friends</span>
+                <span class="inline-flex py-1 px-2 mx-[5px] mt-3 text-[10px] font-bold tracking-wide border rounded-[4px] shadow-sm border-sky-200 uppercase  bg-sky-100 text-sky-600"> #friends</span>
+                <span class="inline-flex py-1 px-2 mx-[5px] mt-3 text-[10px] font-bold tracking-wide border rounded-[4px] shadow-sm border-blue-200 uppercase  bg-blue-100 text-blue-600"> #friends</span>
+                <span class="inline-flex py-1 px-2 mx-[5px] mt-3 text-[10px] font-bold tracking-wide border rounded-[4px] shadow-sm border-indigo-200 uppercase  bg-indigo-100 text-indigo-600"> #friends</span>
+                <span class="inline-flex py-1 px-2 mx-[5px] mt-3 text-[10px] font-bold tracking-wide border rounded-[4px] shadow-sm border-violet-200 uppercase  bg-violet-100 text-violet-600"> #friends</span>
+                <span class="inline-flex py-1 px-2 mx-[5px] mt-3 text-[10px] font-bold tracking-wide border rounded-[4px] shadow-sm border-purple-200 uppercase  bg-purple-100 text-purple-600"> #friends</span>
+                <span class="inline-flex py-1 px-2 mx-[5px] mt-3 text-[10px] font-bold tracking-wide border rounded-[4px] shadow-sm border-fuchsia-200 uppercase  bg-fuchsia-100 text-fuchsia-600"> #friends</span>
+                <span class="inline-flex py-1 px-2 mx-[5px] mt-3 text-[10px] font-bold tracking-wide border rounded-[4px] shadow-sm border-pink-200 uppercase  bg-pink-100 text-pink-600"> #friends</span>
+            </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  gap-4 border-t border-gray-200 dark:border-gray-700 pt-4"
             id="tag-show">
+            
             @foreach ($tags as $tag)
                 <div
                     class="relative mt-2 w-full p-2.5 text-base text-left  border border-transparent rounded-3xl font-normal  hover:bg-gray-100 shadow dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">

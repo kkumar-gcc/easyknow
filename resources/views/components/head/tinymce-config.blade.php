@@ -15,7 +15,7 @@
             'bullist numlist outdent indent | link searchreplace image media | redo  fullscreen codesample | ' +
             'print forecolor backcolor emoticons template pagebreak anchor charmap advlist| help',
         menubar: 'edit view insert format tools table help ',
-        menubar: false,
+        // menubar: false,
         mobile: {
             menubar: true,
             plugins: 'autosave lists autolink',
@@ -129,7 +129,6 @@
         quickbars_selection_toolbar: 'bold italic | quicklink h2 h3 blockquote quickimage quicktable',
         noneditable_class: 'mceNonEditable',
         contextmenu: 'link image table',
-        content_css: '{{ asset('css/app.css') }}?' + new Date().getTime(),
         content_style: `body { font-family:Helvetica,Arial,sans-serif; font-size:16px;margin:20px ;  } :focus-visible {
            outline: none;
         }`,

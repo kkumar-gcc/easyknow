@@ -1,7 +1,7 @@
 <div>
     @if ($pins->count() > 0)
         @foreach ($pins as $pin)
-            <div class="relative mt-3 w-full p-2.5 text-base text-left  border border-transparent rounded-3xl font-normal  hover:bg-gray-100 hover:shadow-md dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
+            <div class="relative mt-3 w-full p-2.5 text-base text-left  border border-transparent rounded-3xl font-normal  bg-amber-50 border-amber-200 hover:shadow-md dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
                 id="blog-{{ $pin->blog->id }}">
                 <div class="flex flex-col items-stretch justify-center p-6 sm:flex-row">
                     <div class="basis-1/3 relative text-center min-h-fit">
@@ -94,7 +94,7 @@
     @endif
     <div>
         @foreach ($blogs as $blog)
-            <div class="relative mt-3 w-full p-2.5 text-base text-left  border border-transparent rounded-3xl font-normal hover:bg-gray-100 hover:shadow-md dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
+            <div class="relative mt-3 w-full p-2.5 text-base text-left  border border-transparent rounded-3xl font-normal hover:bg-gray-50 hover:border-gray-200 hover:shadow-md dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
                 id="blog-{{ $blog->id }}">
                 <div class="flex flex-col items-stretch justify-center p-6 sm:flex-row">
                     <div class="basis-1/3 relative text-center min-h-fit">

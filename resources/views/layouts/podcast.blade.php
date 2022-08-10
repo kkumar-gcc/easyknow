@@ -44,7 +44,7 @@
     </style>
 </head>
 
-<body class="h-screen">
+<body class="h-screen selection:bg-rose-600 dark:selection:bg-rose-500 selection:text-white">
     <?php
     Str::macro('readDuration', function (...$text) {
         $totalWords = str_word_count(implode(' ', $text));

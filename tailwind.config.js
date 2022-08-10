@@ -42,7 +42,8 @@ module.exports = {
             gray:colors.gray,
             zinc:colors.zinc,
             stone:colors.stone,
-            neutral:colors.neutral
+            neutral:colors.neutral,
+            amber:colors.amber,
         },
         extend: {
             display: ["group-hover"],

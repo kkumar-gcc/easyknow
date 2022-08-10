@@ -39,7 +39,7 @@
                 </div>
             </section>
         @endif
-
+       
         <div class="tabs mb-4  mt-4 dark:border-gray-700 overflow-y-hidden">
             <ul class="flex flex-nowrap  whitespace-nowrap  -mb-px text-sm font-medium text-center -primary " role="tablist">
                 <li class="mr-2" role="presentation">
@@ -58,12 +58,12 @@
         </div>
         
         @foreach ($blogs as $blog)
-            <div class="relative mt-3 w-full p-2.5 text-base text-left  border border-transparent rounded-3xl font-normal hover:bg-gray-100 hover:shadow-md dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
+            <div class="relative mt-3 w-full p-2.5 text-base text-left  border border-transparent rounded-3xl font-normal hover:bg-gray-50 hover:border-gray-200 hover:shadow-md dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
                 id="blog-{{ $blog->id }}">
                 <div class="flex flex-col items-stretch justify-center p-6 sm:flex-row">
                     <div class="basis-1/3 relative text-center min-h-fit {{ $blog->adult_warning ? 'prose prose-img:blur-lg' : '' }}">
                         <img class="block relative w-full h-full rounded-xl  object-cover shadow-md hover:shadow-sm sm:absolute sm:top-0 sm:left-0 "
-                            src="https://picsum.photos/400/300" alt="">
+                            src="https://imagekit.io/blog/content/images/2020/06/Server_User.png" alt="">
                     </div>
                     <div class="basis-2/3 mt-2 relative leading-normal sm:mt-0 sm:px-4">
                         <div class="flex flex-row mt-3 mb-1 md:mt-0">
@@ -118,12 +118,11 @@
                                 {{ $blog->title }}
                             </h5>
                         </a>
-                        <p class="font-normal line-clamp-3 sm:hidden">
-                            {!! Str::words(strip_tags($blog->description), 50) !!}
-                        </p>
+                        
                         @foreach ($blog->tags as $tag)
-                            <a href="/blogs/tagged/{{ $tag->title }}" class="tag-popover"
+                             <a href="/blogs/tagged/{{ $tag->title }}" class="tag-popover"
                                 id="tag{{ $blog->id }}-{{ $tag->id }}">
+                                
                                 <span class="modern-badge  modern-badge-{{ $tag->color }}">
                                     #{{ $tag->title }}
                                 </span>
@@ -152,24 +151,7 @@
 @endsection
 @section('content-right')
     <article id="sticky-sidebar" class="">
-        <div class="mb-4">
-            <button
-                class="space-x-2 flex w-full justify-start items-center font-semibold whitespace-nowrap select-none my-[1px]  p-3 text-sm rounded-lg text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200  dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
-                type="button" data-modal-toggle="searchModal">
-                @svg('heroicon-o-search', 'flex-none')
-                <span class="flex-1 text-left">search </span>
-                <span class="flex-none hidden sm:block">
-                    <kbd
-                        class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg dark:bg-gray-600 dark:text-gray-100 dark:border-gray-500">
-                        Ctrl</kbd>
-                    +
-                    <kbd
-                        class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg dark:bg-gray-600 dark:text-gray-100 dark:border-gray-500">
-                        K</kbd>
-                </span>
-            </button>
-        </div>
-
+        
         @if ($topUsers->count() > 3)
             <div
                 class="relative mt-3 w-full  text-base text-left  border  border-gray-200 rounded-xl font-normal   hover:shadow-md dark:border-gray-700 dark:bg-gray-800 ">
@@ -179,7 +161,7 @@
                 <ul class="p-0 list-none">
                     @foreach ($topUsers as $topUser)
                         <li
-                            class="border-t py-3 px-4 last:rounded-b-xl border-gray-200 dark:hover:text-white dark:border-gray-700 hover:bg-gray-100 hover:shadow-md dark:bg-gray-800 dark:hover:bg-gray-700">
+                            class="border-t py-3 px-4 last:rounded-b-xl border-gray-200 dark:hover:text-white dark:border-gray-700 hover:bg-gray-50 hover:shadow-sm dark:bg-gray-800 dark:hover:bg-gray-700">
                             <a href="/users/{{ $topUser->username }}" class="flex items-center space-x-4 user-popover"
                                 id="user-1" id="user-{{ $topUser->id }}" data-popover-placement="left">
                                 <img class="w-12 h-12 rounded-full"

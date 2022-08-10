@@ -30,7 +30,7 @@
 
 </head>
 
-<body>
+<body class="selection:bg-rose-600 dark:selection:bg-rose-500 selection:text-white">
 
     <div id="app">
         <div class="wrapper w-full">

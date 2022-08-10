@@ -32,22 +32,22 @@ class BlogController extends Controller
         $tab = 'newest';
 
         if ($request->tab == 'likes') {
-            $blogs = Blog::where("status", "=", "posted")->withCount(['bloglikes' => function ($q) {
+            $blogs = Blog::where("status", "=", "posted")->with(['user','tags'])->withCount(['bloglikes' => function ($q) {
                 $q->where('status', '=', 1);
             }])->orderByDesc('bloglikes_count')->paginate(10);
         } else if ($request->tab == 'newest') {
-            $blogs = Blog::where("status", "=", "posted")->orderByDesc('created_at')->paginate(10);
+            $blogs = Blog::where("status", "=", "posted")->with('user')->orderByDesc('created_at')->paginate(10);
         } else if ($request->tab == 'views') {
-            $blogs = Blog::where("status", "=", "posted")->withCount('blogviews')->orderByDesc('blogviews_count')->paginate(10);
+            $blogs = Blog::where("status", "=", "posted")->with('user')->withCount('blogviews')->orderByDesc('blogviews_count')->paginate(10);
         } else {
-            $blogs = Blog::where("status", "=", "posted")->orderByDesc('created_at')->paginate(10);
+            $blogs = Blog::where("status", "=", "posted")->with('user')->orderByDesc('created_at')->paginate(10);
         }
         if ($request->tab) {
             $tab = $request->tab;
         }
         // Unknown column 'friendships.user_id' in 'where clause'
-        $topUsers = User::limit(5)->get();
-        $topTags = Tag::withCount(['blogs' => function ($q) {
+        $topUsers = User::select(['id','username','profile_image'])->limit(5)->get();
+        $topTags = Tag::select(['id','title'])->withCount(['blogs' => function ($q) {
             $q->where('status', '=', "posted");
         }])->orderByDesc('blogs_count')->limit(10)->get();
         return view("blogs.index")->with([
@@ -427,7 +427,7 @@ class BlogController extends Controller
             ->with([
                 "blog" => $blog,
             ])->render();
-        return response()->json($html);
+        return json_encode($html);
     }
     public function tagSearch(Request $request, $title)
     {

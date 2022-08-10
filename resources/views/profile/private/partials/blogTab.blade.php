@@ -3,7 +3,7 @@
         <div>
             
             @foreach ($blogs as $blog)
-                <div class="relative mt-3 w-full p-2.5 text-base text-left  border border-transparent rounded-3xl font-normal hover:bg-gray-100 hover:shadow-md dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
+                <div class="relative mt-3 w-full p-2.5 text-base text-left  border border-transparent rounded-3xl font-normal hover:bg-gray-50 hover:border-gray-200 hover:shadow-md dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
                     id="blog-{{ $blog->id }}">
                     <div class="flex flex-col items-stretch justify-center p-6 sm:flex-row">
                         <div class="relative text-center basis-1/3 min-h-fit">
@@ -27,7 +27,7 @@
                                             <div class="inline-flex rounded-md shadow-sm" role="group">
                                                 <a type="button" data-tooltip-target="tooltip-edit" data-tooltip-trigger="hover"
                                                     href="/blogs/edit/{{ Str::slug($blog->title, '-') }}-{{ $blog->id }}"
-                                                    class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-l-lg hover:bg-gray-100 hover:text-rose-600 focus:z-10 focus:ring-2 focus:ring-rose-600 focus:text-rose-600 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-rose-500 dark:focus:text-white">
+                                                    class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-l-lg hover:bg-gray-50 hover:text-rose-600 focus:z-10 focus:ring-2 focus:ring-rose-600 focus:text-rose-600 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-rose-500 dark:focus:text-white">
                                                     {{ svg('coolicon-edit', 'w-3 h-3 fill-current') }}
                                                 </a>
                                                 <div id="tooltip-edit" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">

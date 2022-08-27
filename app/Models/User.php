@@ -6,12 +6,95 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Sanctum\HasApiTokens;
-
+use Illuminate\Support\Str;
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
-
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'email',
+        'username',
+        'name',
+        'first_name',
+        'last_name',
+        'password',
+        'about_me',
+        'short_bio',
+        'profile_image',
+        'background_image',
+        "website_url",
+        'twitter_url',
+        'github_url',
+        'facebook_url'
+    ];
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
+    public function id(): int
+    {
+       return $this->id;
+    }
+    public function emailAddress(): string
+    {
+        return $this->email;
+    } 
+    public function firstName(): string
+    {
+       return $this->first_name;
+    }
+    public function lastName(): string
+    {
+       return $this->last_name;
+    }
+    
+    public function username(): string
+    {
+       return $this->username;
+    }
+    public function shortBio(): string
+    {
+       return $this->short_bio;
+    }
+    public function aboutMe()
+    {
+       return $this->about_me;
+    }
+    public function location(): string
+    {
+       return $this->location;
+    }
+    public function twitterUrl(): ?string
+    {
+       return $this->twitter_url;
+    }
+    public function isBanned(): bool
+    {
+        return ! is_null($this->banned_at);
+    }
+    public function isLoggedInUser(): bool
+    {
+        return $this->id() === Auth::id();
+    }
     public function blogs()
     {
         return $this->hasMany(Blog::class);
@@ -73,45 +156,8 @@ class User extends Authenticatable
     {
         return $this->followers()->where('follower_id', '=', auth()->user()->id)->exists();
     }
+    public function avatarUrl(){
+        return 'https://www.gravatar.com/avatar/'.md5(Str::lower(trim($this->email)));
+    }
     
-   
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
-    protected $fillable = [
-        'email',
-        'username',
-        'name',
-        'first_name',
-        'last_name',
-        'password',
-        'about_me',
-        'short_bio',
-        'profile_image',
-        'background_image',
-        "website_url",
-        'twitter_url',
-        'github_url',
-        'facebook_url'
-    ];
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
-
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
 }

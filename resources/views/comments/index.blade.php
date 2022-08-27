@@ -105,7 +105,7 @@
                 <div id="new-comment">
                 </div>
                 @foreach ($comments as $comment)
-                    <div class="w-full p-4 px-4 my-3 border border-gray-200 not-prose rounded-xl hover:border-rose-600 active:border-rose-600 dark:border-gray-700 dark:hover:border-rose-500"
+                    <div class="w-full p-4 px-4 my-3 border border-gray-200 not-prose rounded-lg shadow-sm   hover:border-gray-400"
                         id="comment-{{ $comment->id }}">
                         <header class="flex flex-row not-prose">
                             <div class="flex-1">
@@ -134,7 +134,7 @@
                                 </button>
                             </div>
                         </header>
-                        <div class="my-3">
+                        <div class="my-3 prose max-w-none sm:max-w-full prose-img:rounded-xl prose-a:text-rose-600 ">
                             {!! $comment->description !!}
                         </div>
                         <footer class="mt-2">

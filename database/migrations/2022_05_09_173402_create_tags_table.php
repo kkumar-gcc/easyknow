@@ -15,9 +15,11 @@ return new class extends Migration
     {
         Schema::create('tags', function (Blueprint $table) {
             $table->id();
+            $table->string('uuid')->nullable()->unique();
             $table->string('title')->unique();
             $table->text('description')->nullable();
             $table->string('color')->nullable();
+            $table->string('slug')->nullable();
             $table->foreignId('user_id')->nullable()
                 ->constrained("users")
                 ->onUpdate('cascade');

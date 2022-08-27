@@ -1,4 +1,4 @@
-@extends('layouts.blog')
+@extends('layouts.default')
 @push('styles')
     <x-head.tinymce-config />
 @endpush

@@ -1,5 +1,5 @@
 <div
-    class="mt-3 w-full text-base text-left  border  border-gray-200 rounded-xl font-normal  dark:border-gray-700 dark:bg-gray-800 ">
+    class="mt-3 w-full text-base text-left  border  border-gray-200 rounded-lg font-normal  dark:border-gray-700 dark:bg-gray-800 ">
     <header class="py-3 px-4 flex flex-row text-2xl font-semibold text-gray-700 dark:text-white">
         <div class="flex-1">
             <h3> About Me </h3>
@@ -13,7 +13,7 @@
         @endauth
     </header>
     <div
-        class="py-3 px-4 rounded-xl text-base  text-gray-700 dark:text-gray-300   dark:bg-gray-800 ">
+        class="py-3 px-4 rounded-lg text-base  text-gray-700 dark:text-gray-300   dark:bg-gray-800 ">
         @if ($user->about_me)
             {!! $user->about_me !!}
         @else

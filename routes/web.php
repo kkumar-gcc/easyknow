@@ -117,24 +117,5 @@ Route::group(['middleware' => 'HtmlMinifier'], function () {
     Route::get("/test/register",[TestController::class,'register']);
     Route::get("/test/feature-list",[TestController::class,'feature']);
 
-    //docs routes
-    Route::get("/docs",[DocController::class,'index']);
-    Route::get("/docs/accordion",[DocController::class,'accordion']);
-    Route::get("/docs/alerts",[DocController::class,'alerts']);
-    Route::get("/docs/badges",[DocController::class,'badges']);
-    Route::get("/docs/breadcrumb",[DocController::class,'breadcrumb']);
-    Route::get("/docs/buttons",[DocController::class,'buttons']);
-    Route::get("/docs/cards",[DocController::class,'cards']);
-    Route::get("/docs/carousel",[DocController::class,'carousel']);
-    Route::get("/docs/chips",[DocController::class,'chips']);
-    Route::get("/docs/collapse",[DocController::class,'collapse']);
-    Route::get("/docs/colors",[DocController::class,'colors']);
-    Route::get("/docs/dropdowns",[DocController::class,'dropdowns']);
-    Route::get("/docs/lightbox",[DocController::class,'lightbox']);
-    Route::get("/docs/modal",[DocController::class,'modal']);
-    Route::get("/docs/pagination",[DocController::class,'pagination']);
-    Route::get("/docs/popovers",[DocController::class,'popovers']);
-    Route::get("/docs/spinners",[DocController::class,'spinners']);
-    Route::get("/docs/toasts",[DocController::class,'toasts']);
-
+   
 });

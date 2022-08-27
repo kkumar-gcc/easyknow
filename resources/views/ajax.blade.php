@@ -1232,18 +1232,5 @@
                 $("#searchModal").hide();
             }
         });
-
-        function stickySidebar() {
-            var $sticky = $('#sticky-sidebar');
-            $sticky.hcSticky();
-            $sticky.hcSticky('update', {
-                top: 100,
-                bottom: 5
-            });
-        }
-        stickySidebar();
-
-
-       
     });
 </script>

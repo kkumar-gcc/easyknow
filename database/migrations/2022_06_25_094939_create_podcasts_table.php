@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('podcasts', function (Blueprint $table) {
             $table->id();
+            $table->string('uuid')->nullable()->unique();
             $table->foreignId('user_id')
                 ->constrained("users")
                 ->onUpdate('cascade');

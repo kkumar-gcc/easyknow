@@ -4,10 +4,27 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Str;
 class Comment extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'description',
+        'blog_id',
+    ];
+    public function id(): int
+    {
+        return $this->id;
+    }
+    public function description(): string
+    {
+        return $this->description;
+    }
+    public function excerpt(int $limit = 100): string
+    {
+        return Str::limit(strip_tags($this->description()), $limit);
+    }
     public function blog()
     {
         return $this->belongsTo(Blog::class);
@@ -20,6 +37,7 @@ class Comment extends Model
     {
         return $this->belongsTo(User::class);
     }
+
     public function commentlikes()
     {
         return $this->hasMany(CommentLike::class);
@@ -36,8 +54,4 @@ class Comment extends Model
             [['user_id','=',auth()->user()->id], ['status', "=", 0]]
         )->exists();
     }
-    protected $fillable = [
-        'description',
-        'blog_id',
-    ];
 }

@@ -1,6 +1,5 @@
 /** @type {import('tailwindcss').Config} */
 const colors = require("tailwindcss/colors");
-
 module.exports = {
     mode: 'jit',
     content: [
@@ -51,9 +50,7 @@ module.exports = {
     },
     // prefix: 'tw-',
     plugins: [
-        require('flowbite/plugin'),
         require('@tailwindcss/typography'),
-        require('@tailwindcss/forms'),
         require('@tailwindcss/line-clamp'),
     ],
 };

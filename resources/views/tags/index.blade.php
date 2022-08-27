@@ -1,4 +1,4 @@
-@extends('layouts.user')
+@extends('layouts.base')
 @push('styles')
     <x-head.tinymce-config />
 @endpush
@@ -35,7 +35,7 @@
             @auth
             
                 <div
-                    class="relative mt-3 w-full  text-base text-left  border  border-gray-200 rounded-xl font-normal   hover:shadow-md dark:border-gray-700 dark:bg-gray-800 ">
+                    class="relative mt-3 w-full  text-base text-left  border  border-gray-200 rounded-lg font-normal   hover:shadow-md dark:border-gray-700 dark:bg-gray-800 ">
                     <div class="py-3 px-4 ">
 
                         <form method="POST" id="tag_create">
@@ -57,37 +57,28 @@
                     </div>
                 </div>
             @endauth
-            @if ($topUsers->count() > 3)
-                <div
-                    class="relative mt-3 w-full  text-base text-left  border  border-gray-200 rounded-xl font-normal   hover:shadow-md dark:border-gray-700 dark:bg-gray-800 ">
-                    <header class="py-3 px-4 text-2xl font-semibold text-gray-700 dark:text-white">
-                        <h3> Top Users</h3>
-                    </header>
-                    <ul class="p-0 list-none">
-                        @foreach ($topUsers as $topUser)
-                            <li
-                                class="border-t py-3 px-4 last:rounded-b-xl border-gray-200  dark:hover:text-white dark:border-gray-700 hover:bg-gray-100 hover:shadow-sm dark:bg-gray-800 dark:hover:bg-gray-700">
-                                <a href="/users/{{ $topUser->username }}" class="flex items-center space-x-4 user-popover"
-                                    id="user-1" id="user-{{ $topUser->id }}" data-popover-placement="left">
-                                    <img class="w-12 h-12 rounded-full"
-                                        src="{{ asset($topUser->profile_image ?? 'images/1654760695anime3.png') }}"
-                                        alt="">
-                                    <div class="space-y-1 font-medium ">
-                                        <div>{{ $topUser->username }}</div>
-                                    </div>
-                                </a>
-                            </li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
+            <livewire:top-users />
+        {{-- <div
+            class="w-full mt-3 text-base font-normal text-left border border-gray-200 rounded-xl hover:shadow-md dark:border-gray-700 dark:bg-gray-800">
+            <header class="px-4 py-3 text-2xl font-semibold text-gray-700 dark:text-white">
+                <span class="modern-badge modern-badge-danger">#Advertisment</span>
+            </header>
             <div
-                class="relative mt-3 w-full  text-base text-left  border  border-gray-200 rounded-xl font-normal   hover:shadow-md dark:border-gray-700 dark:bg-gray-800 ">
+                class="px-4 py-3 text-gray-700 border-t border-gray-200 last:rounded-b-xl dark:text-gray-400 dark:hover:text-white dark:border-gray-700 hover:bg-gray-50 hover:shadow-md dark:bg-gray-800 dark:hover:bg-gray-700">
+                <div class="relative  pt-[60%] w-full rounded-xl sm:pt-[50%] md:pt-[42%] ">
+                    <img class="absolute top-0 bottom-0 left-0 right-0 object-cover w-full h-full m-0 bg-white shadow-md rounded-xl drop-shadow-md dark:bg-gray-800"
+                        src="https://picsum.photos/400/300" alt="" />
+                </div>
+            </div>
+        </div> --}}
+        <livewire:top-blogs />
+            <div
+                class="relative mt-3 w-full  text-base text-left  border  border-gray-200 rounded-lg font-normal   hover:shadow-md dark:border-gray-700 dark:bg-gray-800 ">
                 <header class="py-3 px-4 text-2xl font-semibold text-gray-700 dark:text-white">
                     <span class="modern-badge modern-badge-danger">#Advertisment</span>
                 </header>
                 <div
-                    class="border-t py-3 px-4 last:rounded-b-xl border-gray-200 text-gray-700 dark:text-gray-400 dark:hover:text-white dark:border-gray-700 hover:bg-gray-100 hover:shadow-md dark:bg-gray-800 dark:hover:bg-gray-700">
+                    class="border-t py-3 px-4 last:rounded-b-lg border-gray-200 text-gray-700 dark:text-gray-400 dark:hover:text-white dark:border-gray-700 hover:bg-gray-100 hover:shadow-md dark:bg-gray-800 dark:hover:bg-gray-700">
 
                     <img src="https://picsum.photos/1200/1000" alt="">
                 </div>
@@ -166,13 +157,9 @@
             
             @foreach ($tags as $tag)
                 <div
-                    class="relative mt-2 w-full p-2.5 text-base text-left  border border-transparent rounded-3xl font-normal  hover:bg-gray-100 shadow dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
+                    class="relative mt-2 w-full p-2.5 text-base text-left  border border-gray-200 rounded-lg font-normal  hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
                     <div class="flex flex-col items-stretch justify-center p-6">
-                        <a href="/blogs/tagged/{{ $tag->title }}" class="tag-popover" id="tag-{{ $tag->id }}"><span
-                                class="modern-badge  modern-badge-{{ $tag->color }}">
-                                #{{ $tag->title }}
-                            </span>
-                        </a>
+                        <x-tag :tag=$tag  id="tag-{{ $tag->id }}" class="not-prose"/>
                         <p class="mt-3 mb-3">Some quick example text to build on the card title and make up the
                             bulk of
                             the card's content.</p>

@@ -1,4 +1,4 @@
-@extends('layouts.blog2')
+@extends('layouts.base')
 
 @section('content')
     <?php
@@ -19,13 +19,6 @@
         }
         return number_format($n);
     }
-    Str::macro('readDuration', function (...$text) {
-        $totalWords = str_word_count(implode(' ', $text));
-        $minutesToRead = round($totalWords / 200);
-    
-        return (int) max(1, $minutesToRead);
-    });
-    
     ?>
     <div class="w-full px-2 md:px-12  my-4 mx-auto  relative">
       <div id="toast-info">
@@ -72,74 +65,10 @@
         @endif
     </div>
 @endsection
-@section('content-right')
+@section('content-left')
     <article id="sticky-sidebar" class="">
-        <div class="mb-4">
-            <button
-                class="space-x-2 flex w-full justify-start items-center font-semibold whitespace-nowrap select-none my-[1px]  p-3 text-sm rounded-lg text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200  dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
-                type="button" data-modal-toggle="searchModal">
-                @svg('heroicon-o-search', 'flex-none')
-                <span class="flex-1 text-left">search </span>
-                <span class="flex-none hidden sm:block">
-                    <kbd
-                        class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg dark:bg-gray-600 dark:text-gray-100 dark:border-gray-500">
-                        Ctrl</kbd>
-                    +
-                    <kbd
-                        class="px-2 py-1.5 text-xs font-semibold text-gray-800 bg-gray-100 border border-gray-200 rounded-lg dark:bg-gray-600 dark:text-gray-100 dark:border-gray-500">
-                        K</kbd>
-                </span>
-            </button>
-        </div>
-        <div
-            class="relative mt-3 w-full  text-base text-left  border  border-gray-200 rounded-xl font-normal   hover:shadow-md dark:border-gray-700 dark:bg-gray-800 ">
-            <header class="py-3 px-4 text-2xl font-semibold text-gray-700 dark:text-white">
-                <h3> Top Blogs</h3>
-            </header>
-            <ul class="p-0 list-none">
-                @foreach ($topBlogs as $topBlog)
-                    <li
-                        class=" border-t py-3 px-4 last:rounded-b-xl border-gray-200  dark:border-gray-700 hover:bg-gray-100 hover:shadow-md dark:bg-gray-800 dark:hover:bg-gray-700">
-                        <a href="/blogs/{{ Str::slug($topBlog->title, '-') }}-{{ $topBlog->id }}"
-                            class="blog-popover flex items-center space-x-4 user-popover " id="topBlog-{{ $topBlog->id }}"
-                            data-popover-placement="left">
-                            <div class="space-y-1 font-medium ">
-                                <div class="line-clamp-3 text-gray-700  dark:text-white">{{ $topBlog->title }}</div>
-                                <div class="text-sm"> <time
-                                        datetime="{{ $topBlog->created_at }}">
-                                        {{ \Carbon\Carbon::parse($topBlog->created_at)->format('M d, Y') }}
-                                    </time>
-                                    ∙ {{ Str::readDuration($topBlog->description) }} mins read</div>
-                            </div>
-                        </a>
-                    </li>
-                @endforeach
-            </ul>
-        </div>
-        @if ($topUsers->count() > 3)
-            <div
-                class="relative mt-3 w-full  text-base text-left  border  border-gray-200 rounded-xl font-normal   hover:shadow-md dark:border-gray-700 dark:bg-gray-800 ">
-                <header class="py-3 px-4 text-2xl font-semibold text-gray-700 dark:text-white">
-                    <h3> Top Users</h3>
-                </header>
-                <ul class="p-0 list-none">
-                    @foreach ($topUsers as $topUser)
-                        <li
-                            class="border-t py-3 px-4 last:rounded-b-xl border-gray-200  dark:hover:text-white dark:border-gray-700 hover:bg-gray-100 hover:shadow-md dark:bg-gray-800 dark:hover:bg-gray-700">
-                            <a href="/users/{{ $topUser->username }}" class="text-gray-700 dark:text-white flex items-center space-x-4 user-popover"
-                                id="user-1" id="user-{{ $topUser->id }}" data-popover-placement="left">
-                                <img class="w-12 h-12 rounded-full"
-                                    src="{{ asset($topUser->profile_image) }}" onerror="this.onerror=null;this.src=`https://avatars.dicebear.com/api/bottts/:{{ $topUser->username }}.svg`"
-                                    alt="">
-                                <div class="space-y-1 font-medium ">
-                                    <div>{{ $topUser->username }}</div>
-                                </div>
-                            </a>
-                        </li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
+        <livewire:top-blogs />
+        <livewire:top-users />
         <div
             class="relative mt-3 w-full  text-base text-left  border  border-gray-200 rounded-xl font-normal   hover:shadow-md dark:border-gray-700 dark:bg-gray-800 ">
             <header class="py-3 px-4 text-2xl font-semibold text-gray-700 dark:text-white">
@@ -153,31 +82,7 @@
                 </div>
             </div>
         </div>
-        <div
-            class="relative mt-3 w-full  text-base text-left  border  border-gray-200 rounded-xl font-normal   hover:shadow-md dark:border-gray-700 dark:bg-gray-800 ">
-            <header class="py-3 px-4 text-2xl font-semibold text-gray-700 dark:text-white">
-                <span class="modern-badge modern-badge-danger">Top Tags</span>
-            </header>
-            <div
-                class="border-t py-3 px-4 last:rounded-b-xl border-gray-200  dark:hover:text-white dark:border-gray-700 hover:bg-gray-100 hover:shadow-md dark:bg-gray-800 dark:hover:bg-gray-700">
-
-                @foreach ($topTags as $topTag)
-                    <div data-name="{{ $topTag->title }}">
-                        <a href="/blogs/tagged/{{ $topTag->title }}" class="tag-popover"
-                            id="sidebarTag-{{ $topTag->id }}">
-                            <span class="modern-badge modern-badge-{{ $topTag->color }}">
-                                #{{ $topTag->title }}
-                            </span>
-                        </a>
-                        <span class="item-multiplier">
-                            <span class="item-multiplier-x">×</span>&nbsp;
-                            <span class="item-multiplier-count">{{ $topTag->blogs_count }}</span>
-                        </span>
-                    </div>
-                @endforeach
-            </div>
-        </div>
-
+        <livewire:top-tags />
     </article>
 @endsection
 @push('scripts')

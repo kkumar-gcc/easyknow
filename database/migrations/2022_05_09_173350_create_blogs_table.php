@@ -15,11 +15,13 @@ return new class extends Migration
     {
         Schema::create('blogs', function (Blueprint $table) {
             $table->id();
+            $table->string('uuid')->nullable()->unique();
             $table->string('image')->nullable();
             $table->foreignId('user_id')
                 ->constrained("users")
                 ->onUpdate('cascade');
             $table->string('title');
+            $table->string("slug")->nullable();
             $table->string('meta_title')->nullable();
             $table->text('description');
             $table->text('meta_description')->nullable();
@@ -28,7 +30,7 @@ return new class extends Migration
             $table->enum("comment_access", ['enable', 'disable'])->default('enable');
             $table->boolean("adult_warning")->default(false);
             $table->boolean("age_confirmation")->default(false);
-            $table->boolean("pinned")->default(false);
+            $table->boolean("is_pinned")->default(false);
             $table->timestamps();
         });
     }

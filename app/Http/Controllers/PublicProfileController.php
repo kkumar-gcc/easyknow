@@ -27,7 +27,7 @@ class PublicProfileController extends Controller
             if ($request->tab == 'blogs') {
                 $tab = 'blogs';
                 $pins = BlogPin::where("user_id", "=", $id)->get();
-                $blogs = Blog::with('user','tags')->where("user_id", "=", $id)->where([['status', '=', 'posted'], ["pinned", "=", false]])->paginate(5);
+                $blogs = Blog::with('user','tags')->where("user_id", "=", $id)->where([['status', '=', 'posted'], ["is_pinned", "=", false]])->paginate(5);
 
                 return view("profile.public.index")->with([
                     "user" => $user,

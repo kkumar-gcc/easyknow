@@ -183,6 +183,7 @@ return [
         Illuminate\View\ViewServiceProvider::class,
         Jorenvh\Share\Providers\ShareServiceProvider::class,
         \Conner\Tagging\Providers\TaggingServiceProvider::class,
+        Barryvdh\Debugbar\ServiceProvider::class,
         /*
          * Package Service Providers...
          */
@@ -211,6 +212,7 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         'Share' => Jorenvh\Share\ShareFacade::class,
+        'Debugbar' => Barryvdh\Debugbar\Facades\Debugbar::class,
     ])->toArray(),
 
 ];

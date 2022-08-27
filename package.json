@@ -11,13 +11,10 @@
     },
     "devDependencies": {
         "@popperjs/core": "^2.10.2",
-        "@tailwindcss/forms": "^0.5.2",
         "@tailwindcss/line-clamp": "^0.4.0",
         "@tailwindcss/typography": "^0.5.4",
-        "@themesberg/flowbite": "^1.3.0",
         "autoprefixer": "^10.4.7",
         "axios": "^0.25",
-        "flowbite": "^1.5.1",
         "laravel-mix": "^6.0.6",
         "lodash": "^4.17.19",
         "postcss": "^8.4.14",
@@ -27,9 +24,7 @@
         "tailwindcss": "^3.1.6"
     },
     "dependencies": {
-        "@jkryszto/mdb-for-laravel": "^1.0.0",
-        "@toast-ui/editor": "^3.1.5",
-        "hc-sticky": "^2.2.7",
+        "turbolinks": "^5.2.0",
         "webui-popover": "^1.2.18"
     }
 }

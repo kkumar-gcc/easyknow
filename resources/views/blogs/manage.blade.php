@@ -30,7 +30,8 @@
 
         </div>
         <section>
-            <div class="not-prose relative mt-3 w-full p-2.5 text-base text-left font-normal  border border-gray-200 rounded-xl hover:shadow-md dark:border-gray-700 dark:bg-gray-800 "
+            <x-cards.card-primary :blog=$blog class="not-prose sm:border-gray-200"/>
+            {{-- <div class="not-prose relative mt-3 w-full p-2.5 text-base text-left font-normal  border border-gray-200 rounded-xl hover:shadow-md dark:border-gray-700 dark:bg-gray-800 "
                 id="blog-{{ $blog->id }}">
                 <div class="flex flex-col items-stretch justify-center p-6 sm:flex-row">
                     <div class="relative text-center basis-1/3 min-h-fit">
@@ -116,7 +117,7 @@
                         </a>
                     </div>
                 </div>
-            </div>
+            </div> --}}
         </section>
         <div class="relative flex flex-col w-full mt-3 lg:flex-row ">
             <aside class="basis-1/4 not-prose" aria-label="Sidebar">

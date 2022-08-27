@@ -1,2 +1,2 @@
-const hcSticky = require('hc-sticky');
-
+var Turbolinks = require("turbolinks");
+Turbolinks.start();

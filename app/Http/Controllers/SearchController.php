@@ -13,22 +13,15 @@ class SearchController extends Controller
     {
         $query = $request->get('query');
         $tab = "blogs";
-        $blogs = Blog::query()->with(['user', 'tags'])->where([['title', 'LIKE', "%{$query}%"], ["status", "=", "posted"]])
-            ->orWhere([['description', 'LIKE', "%{$query}%"], ["status", "=", "posted"]])
-            ->paginate(10);
-        $topUsers =  $topUsers = User::select(['id', 'username', 'profile_image'])->limit(5)->get();
-        $topTags = Tag::withCount(['blogs' => function ($q) {
-            $q->where('status', '=', "posted");
-        }])->orderByDesc('blogs_count')->limit(10)->get();
-        $topBlogs = Blog::select(['id', 'title', 'created_at'])->where("status", "=", "posted")->withCount('blogviews')->orderByDesc('blogviews_count')->limit(5)->get();
-
+        
+        $blogs = Blog::where("status","=","posted")->where('title', 'like', "%$query%")
+        ->orWhere('description', 'like', "%$query%")
+        ->orderByDesc('updated_at')
+        ->paginate(10);
         return view('search.search')->with([
             "blogs" => $blogs,
             "query" => $query,
-            "tab" => $tab,
-            "topUsers" => $topUsers,
-            "topTags" => $topTags,
-            "topBlogs" => $topBlogs
+            "tab" => $tab
         ]);
     }
     public function searchTag(Request $request)
@@ -73,20 +66,10 @@ class SearchController extends Controller
         $tags = Tag::query()->with('blogs')->where('title', 'LIKE', "%{$query}%")
             ->orWhere('description', 'LIKE', "%{$query}%")
             ->paginate(6);
-
-        $topUsers =  $topUsers = User::select(['id', 'username', 'profile_image'])->limit(5)->get();
-        $topTags = Tag::withCount(['blogs' => function ($q) {
-            $q->where('status', '=', "posted");
-        }])->orderByDesc('blogs_count')->limit(10)->get();
-        $topBlogs = Blog::select(['id', 'title', 'created_at'])->where("status", "=", "posted")->withCount('blogviews')->orderByDesc('blogviews_count')->limit(5)->get();
-
         return view('search.search')->with([
             "tags" => $tags,
             "query" => $query,
-            "tab" => $tab,
-            "topUsers" => $topUsers,
-            "topTags" => $topTags,
-            "topBlogs" => $topBlogs
+            "tab" => $tab
         ]);
     }
     public function user(Request $request)
@@ -97,19 +80,10 @@ class SearchController extends Controller
             ->orWhere('name', 'LIKE', "%{$query}%")
             ->paginate(10);
 
-        $topUsers =  $topUsers = User::select(['id', 'username', 'profile_image'])->limit(5)->get();
-        $topTags = Tag::withCount(['blogs' => function ($q) {
-            $q->where('status', '=', "posted");
-        }])->orderByDesc('blogs_count')->limit(10)->get();
-        $topBlogs = Blog::select(['id', 'title', 'created_at'])->where("status", "=", "posted")->withCount('blogviews')->orderByDesc('blogviews_count')->limit(5)->get();
-
         return view('search.search')->with([
             "users" => $users,
             "query" => $query,
-            "tab" => $tab,
-            "topUsers" => $topUsers,
-            "topTags" => $topTags,
-            "topBlogs" => $topBlogs
+            "tab" => $tab
         ]);
     }
     public function blog(Request $request)
@@ -119,34 +93,10 @@ class SearchController extends Controller
         $blogs = Blog::query()->with(['user', 'tags'])->where([['title', 'LIKE', "%{$query}%"], ["status", "=", "posted"]])
         ->orWhere([['description', 'LIKE', "%{$query}%"], ["status", "=", "posted"]])
         ->paginate(10);
-
-        $topUsers =  $topUsers = User::select(['id', 'username', 'profile_image'])->limit(5)->get();
-        $topTags = Tag::withCount(['blogs' => function ($q) {
-            $q->where('status', '=', "posted");
-        }])->orderByDesc('blogs_count')->limit(10)->get();
-        $topBlogs = Blog::select(['id', 'title', 'created_at'])->where("status", "=", "posted")->withCount('blogviews')->orderByDesc('blogviews_count')->limit(5)->get();
-
         return view('search.search')->with([
             "blogs" => $blogs,
             "query" => $query,
-            "tab" => $tab,
-            "topUsers" => $topUsers,
-            "topTags" => $topTags,
-            "topBlogs" => $topBlogs
+            "tab" => $tab
         ]);
-    }
-
-    public function topContent(Request $request)
-    {
-        $navType = $request->get('dataNavType');
-        if ($navType == 'blog') {
-            $topBlogs = Blog::where("status", "=", "posted")->withCount('blogviews')->orderByDesc('blogviews_count')->limit(5)->get();
-            return response()->json(["type" => $navType, "topBlogs" => $topBlogs]);
-        } else if ($navType == 'tag') {
-            $topTags = Tag::withCount(['blogs' => function ($q) {
-                $q->where('status', '=', "posted");
-            }])->orderByDesc('blogs_count')->limit(10)->get();
-            return response()->json(["type" => $navType, "topTags" => $topTags]);
-        }
     }
 }

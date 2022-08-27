@@ -28,34 +28,26 @@ class BlogController extends Controller
      */
     public function index(Request $request)
     {
-        $blogCount = Blog::where("status", "=", "posted")->count();
+        
         $tab = 'newest';
 
         if ($request->tab == 'likes') {
-            $blogs = Blog::where("status", "=", "posted")->with(['user','tags'])->withCount(['bloglikes' => function ($q) {
-                $q->where('status', '=', 1);
-            }])->orderByDesc('bloglikes_count')->paginate(10);
+            $blogs = Blog::select(['title','id','created_at','user_id'])->where("status", "=", "posted")->with(['user','tags'])->withCount(['bloglikes'])->orderByDesc('bloglikes_count')->paginate(10);
+            // dd($blogs);
         } else if ($request->tab == 'newest') {
-            $blogs = Blog::where("status", "=", "posted")->with('user')->orderByDesc('created_at')->paginate(10);
+            $blogs = Blog::latest()->filter()->paginate(10);
         } else if ($request->tab == 'views') {
-            $blogs = Blog::where("status", "=", "posted")->with('user')->withCount('blogviews')->orderByDesc('blogviews_count')->paginate(10);
+            $blogs = Blog::where("status", "=", "posted")->with(['user','tags'])->withCount('blogviews')->orderByDesc('blogviews_count')->paginate(10);
         } else {
-            $blogs = Blog::where("status", "=", "posted")->with('user')->orderByDesc('created_at')->paginate(10);
+            $blogs = Blog::where("status", "=", "posted")->with(['user','tags'])->orderByDesc('created_at')->paginate(10);
         }
         if ($request->tab) {
             $tab = $request->tab;
         }
-        // Unknown column 'friendships.user_id' in 'where clause'
-        $topUsers = User::select(['id','username','profile_image'])->limit(5)->get();
-        $topTags = Tag::select(['id','title'])->withCount(['blogs' => function ($q) {
-            $q->where('status', '=', "posted");
-        }])->orderByDesc('blogs_count')->limit(10)->get();
         return view("blogs.index")->with([
             "blogs" => $blogs,
-            "blogCount" => $blogCount,
-            "tab" => $tab,
-            "topTags" => $topTags,
-            "topUsers" => $topUsers
+            "blogCount" => $blogs->count(),
+            "tab" => $tab
         ]);
     }
 
@@ -177,16 +169,6 @@ class BlogController extends Controller
                     $newView->blog_id = $id;
                     $newView->save();
                 }
-                $tagTitles = [];
-                foreach ($blog->tags as $tag) {
-                    $tagTitles[] = $tag->title;
-                }
-                if (Auth::check()) {
-                    $like = BlogLike::where([
-                        ["blog_id", "=", $id],
-                        ["user_id", "=", auth()->user()->id]
-                    ])->first();
-                }
                 $related = Blog::where("status", "=", "posted")->with('tags')->whereHas('tags', function ($query) use ($blog) {
                     $query->whereIn('title', $blog->tags->pluck('title'));
                 }, '>=', count($blog->tags->pluck('title')))->where("id", "!=", $blog->id)->limit(5)->withCount('tags')
@@ -208,7 +190,7 @@ class BlogController extends Controller
                     "blog" => $blog,
                     "comments" => $comments,
                     "like" => $like,
-                    "tagTitles" => json_encode($tagTitles),
+                    // "tagTitles" => json_encode($tagTitles),
                     "related" => $related,
                     "shareBlog" => $shareBlog,
                 ]);

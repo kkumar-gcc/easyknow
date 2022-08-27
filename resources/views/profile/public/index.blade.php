@@ -1,4 +1,4 @@
-@extends('layouts.user')
+@extends('layouts.base')
 @section('content-left')
     <?php
     function nice_number($n)
@@ -21,7 +21,7 @@
     }
     ?>
 
-    <article id="sticky-sidebar" class="">
+    {{-- <article >
         <div
             class="w-full text-base text-left  border  border-gray-200 rounded-xl font-normal  dark:border-gray-700 dark:bg-gray-800 ">
             <header class="py-3 px-4 text-2xl font-semibold text-gray-700 dark:text-white">
@@ -142,21 +142,21 @@
             </div>
         </div>
 
-    </article>
+    </article> --}}
 @endsection
 @section('content')
     <main class="md:p-5 lg:p-7">
         <div id="toast-info"></div>
         <section class="p-2 w-full">
-            <header class="border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-800">
-                <div class="relative  pt-[60%] rounded-xl sm:pt-[30%] md:pt-[22%] ">
-                    <img class="absolute m-0 top-0 left-0 right-0 bottom-0 w-full h-full object-fit rounded-t-xl  bg-white dark:bg-gray-800"
+            <header class="border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800">
+                <div class="relative  pt-[60%] rounded-lg sm:pt-[30%] md:pt-[22%] ">
+                    <img class="absolute m-0 top-0 left-0 right-0 bottom-0 w-full h-full object-fit rounded-t-lg  bg-white dark:bg-gray-800"
                         src="{{ asset($user->background_image) ?? 'https://picsum.photos/400/300' }}" alt="" />
                 </div>
                 <div class="my-4 flex flex-col md:flex-row px-6">
                     <div class="basis-1/3 mb-4 w-full md:w-1/3 flex items-start justify-center relative">
                         <img class="-mt-24 z-10 w-40 h-40 rounded-full ring-8 ring-white dark:ring-gray-500"
-                            src="{{ asset($user->profile_image) }}" onerror="this.onerror=null;this.src=`https://avatars.dicebear.com/api/bottts/:{{ $user->username }}.svg`" alt="Bordered avatar">
+                            src="{{ $user->avatarurl() }}"  alt="Bordered avatar">
                     </div>
                     <div class="basis-2/3 mb-4 flex flex-col md:flex-row items-center justify-center md:items-start">
                         <div class="flex-1">
@@ -243,10 +243,4 @@
 @endsection
 @push('scripts')
     @include('ajax')
-    <script>
-        $(document).ready(function() {
-
-
-        });
-    </script>
 @endpush

@@ -1,4 +1,4 @@
-@extends('layouts.blog')
+@extends('layouts.default')
 @push('styles')
     <x-head.tinymce-config />
 @endpush
@@ -45,7 +45,7 @@
         class="relative prose max-w-none lg:max-w-full xl:max-w-none prose-img:rounded-xl  dark:prose-invert prose-a:text-rose-600 dark:prose-a:text-rose-500">
 
         <div id="toast-info">
-          
+
         </div>
         <div class="relative  pt-[60%] rounded-xl sm:pt-[50%] md:pt-[42%] ">
             <img class="absolute top-0 bottom-0 left-0 right-0 w-full h-full m-0 bg-white shadow-md object-fit rounded-xl drop-shadow-md dark:bg-gray-800"
@@ -60,14 +60,9 @@
                                 class="font-black text-rose-600 ml-2">learn more</a></p>
                     </div>
                 </div>
-                <div>
+                <div class="not-prose">
                     @foreach ($blog->tags as $tag)
-                        <a href="/blogs/tagged/{{ $tag->title }}" class="link tag-popover"
-                            id="tag{{ $blog->id }}-{{ $tag->id }}">
-                            <span class="modern-badge  modern-badge-{{ $tag->color }}">
-                                #{{ $tag->title }}
-                            </span>
-                        </a>
+                        <x-tag :tag=$tag id="tag{{ $blog->id }}-{{ $tag->id }}" />
                     @endforeach
                 </div>
                 <h1 class="text-3xl my-55 md:text-4xl lg:text-5xl dark:text-white">
@@ -128,16 +123,16 @@
                             </div>
                         @else
                             @if ($blog->user_id == auth()->user()->id)
-                                <article class="w-full my-5 ">
+                                <article class="w-full my-5">
                                     {!! $blog->description !!}
                                 </article>
                             @else
                                 @if ($blog->user->isFollowing())
-                                    <article class="w-full my-5 ">
+                                    <article class="w-full my-5">
                                         {!! $blog->description !!}
                                     </article>
                                 @else
-                                    <article class="w-full my-5 ">
+                                    <article class="w-full my-5">
                                         {!! Str::words(strip_tags($blog->description), 50) !!}
                                     </article>
                                     <div class="">
@@ -178,7 +173,7 @@
                             @endif
                         @endguest
                     @elseif($blog->access == 'public')
-                        <article class="w-full my-5 ">
+                        <article class="w-full my-5">
                             {!! $blog->description !!}
                         </article>
                     @endif
@@ -196,106 +191,16 @@
                                 </path>
                             </svg>
                         </h2>
+
                         @foreach ($related as $sblog)
-                            <div class="mt-2 relative w-full p-2.5 text-base text-left  border border-transparent rounded-3xl font-normal hover:bg-gray-50 hover:shadow-md dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 not-prose"
-                                id="blog-{{ $sblog->id }}">
-                                <div class="flex flex-col items-stretch justify-center p-6 sm:flex-row">
-                                    <div class="relative text-center basis-1/3 max-h-fit">
-                                        <img class="relative block object-cover w-full h-full shadow-md rounded-xl hover:shadow-sm sm:absolute sm:top-0 sm:left-0 "
-                                            src="https://picsum.photos/400/300" alt="">
-                                    </div>
-                                    <div class="relative mt-2 leading-normal basis-2/3 sm:mt-0 sm:px-4">
-                                        <div class="flex flex-row mt-3 mb-1 md:mt-0">
-                                            <div class="flex flex-row items-center flex-1">
-                                                <div class="mr-2 text-sm">
-                                                    {{ nice_number($sblog->bloglikes->where('status', 1)->count()) }}
-                                                    <span>likes</span>
-                                                </div>
-                                                <div class="mr-2 text-sm">
-                                                    {{ nice_number($sblog->blogviews->count()) }} <span>views</span>
-                                                </div>
-                                            </div>
-                                            <div>
-                                                @guest
-
-                                                    <button type="button"
-                                                        class="flex flex-row items-center p-2 mr-1 text-sm rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:focus:ring-gray-700"
-                                                        data-modal-toggle="loginMessageModal">
-                                                        <span title="Bookmark this Article">
-                                                            @svg('gmdi-bookmark-add-o', 'h-5 w-5') </span>
-                                                    </button>
-                                                @else
-                                                    @if (auth()->user()->id != $sblog->user_id)
-                                                        <form method="POST" id="bookmark-{{ $sblog->id }}"
-                                                            class="bookmark_form">
-                                                            @csrf
-                                                            @method('PUT')
-                                                            <input type="hidden" name="user_id"
-                                                                id="user_bookmark_id_{{ $sblog->id }}"
-                                                                value="{{ auth()->user()->id }}">
-                                                            <input type="hidden" name="blog_id"
-                                                                id="blog_bookmark_id_{{ $sblog->id }}"
-                                                                value="{{ $sblog->id }}">
-                                                            <button type="submit"
-                                                                class="flex flex-row items-center p-2 mr-1 text-sm rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:focus:ring-gray-700">
-                                                                <span class="bookmark_btn_{{ $sblog->id }}"
-                                                                    id="bookmark_btn_{{ $sblog->id }}"
-                                                                    title="Bookmark this Article">
-                                                                    @if ($sblog->isBookmarked())
-                                                                        @svg('gmdi-bookmark-added-r', 'w-5 h-5 text-rose-500 dark:text-rose-500')
-                                                                    @else
-                                                                        @svg('gmdi-bookmark-add-o', 'h-5 w-5')
-                                                                    @endif
-                                                                </span>
-                                                            </button>
-
-                                                        </form>
-                                                    @endif
-                                                @endguest
-                                            </div>
-                                        </div>
-                                        <a href="/blogs/{{ Str::slug($sblog->title, '-') }}-{{ $sblog->id }}"
-                                            class="link link-secondary">
-                                            <h5
-                                                class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                                                In
-                                                {{ $sblog->title }}
-                                            </h5>
-                                        </a>
-
-                                        @foreach ($sblog->tags as $tag)
-                                            <a href="/blogs/tagged/{{ $tag->title }}" class="tag-popover"
-                                                id="tagSuggest{{ $sblog->id }}-{{ $tag->id }}">
-                                                <span class="modern-badge  modern-badge-{{ $tag->color }}">
-                                                    #{{ $tag->title }}
-                                                </span>
-                                            </a>
-                                        @endforeach
-                                        <p class="mt-3">
-                                            <span class="mr-1">By </span>
-                                            <a class="text-sm font-medium text-gray-900 truncate dark:text-white user-popover"
-                                                href="/users/{{ $sblog->user->username }}"
-                                                id="user{{ $sblog->id }}-{{ $sblog->user_id }}">
-                                                {{ __($sblog->user->username) }}
-                                            </a>
-                                            <span class="ml-1 text-sm">posted
-                                                {{ \Carbon\Carbon::parse($sblog->created_at)->diffForHumans() }}
-                                            </span>
-                                        </p>
-                                        <a class="e-btn e-btn-dark e-btn-lg sm:hidden"
-                                            href="/blogs/{{ Str::slug($sblog->title, '-') }}-{{ $sblog->id }}">
-                                            Read
-                                            Article
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
+                            <x-cards.card-primary :blog=$sblog class="not-prose" />
                         @endforeach
                     </div>
                 @endif
             </div>
             <aside class="my-2 overflow-hidden basis-1/3 lg:pl-5 lg:py-5">
                 <div id="sticky-sidebar">
+                    {{-- <livewire:like-blog :blog="$blog" :isSidebar="false" /> --}}
                     <div
                         class="w-full mt-3 text-base font-normal text-left border border-gray-200 rounded-xl dark:border-gray-700 dark:bg-gray-800 ">
                         <div class="px-4 py-3 rounded-xl dark:bg-gray-800 ">
